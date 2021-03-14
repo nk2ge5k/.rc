@@ -71,7 +71,7 @@ echo "============================ INSTALLING GIT CONFIG =======================
 
 (cat  <<EOF
 [include]
-    path = $SOURCE_DIR/git/gitconfig
+    path = $SCRIPT_DIR/git/gitconfig
 EOF
 ) > $HOME/.gitconfig
 

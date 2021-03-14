@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/bash
 
 SCRIPT_DIR=$(realpath $(dirname $0))
 SOURCE_DIR="$HOME/src"
@@ -80,8 +80,13 @@ echo "================================ INTALLING TMUX ==========================
     cd "$SOURCE_DIR/github.com/tmux/tmux" && \
         ./autogen.sh && ./configure && make && sudo make install
 
+fi
+
+if [ ! -f "$HOME/.tmux.conf" ]
+then
     ln -s "$SCRIPT_DIR/tmux/tmux.conf" "$HOME/.tmux.conf"
 fi
+
 ##################################### ZSH ######################################
 if ! command -v zsh &> /dev/null
 then

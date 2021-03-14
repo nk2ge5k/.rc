@@ -33,12 +33,15 @@ alias vim=nvim
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # init pyenv
-if [ -d "$HOME/.pyenv/bin" ]
+export PYENV_ROOT="$HOME/.pyenv"
+if [ -d "$PYENV_ROOT" ]
 then
-    export PATH="$HOME/.pyenv/bin:$PATH"
+    export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
+    # eval "$(pyenv virtualenv-init -)"
 fi
 
-# switch keyboard layouts with alt+space
-setxkbmap -layout us,ru -option 'grp:alt_space_toggle'
+if [[ $DISPLAY ]]; then
+    # switch keyboard layouts with alt+space
+    setxkbmap -layout us,ru -option 'grp:alt_space_toggle'
+fi

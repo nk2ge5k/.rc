@@ -32,5 +32,13 @@ alias vim=nvim
 # add fzf bindings
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# init pyenv
+if [ -d "$HOME/.pyenv/bin" ]
+then
+    export PATH="$HOME/.pyenv/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
+
 # switch keyboard layouts with alt+space
 setxkbmap -layout us,ru -option 'grp:alt_space_toggle'

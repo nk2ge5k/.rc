@@ -63,6 +63,19 @@ source $SCRIPT_DIR/vim/vimrc
 EOF
 ) > $HOME/.vimrc
 
+##################################### GIT ######################################
+
+if [ ! -f "$HOME/.gitconfig" ]
+then
+echo "============================ INSTALLING GIT CONFIG ============================="
+
+(cat  <<EOF
+[include]
+    path = $SOURCE_DIR/git/gitconfig
+EOF
+) > $HOME/.gitconfig
+
+fi
 
 ##################################### TMUX #####################################
 if ! command -v tmux &> /dev/null

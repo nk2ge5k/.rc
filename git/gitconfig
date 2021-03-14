@@ -1,0 +1,11 @@
+[alias]
+    s = status --short -uall -b
+    amend = commit --amend --no-edit
+    unstage = reset HEAD --
+    upload = "!git push origin $(git rev-parse --abbrev-ref HEAD)"
+    force-upload = "!git push --no-verify origin $(git rev-parse --abbrev-ref HEAD)"
+    download = "!git pull origin $(git rev-parse --abbrev-ref HEAD)"
+    find = log --pretty=\"format:%Cgreen%H\n%s\n\n%b\" --name-status --grep
+    sdiff = diff --cached
+    graph = log --graph --pretty='format:%C(red)%d%C(reset) %C(yellow)%h%C(reset) %ar %C(green)%aN%C(reset) %s'
+    unpushed = "!git log --branches --not --remotes"

@@ -57,8 +57,10 @@ cmap cd. lcd %:p:h
 
 noremap <leader>hl :nohl<CR>
 noremap <leader>nl :set invnumber invrelativenumber<CR>
-noremap <leader>j :cnext
-noremap <leader>k :cprevious
+noremap <leader>j :cnext<CR>
+noremap <leader>k :cprevious<CR>
+noremap <C-j> :lnext<CR>
+noremap <C-k> :lprevious<CR>
 
 cnoreabbrev hs split %:p:h/<C-R>
 cnoreabbrev hv vsplit %:p:h/<C-R>
@@ -136,11 +138,6 @@ set splitright                  " Puts new vsplit windows to the right of the cu
 set splitbelow                  " Puts new split windows to the bottom of the current
 
 """"""""""""""""""""""""""""""""" KEY MAPPING """"""""""""""""""""""""""""""""""
-
-nmap <C-j> <C-W>j
-nmap <C-k> <C-W>k
-nmap <C-h> <C-W>h
-nmap <C-l> <C-W>l
 
 nmap j gj
 nmap k gk
@@ -233,6 +230,19 @@ let g:rustfmt_autosave = 1
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 set completeopt=menuone,noinsert,noselect
 
+if has('nvim')
+
+fun! LspLocationList()
+    lua vim.lsp.diagnostic.set_loclist({open_loclist = false})
+endfun
+
+augroup location_list_fill
+    autocmd!
+    autocmd! BufWrite,BufEnter,InsertLeave * :call LspLocationList()
+augroup END
+
+endif
+
 """"""""""""""""""""""""""""" google/vim-codefmt """""""""""""""""""""""""""""""
 
 Glaive codefmt clang_format_executable='clang-format-9'
@@ -251,7 +261,7 @@ augroup autoformat_settings
   autocmd FileType vue AutoFormatBuffer prettier
 augroup END
 
-"" telescope ""
+""""""""""""""""""""""""""""""""" telescope """"""""""""""""""""""""""""""""""""
 
 if has('nvim')
     lua require('custom')
@@ -259,9 +269,6 @@ if has('nvim')
     nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files()<cr>
     nnoremap <leader>g <cmd>lua require('telescope.builtin').live_grep()<cr>
     nnoremap <leader>; <cmd>lua require('telescope.builtin').buffers()<cr>
-
-    nnoremap <leader>uf <cmd>lua require('custom.telescope').uservices_files()<cr>
-    nnoremap <leader>ug <cmd>lua require('custom.telescope').uservices_grep()<cr>
-    nnoremap <leader>bf <cmd>lua require('custom.telescope').backend_platform_files()<cr>
-    nnoremap <leader>bg <cmd>lua require('custom.telescope').backend_platform_grep()<cr>
+    nnoremap <leader>q <cmd>lua require('telescope.builtin').quickfix()<cr>
+    nnoremap <leader>p <cmd>lua require('custom.telescope').projects()<cr>
 endif

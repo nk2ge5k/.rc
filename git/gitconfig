@@ -9,3 +9,5 @@
     sdiff = diff --cached
     graph = log --graph --pretty='format:%C(red)%d%C(reset) %C(yellow)%h%C(reset) %ar %C(green)%aN%C(reset) %s'
     unpushed = "!git log --branches --not --remotes"
+    update = "!git fetch -ap upstream && git pull upstream develop && git push origin develop"
+    fz = "!git checkout $(git branch | fzf)"

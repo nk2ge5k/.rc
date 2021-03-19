@@ -112,10 +112,11 @@ custom.projects = function(opts)
             local grep = function()
                 local selection = action_state.get_selected_entry()
                 actions.close(prompt_bufnr)
+                local name = selection.display
                 local path = selection.filename
 
                 require("telescope.builtin").live_grep({
-                    prompt_title = path .. " grep",
+                    prompt_title = name .. " grep",
                     cwd = path,
                 })
             end
@@ -127,10 +128,11 @@ custom.projects = function(opts)
             actions.select_default:replace(function()
                 local selection = action_state.get_selected_entry()
                 actions.close(prompt_bufnr)
+                local name = selection.display
                 local path = selection.filename
 
                 require("telescope.builtin").find_files({
-                    prompt_title = path .. " files",
+                    prompt_title = name .. " files",
                     cwd = path,
                 })
             end)

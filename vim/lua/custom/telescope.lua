@@ -60,6 +60,10 @@ local configs = {
         path = uservices_dir .. "/services/eats-collections"
     },
     {
+        name = "eats-catalog-storage",
+        path = uservices_dir .. "/services/eats-catalog-storage"
+    },
+    {
         name = "scripts",
         path = home_dir .. "/scripts"
     },

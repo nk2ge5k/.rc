@@ -154,6 +154,10 @@ if has('nvim')
     tnoremap <C-w>l <C-\><C-N><C-w>l
 endif
 
+if executable('ag')
+    let g:ackprg = 'ag --vimgrep'
+endif
+
 """"""""""""""""""""""""""""""" NERDCommenter """"""""""""""""""""""""""""""""""
 
 let g:NERDSpaceDelims = 1
@@ -172,18 +176,6 @@ let g:go_def_mapping_enabled = 1
 let g:go_term_enabled = 1
 let g:go_term_close_on_exit = 0
 
-cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Ack!<Space>
-
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
-
-if executable('rg')
-  set grepprg=rg\ --no-heading\ --vimgrep
-  set grepformat=%f:%l:%c:%m
-endif
-
 """""""""""""""""""""""""""""""""" undotree """"""""""""""""""""""""""""""""""""
 
 let g:undotree_WindowLayout = 3
@@ -194,9 +186,9 @@ set undofile                " So is persistent undo ...
 
 """""""""""""""""""""""""""""""""""" FZF """""""""""""""""""""""""""""""""""""""
 
-if !has('nvim')
-    map <C-p> :Files<CR>
-    nmap <leader>; :Buffers<CR>
+if executable('rg')
+    set grepprg=rg\ --no-heading\ --vimgrep
+    set grepformat=%f:%l:%c:%m
 
     let g:fzf_layout = { 'down': '~20%' }
     command! -bang -nargs=* Rg
@@ -229,19 +221,6 @@ let g:rustfmt_autosave = 1
 
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 set completeopt=menuone,noinsert,noselect
-
-if has('nvim')
-
-fun! LspLocationList()
-    lua vim.lsp.diagnostic.set_loclist({open_loclist = false})
-endfun
-
-augroup location_list_fill
-    autocmd!
-    autocmd! BufWrite,BufEnter,InsertLeave * :call LspLocationList()
-augroup END
-
-endif
 
 """"""""""""""""""""""""""""" google/vim-codefmt """""""""""""""""""""""""""""""
 

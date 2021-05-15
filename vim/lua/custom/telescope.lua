@@ -37,31 +37,36 @@ function exists(name)
 end
 
 local uservices_dir = home_dir .. "/src/github.yandex-team.ru/nk2ge5k/uservices"
+local arc_uservices_dir = home_dir .. "/src/a.yandex-team.ru/taxi/uservices"
 
 local configs = {
     {
         name = "uservices",
-        path = uservices_dir
+        path = arc_uservices_dir
     },
     {
         name = "eats-catalog",
-        path = uservices_dir .. "/services/eats-catalog"
+        path = arc_uservices_dir .. "/services/eats-catalog"
     },
     {
         name = "eats-layout-constructor",
-        path = uservices_dir .. "/services/eats-layout-constructor"
+        path = arc_uservices_dir .. "/services/eats-layout-constructor"
     },
     {
         name = "eats-communications",
-        path = uservices_dir .. "/services/eats-communications"
+        path = arc_uservices_dir .. "/services/eats-communications"
     },
     {
         name = "eats-collections",
-        path = uservices_dir .. "/services/eats-collections"
+        path = arc_uservices_dir .. "/services/eats-collections"
     },
     {
         name = "eats-catalog-storage",
-        path = uservices_dir .. "/services/eats-catalog-storage"
+        path = arc_uservices_dir .. "/services/eats-catalog-storage"
+    },
+    {
+        name = "schemas",
+        path = arc_uservices_dir .. "/schemas"
     },
     {
         name = "scripts",

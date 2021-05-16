@@ -58,7 +58,6 @@ fi
 
 (cat <<EOF
 let &runtimepath.=',$SCRIPT_DIR/vim'
-source $SCRIPT_DIR/vim/vimrc.plugins
 source $SCRIPT_DIR/vim/vimrc
 EOF
 ) > $HOME/.vimrc

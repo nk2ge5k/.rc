@@ -86,8 +86,48 @@ function! s:ListPanes()
     retur panes
 endfunction
 
-" s:SplitWindow([, {horizontal}, {detach}, {size}])
-function! s:SplitWindow(...) abort
+function! s:SwichToPane(index)
+    let cmd = [g:tmux_executable, 'select-pane', '-t', index]
+
+    let [out, err] = s:SystemError(cmd)
+    return err ? 'echoerr ' . string(out) : ''
+endfunction
+
+function! s:SplitWindow(horizontal, detach, size, dir)
+    let cmd = [g:tmux_executable, 'split-window']
+
+    if a:horizontal
+        call add(cmd, '-h')
+    endif
+
+    if a:detach
+        call add(cmd, '-d')
+    endif
+
+    if a:size
+        call add(cmd, '-l')
+        call add(cmd, a:size)
+    endif
+
+    if !empty(a:dir)
+        call add(cmd, '-c')
+        call add(cmd, a:dir)
+    endif
+
+    let [out, err] = s:SystemError(cmd)
+    return err ? 'echoerr ' . string(out) : ''
+endfunction
+
+function! s:SendKeys(pane_index, command)
+    let cmd = [g:tmux_executable,
+                \ 'send-keys', '-t', a:pane_index] + a:command + ['Enter']
+
+    let [out, err] = s:SystemError(cmd)
+    return err ? 'echoerr ' . string(out) : ''
+endfunction
+
+" tmux#SplitWindow([, {horizontal}, {detach}, {size}, {dir}])
+function! tmux#SplitWindow(...) abort
     if !s:InsideTmux()
         return 'echoerr ' . string('cannot split outside tmux')
     endif
@@ -99,46 +139,22 @@ function! s:SplitWindow(...) abort
     endtry
 
     if len(panes) > 1
-        let cmd = [g:tmux_executable, 'select-pane']
         for pane in panes
             if !pane.active
-                call add(cmd, '-t')
-                call add(cmd, pane.index)
-                call s:SystemError(cmd)
+                return s:SwichToPane(pane.index)
             endif
         endfor
-
-        return ''
     endif
 
-    let cmd = [g:tmux_executable, 'split-window']
-
-    let horizontal = get(a:000, 0, g:split_horizontal)
-    if horizontal
-        call add(cmd, '-h')
-    endif
-
-    let detach = get(a:000, 1, g:split_detach)
-    if detach
-        call add(cmd, '-d')
-    endif
-
-    let size = get(a:000, 2, g:split_size)
-    if size
-        call add(cmd, '-l')
-        call add(cmd, size)
-    endif
-
-    let [out, err] = s:SystemError(cmd)
-    if err
-        return 'echoerr ' . string(out)
-    endif
-
-    return ''
+    return s:SplitWindow(
+                \ get(a:000, 0, g:split_horizontal),
+                \ get(a:000, 1, g:split_detach),
+                \ get(a:000, 2, g:split_size),
+                \ get(a:000, 3, ''))
 endfunction
 
-" s:SendKeys([, command ...])
-function! s:SendKeys(...) abort
+" tmux#SendKeys([, command ...])
+function! tmux#SendKeys(dir, ...) abort
     if !s:InsideTmux()
         return 'echoerr ' . string('cannot split outside tmux')
     endif
@@ -146,7 +162,6 @@ function! s:SendKeys(...) abort
     if !a:0
         return ''
     endif
-
 
     try
         let panes = s:ListPanes()
@@ -156,40 +171,28 @@ function! s:SendKeys(...) abort
 
     let index = -1
 
-    if len(panes) > 1
-        for pane in panes
-            if !pane.active
-                let index = pane.index
-                break
-            endif
-        endfor
-    else
-        let msg = s:SplitWindow(g:split_horizontal, 1, g:split_size)
-        if msg
+    for pane in panes
+        if !pane.active && (empty(a:dir) || pane.path == a:dir)
+            let index = pane.index
+            break
+        endif
+    endfor
+
+    if index == -1
+        let msg = s:SplitWindow(g:split_horizontal, 1, g:split_size, a:dir)
+        if !empty(msg)
             return msg
         endif
         let index = 1
     endif
 
-    if index == -1
-        return 'echoerr ' . string('could not find pane')
-    endif
-
-    let cmd = [g:tmux_executable,
-                \ 'send-keys', '-t', index] + a:000 + ['Enter']
-
-    let [out, err] = s:SystemError(cmd)
-    if err
-        return 'echoerr ' . string(out)
-    endif
-
-    return ''
+    return s:SendKeys(index, a:000)
 endfunction
 
 
 " commands
-command! -bang -nargs=* -range=-1 Tsplit exec s:SplitWindow(<f-args>)
-command! -bang -nargs=1 -range=-1 Tmux exec s:SendKeys(<q-args>)
+command! -bang -nargs=* -range=-1 Tsplit exec tmux#SplitWindow(<f-args>)
+command! -bang -nargs=1 -range=-1 Tmux exec tmux#SendKeys('', <q-args>)
 
 " remaps
 noremap <leader>s :Tsplit<CR>

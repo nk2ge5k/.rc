@@ -155,3 +155,7 @@ endfunction
 " commands
 command! -bang -nargs=? -range=-1 Tsplit exec s:SplitWindow(<f-args>)
 command! -bang -nargs=? -range=-1 Tmux exec s:SendKeys(<f-args>)
+
+" remaps
+noremap <leader>s :Tsplit<CR>
+

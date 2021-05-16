@@ -1,7 +1,18 @@
-let g:split_horizontal = 1
-let g:split_size = 0
-let g:split_detach = 0
-let g:tmux_executable = 'tmux'
+if !exists('g:split_horizontal')
+    let g:split_horizontal = 1
+endif
+
+if !exists('g:split_size')
+    let g:split_size = 0
+endif
+
+if !exists('g:split_detach')
+    let g:split_detach = 0
+endif
+
+if !exists('g:tmux_executable')
+    let g:tmux_executable = 'tmux'
+endif
 
 function! s:Prepare(cmd) abort
     return join(map(a:cmd, 'shellescape(v:val)'))
@@ -46,10 +57,39 @@ function! s:InsideTmux()
     return exists('$TMUX')
 endfunction
 
+function! s:ListPanes()
+    let cmd = [g:tmux_executable,
+                \ 'list-panes', '-F"#P #{pane_active} #{pane_current_path}"']
+
+    let [out, err] = s:SystemError(cmd)
+    if err
+        throw 'failed to list panes: ' . out
+    end
+
+    let panes = []
+    for line in split(out, "\n")
+        let line = trim(line, '"')
+        let index = matchstr(line, '^[0-9]\+')
+
+        if !empty(index)
+            let line = line[len(index) + 1:]
+            let active = matchstr(line, '^[0-9]\+')
+
+            call add(panes, {
+                        \ 'index': index + 0,
+                        \ 'active': active ==# '1',
+                        \ 'path': line[len(active) + 1:]
+                        \ })
+        endif
+    endfor
+
+    retur panes
+endfunction
+
 " s:SplitWindow([, {horizontal}, {detach}, {size}])
 function! s:SplitWindow(...) abort
     if !s:InsideTmux()
-        return
+        throw 'cannot split outside tmux'
     endif
 
     let panes = s:ListPanes()
@@ -89,7 +129,12 @@ function! s:SplitWindow(...) abort
     return ''
 endfunction
 
-function! s:SendKeys(...)
+" s:SendKeys([, command ...])
+function! s:SendKeys(...) abort
+    if !s:InsideTmux()
+        throw 'cannot send keys outside tmux'
+    endif
+
     if !a:0
         return ''
     endif
@@ -123,34 +168,6 @@ function! s:SendKeys(...)
     return ''
 endfunction
 
-function! s:ListPanes() abort
-    let cmd = [g:tmux_executable,
-                \ 'list-panes', '-F"#P #{pane_active} #{pane_current_path}"']
-
-    let [out, err] = s:SystemError(cmd)
-    if err
-        throw 'failed to list panes: ' . out
-    end
-
-    let panes = []
-    for line in split(out, "\n")
-        let line = trim(line, '"')
-        let index = matchstr(line, '^[0-9]\+')
-
-        if !empty(index)
-            let line = line[len(index) + 1:]
-            let active = matchstr(line, '^[0-9]\+')
-
-            call add(panes, {
-                        \ 'index': index + 0,
-                        \ 'active': active ==# '1',
-                        \ 'path': line[len(active) + 1:]
-                        \ })
-        endif
-    endfor
-
-    retur panes
-endfunction
 
 " commands
 command! -bang -nargs=? -range=-1 Tsplit exec s:SplitWindow(<f-args>)
@@ -158,4 +175,3 @@ command! -bang -nargs=? -range=-1 Tmux exec s:SendKeys(<f-args>)
 
 " remaps
 noremap <leader>s :Tsplit<CR>
-

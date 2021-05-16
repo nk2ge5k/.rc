@@ -89,10 +89,15 @@ endfunction
 " s:SplitWindow([, {horizontal}, {detach}, {size}])
 function! s:SplitWindow(...) abort
     if !s:InsideTmux()
-        throw 'cannot split outside tmux'
+        return 'echoerr ' . string('cannot split outside tmux')
     endif
 
-    let panes = s:ListPanes()
+    try
+        let panes = s:ListPanes()
+    catch
+        return 'echoerr ' . string(v:exception)
+    endtry
+
     if len(panes) > 1
         let cmd = [g:tmux_executable, 'select-pane']
         for pane in panes
@@ -124,7 +129,10 @@ function! s:SplitWindow(...) abort
         call add(cmd, size)
     endif
 
-    call s:SystemError(cmd)
+    let [out, err] = s:SystemError(cmd)
+    if err
+        return 'echoerr ' . string(out)
+    endif
 
     return ''
 endfunction
@@ -132,15 +140,19 @@ endfunction
 " s:SendKeys([, command ...])
 function! s:SendKeys(...) abort
     if !s:InsideTmux()
-        throw 'cannot send keys outside tmux'
+        return 'echoerr ' . string('cannot split outside tmux')
     endif
 
     if !a:0
         return ''
     endif
 
+    try
+        let panes = s:ListPanes()
+    catch
+        return 'echoerr ' . string(v:exception)
+    endtry
 
-    let panes = s:ListPanes()
     let index = -1
 
     if len(panes) > 1
@@ -151,19 +163,25 @@ function! s:SendKeys(...) abort
             endif
         endfor
     else
-        call s:SplitWindow(g:split_horizontal, 1, g:split_size)
+        let msg = s:SplitWindow(g:split_horizontal, 1, g:split_size)
+        if msg
+            return msg
+        endif
+
         let index = 1
     endif
 
     if index == -1
-        echo 'could not find pane'
-        return ''
+        return 'echoerr ' . string('could not find pane')
     endif
 
     let cmd = [g:tmux_executable,
                 \ 'send-keys', '-t', index] + a:000 + ['Enter']
 
-    call s:SystemError(cmd)
+    let [out, err] = s:SystemError(cmd)
+    if err
+        return 'echoerr ' . string(out)
+    endif
 
     return ''
 endfunction

@@ -147,6 +147,7 @@ function! s:SendKeys(...) abort
         return ''
     endif
 
+
     try
         let panes = s:ListPanes()
     catch
@@ -167,7 +168,6 @@ function! s:SendKeys(...) abort
         if msg
             return msg
         endif
-
         let index = 1
     endif
 
@@ -188,8 +188,8 @@ endfunction
 
 
 " commands
-command! -bang -nargs=? -range=-1 Tsplit exec s:SplitWindow(<f-args>)
-command! -bang -nargs=? -range=-1 Tmux exec s:SendKeys(<f-args>)
+command! -bang -nargs=* -range=-1 Tsplit exec s:SplitWindow(<f-args>)
+command! -bang -nargs=1 -range=-1 Tmux exec s:SendKeys(<q-args>)
 
 " remaps
 noremap <leader>s :Tsplit<CR>

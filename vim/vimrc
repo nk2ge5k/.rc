@@ -1,5 +1,12 @@
 set shell=/bin/bash
 
+let s:vim_dir = expand('<sfile>:h')
+function! s:LocalSource(filename) abort
+    exec 'source ' . s:vim_dir . '/' . a:filename
+endfunction
+
+call s:LocalSource('vimrc.plugins')
+
 """"""""""""""""""""""""""""""""""" GENERAL """"""""""""""""""""""""""""""""""""
 
 if has('nvim')
@@ -279,3 +286,6 @@ if has('nvim')
     nnoremap <leader>q <cmd>lua require('telescope.builtin').quickfix()<cr>
     nnoremap <leader>p <cmd>lua require('custom.telescope').projects()<cr>
 endif
+
+
+call s:LocalSource('tmux.vim')

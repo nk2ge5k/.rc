@@ -14,12 +14,22 @@ function! s:ExtractUservicesRootDir()
     return ''
 endfunction
 
-function! s:GetServiceFromDir()
-    let service = fnamemodify(getcwd(), ':t')
-    if service !~ '^eats-'
-        return ''
-    endif
-    return service
+function! s:ExtractServiceName()
+    let previous = ''
+    let root = getcwd()
+
+    while root !=# previous
+        let service_yaml = substitute(root, '[\/]$', '', '') . '/service.yaml'
+        let type = getftype(service_yaml)
+        if type ==# 'file'
+            return fnamemodify(root, ':t')
+        endif
+
+        let previous = root
+        let root = fnamemodify(root, ':h')
+    endwhile
+
+    return ''
 endfunction
 
 function! uservices#Testsuite(...) abort
@@ -29,16 +39,16 @@ function! uservices#Testsuite(...) abort
         return 'echoerr cannot call outside uservices directory'
     endif
 
-    let l:service = get(a:000, 0, '')
+    let service = get(a:000, 0, '')
 
-    if empty(l:service)
-        let l:service = s:GetServiceFromDir()
-        if empty(l:service)
+    if empty(service)
+        let service = s:ExtractServiceName()
+        if empty(service)
             return 'echoerr service name is required'
         endif
     endif
 
-    return tmux#SendKeys(uservices_dir, 'make testsuite-' . l:service)
+    return tmux#SendKeys(uservices_dir, 'make testsuite-' . service)
 endfunction
 
 function! uservices#TestsuiteThis() abort
@@ -47,8 +57,8 @@ function! uservices#TestsuiteThis() abort
         return 'echoerr cannot call outside uservices directory'
     endif
 
-    let l:service = s:GetServiceFromDir()
-    if empty(l:service)
+    let service = s:ExtractServiceName()
+    if empty(service)
         return 'echoerr could not detect service'
     endif
 
@@ -75,7 +85,7 @@ function! uservices#TestsuiteThis() abort
     let end = match(line, '(', start)
     let name = line[start:end-1]
 
-    return tmux#SendKeys(uservices_dir, 'make testsuite-' . l:service .
+    return tmux#SendKeys(uservices_dir, 'make testsuite-' . service .
                 \ ' PYTEST_ARGS="-k ' . name . ' -vv"')
 endfunction
 

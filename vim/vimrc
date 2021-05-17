@@ -289,3 +289,4 @@ endif
 
 
 call s:LocalSource('tmux.vim')
+call s:LocalSource('uservices.vim')

@@ -64,14 +64,14 @@ function! uservices#TestsuiteThis() abort
 
     let linenum = line('.')
 
-    while linenum > 1
+    while linenum > 0
         if getline(linenum) =~ '^async def test_'
             break
         endif
         let linenum = linenum - 1
     endwhile
 
-    if linenum == 0
+    if linenum == 1
         return 'echoerr failed to find test function'
     end
 

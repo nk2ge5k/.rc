@@ -1,10 +1,15 @@
 function! s:ExtractUservicesRootDir()
+    if exists('w:uservices_dir')
+        return w:uservices_dir
+    endif
+
     let previous = ''
 
     let root = getcwd()
     while root !=# previous
         if fnamemodify(root, ':t') ==# 'uservices'
-            return root
+            let w:uservices_dir = root
+            return w:uservices_dir
         endif
 
         let previous = root

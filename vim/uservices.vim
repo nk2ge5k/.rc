@@ -59,12 +59,12 @@ endfunction
 function! uservices#TestsuiteThis() abort
     let uservices_dir = s:ExtractUservicesRootDir()
     if empty(uservices_dir)
-        return 'echoerr cannot call outside uservices directory'
+        return 'echoerr ' . string('cannot call outside uservices directory')
     endif
 
     let service = s:ExtractServiceName()
     if empty(service)
-        return 'echoerr could not detect service'
+        return 'echoerr ' . string('could not detect service')
     endif
 
     let linenum = line('.')
@@ -77,14 +77,14 @@ function! uservices#TestsuiteThis() abort
     endwhile
 
     if linenum == 1
-        return 'echoerr failed to find test function'
+        return 'echoerr ' . string('failed to find test function')
     end
 
     let line = getline(linenum)
 
     let start =  match(line, 'test_')
     if start < 0
-        return 'echoerr failed to get test name'
+        return 'echoerr ' .  string('failed to get test name')
     endif
 
     let end = match(line, '(', start)
@@ -97,3 +97,6 @@ endfunction
 " commands
 command! -bang -nargs=? -range=-1 Testsuite exec uservices#Testsuite(<f-args>)
 command! -bang -nargs=0 -range=-1 TT exec uservices#TestsuiteThis()
+
+noremap <leader>fa :Testsuite<CR>
+noremap <leader>fi :TT<CR>

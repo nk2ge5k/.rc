@@ -120,7 +120,8 @@ endfunction
 
 function! s:SendKeys(pane_index, command)
     let cmd = [g:tmux_executable,
-                \ 'send-keys', '-t', a:pane_index] + a:command + ['Enter']
+                \ "send-keys", "-t", a:pane_index,
+                \ "C-c", "Enter"] + a:command + ["Enter"]
 
     let [out, err] = s:SystemError(cmd)
     return err ? 'echoerr ' . string(out) : ''

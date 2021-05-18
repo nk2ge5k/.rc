@@ -194,21 +194,25 @@ set undofile                " So is persistent undo ...
 """""""""""""""""""""""""""""""""""" FZF """""""""""""""""""""""""""""""""""""""
 
 if executable('fzf')
+    let g:fzf_layout = { 'down': '~20%' }
+
     map <C-p> :Files<CR>
     nmap <leader>; :Buffers<CR>
-endif
 
-if executable('rg')
-    set grepprg=rg\ --no-heading\ --vimgrep
-    set grepformat=%f:%l:%c:%m
+    if executable('rg')
+        set grepprg=rg\ --no-heading\ --vimgrep
+        set grepformat=%f:%l:%c:%m
 
-    let g:fzf_layout = { 'down': '~20%' }
-    command! -bang -nargs=* Rg
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-      \   <bang>0 ? fzf#vim#with_preview('up:60%')
-      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \   <bang>0)
+        command! -bang -nargs=* Rg
+          \ call fzf#vim#grep(
+          \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+          \   <bang>0 ? fzf#vim#with_preview('up:60%')
+          \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+          \   <bang>0)
+
+
+        nmap <leader>g :Rg<CR>
+    endif
 endif
 
 """""""""""""""""""""""""""""""""" vim-wiki """"""""""""""""""""""""""""""""""""
@@ -281,8 +285,8 @@ if has('nvim')
 
     " nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files()<cr>
     " nnoremap <leader>; <cmd>lua require('telescope.builtin').buffers()<cr>
+    " nnoremap <leader>g <cmd>lua require('telescope.builtin').live_grep()<cr>
 
-    nnoremap <leader>g <cmd>lua require('telescope.builtin').live_grep()<cr>
     nnoremap <leader>q <cmd>lua require('telescope.builtin').quickfix()<cr>
     nnoremap <leader>p <cmd>lua require('custom.telescope').projects()<cr>
 endif

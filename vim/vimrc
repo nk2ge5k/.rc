@@ -149,9 +149,6 @@ set splitbelow                  " Puts new split windows to the bottom of the cu
 nmap j gj
 nmap k gk
 
-nnoremap <silent> n nzz
-nnoremap <silent> N Nzz
-
 " nvim terminal more like vim terminal
 if has('nvim')
     tnoremap <C-w>N <C-\><C-n>

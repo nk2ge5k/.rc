@@ -206,12 +206,21 @@ if executable('fzf')
         command! -bang -nargs=* Rg
           \ call fzf#vim#grep(
           \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-          \   <bang>0 ? fzf#vim#with_preview('up:60%')
-          \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+          \   fzf#vim#with_preview('right:40%'),
           \   <bang>0)
 
 
         nmap <leader>g :Rg<CR>
+
+        function! SearchWord()
+            :norm "gyiwg
+
+            call fzf#vim#grep(
+                        \ 'rg --column --line-number --no-heading --color=always '.shellescape(getreg('g')), 1,
+                        \ fzf#vim#with_preview('right:40%'), 0)
+        endfunction
+
+        nmap <leader>fw :call SearchWord()<cr>
     endif
 endif
 

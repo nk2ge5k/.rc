@@ -37,11 +37,11 @@ function! s:ExtractServiceName()
     return ''
 endfunction
 
-function! uservices#Testsuite(...) abort
+function! uservices#TestsAll(...) abort
 
     let uservices_dir = s:ExtractUservicesRootDir()
     if empty(uservices_dir)
-        return 'echoerr cannot call outside uservices directory'
+        return 'echoerr ' . string('cannot call outside uservices directory')
     endif
 
     let service = get(a:000, 0, '')
@@ -49,11 +49,31 @@ function! uservices#Testsuite(...) abort
     if empty(service)
         let service = s:ExtractServiceName()
         if empty(service)
-            return 'echoerr service name is required'
+            return 'echoerr ' . string('service name is required')
         endif
     endif
 
     return tmux#SendKeys(uservices_dir, 'make testsuite-' . service)
+endfunction
+
+function! uservices#TestFile(...) abort
+    let uservices_dir = s:ExtractUservicesRootDir()
+    if empty(uservices_dir)
+        return 'echoerr ' . string('cannot call outside uservices directory')
+    endif
+
+    let service = get(a:000, 0, '')
+
+    if empty(service)
+        let service = s:ExtractServiceName()
+        if empty(service)
+            return 'echoerr ' . string('service name is required')
+        endif
+    endif
+
+    let filename = expand('%:t')
+    return tmux#SendKeys(uservices_dir, 'make testsuite-' . service .
+                \ ' PYTEST_ARGS="-k ' . filename . ' -vv"')
 endfunction
 
 function! uservices#TestsuiteThis() abort
@@ -95,8 +115,10 @@ function! uservices#TestsuiteThis() abort
 endfunction
 
 " commands
-command! -bang -nargs=? -range=-1 Testsuite exec uservices#Testsuite(<f-args>)
-command! -bang -nargs=0 -range=-1 TT exec uservices#TestsuiteThis()
+command! -bang -nargs=? -range=-1 Testsuite exec uservices#TestsAll(<f-args>)
+command! -bang -nargs=0 -range=-1 TestFunction exec uservices#TestsuiteThis()
+command! -bang -nargs=0 -range=-1 TestFile exec uservices#TestFile()
 
 noremap <leader>fa :Testsuite<CR>
-noremap <leader>fi :TT<CR>
+noremap <leader>fi :TestFunction<CR>
+noremap <leader>ff :TestFile<CR>

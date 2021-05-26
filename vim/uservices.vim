@@ -37,6 +37,25 @@ function! s:ExtractServiceName()
     return ''
 endfunction
 
+function! uservices#Cmake(...) abort
+
+    let uservices_dir = s:ExtractUservicesRootDir()
+    if empty(uservices_dir)
+        return 'echoerr ' . string('cannot call outside uservices directory')
+    endif
+
+    let service = get(a:000, 0, '')
+
+    if empty(service)
+        let service = s:ExtractServiceName()
+        if empty(service)
+            return 'echoerr ' . string('service name is required')
+        endif
+    endif
+
+    return tmux#SendKeys(uservices_dir, 'make -B cmake-' . service)
+endfunction
+
 function! uservices#TestsAll(...) abort
 
     let uservices_dir = s:ExtractUservicesRootDir()
@@ -118,6 +137,7 @@ endfunction
 command! -bang -nargs=? -range=-1 Testsuite exec uservices#TestsAll(<f-args>)
 command! -bang -nargs=0 -range=-1 TestFunction exec uservices#TestsuiteThis()
 command! -bang -nargs=0 -range=-1 TestFile exec uservices#TestFile()
+command! -bang -nargs=? -range=-1 BCmake exec uservices#Cmake(<f-args>)
 
 noremap <leader>fa :Testsuite<CR>
 noremap <leader>fi :TestFunction<CR>

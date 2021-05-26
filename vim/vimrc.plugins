@@ -22,7 +22,6 @@ call plug#begin()
 
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
     if has('nvim')
         Plug 'neovim/nvim-lspconfig'
@@ -32,9 +31,7 @@ call plug#begin()
         Plug 'nvim-telescope/telescope-fzy-native.nvim'
     endif
 
-    " TODO: move into dotfiles dir
-    " Plug '~/arcane'
-    " Plug '~/vim-testsuite'
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 call glaive#Install()

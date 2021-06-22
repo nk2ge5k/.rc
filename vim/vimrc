@@ -197,7 +197,7 @@ let g:rooter_patterns = ['.git', 'Makefile', '.arc', 'service.yaml', 'compile_co
 let g:undotree_WindowLayout = 3
 let g:undotree_ShortIndicators = 1
 
-set undodir=$HOME/dotfiles/editor/.vimdid/
+set undodir=$HOME/dotfiles2.0/vim/.vimdid/
 set undofile                " So is persistent undo ...
 
 """""""""""""""""""""""""""""""""""" FZF """""""""""""""""""""""""""""""""""""""

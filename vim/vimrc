@@ -30,10 +30,6 @@ if !has("nvim")
     set ttyscroll=10
 endif
 
-if has("termguicolors")
-    set termguicolors
-endif
-
 if has('clipboard')
     if has('unnamedplus')   " When possible use + register for copy-paste
         set clipboard=unnamed,unnamedplus
@@ -99,9 +95,8 @@ vnoremap <silent> <leader>y :call YaPaste()<cr>
 
 """""""""""""""""""""""""""""""""" APPERENCE """""""""""""""""""""""""""""""""""
 
-color nord
-
-highlight Comment guifg=#bdae93
+color default
+highlight ColorColumn ctermbg=8 ctermfg=White
 
 set tabpagemax=15               " Only show 15 tabs
 set showmode                    " Display the current mode

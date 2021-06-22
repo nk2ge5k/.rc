@@ -10,13 +10,9 @@ call plug#begin()
     Plug 'leafgarland/typescript-vim'
     Plug 'peitalin/vim-jsx-typescript'
 
-
-    Plug 'arcticicestudio/nord-vim'
-
     Plug 'google/vim-maktaba'
     Plug 'google/vim-codefmt'
     Plug 'google/vim-glaive'
-
 
     Plug 'vimwiki/vimwiki'
 
@@ -30,8 +26,6 @@ call plug#begin()
         Plug 'nvim-telescope/telescope.nvim'
         Plug 'nvim-telescope/telescope-fzy-native.nvim'
         Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    else
-        Plug 'ycm-core/YouCompleteMe'
     endif
 
 call plug#end()

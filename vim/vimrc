@@ -81,7 +81,15 @@ else
 endif
 
 autocm FileType yaml,python setlocal cursorcolumn " draw cursorcolumn for python and yaml
-autocmd BufWritePre * %s/\s\+$//e
+
+function! StripTrailingWhitespace()
+    if &ft =~ 'vimwiki'
+    else
+        %s/\s\+$//e
+    endif
+endfun
+
+autocmd BufWritePre * call StripTrailingWhitespace()
 
 function YaPaste() range
   echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| ya paste | ya notify')
@@ -180,6 +188,10 @@ let g:go_def_mapping_enabled = 1
 let g:go_term_enabled = 1
 let g:go_term_close_on_exit = 0
 
+""""""""""""""""""""""""""""""""" vim-rooter """""""""""""""""""""""""""""""""""
+
+let g:rooter_patterns = ['.git', 'Makefile', '.arc', 'service.yaml', 'compile_commands.json']
+
 """""""""""""""""""""""""""""""""" undotree """"""""""""""""""""""""""""""""""""
 
 let g:undotree_WindowLayout = 3
@@ -225,8 +237,14 @@ endif
 
 let g:vimwiki_ext2syntax = {'.md': 'markdown'}
 
+let s:note_dir = $HOME . '/src/a.yandex-team.ru/junk/nk2ge5k/notes'
+if !isdirectory(s:note_dir)
+    let s:note_dir = $HOME . '/notes'
+endif
+
+
 let g:vimwiki_list = [{
-    \ 'path': '/home/nk2ge5k/notes',
+    \ 'path': s:note_dir,
     \ 'syntax': 'markdown',
     \ 'ext': '.md',
     \ 'nested_syntaxes': {
@@ -268,6 +286,16 @@ endfunction
 
 """"""""""""""""""""""""""""" google/vim-codefmt """""""""""""""""""""""""""""""
 
+if $ARC == 1
+
+augroup autoformat_settings
+    autocmd BufWritePost * silent! !ya style <afile>
+    autocmd BufWritePost * edit
+    autocmd BufWritePost * redraw!
+augroup END
+
+else
+
 Glaive codefmt clang_format_executable='clang-format-9'
 
 augroup autoformat_settings
@@ -283,6 +311,8 @@ augroup autoformat_settings
   autocmd FileType rust AutoFormatBuffer rustfmt
   autocmd FileType vue AutoFormatBuffer prettier
 augroup END
+
+endif
 
 """"""""""""""""""""""""""""""""" telescope """"""""""""""""""""""""""""""""""""
 

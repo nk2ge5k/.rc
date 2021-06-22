@@ -124,6 +124,6 @@ if ! command -v go &> /dev/null
 then
 echo "================================ INSTALLING GO ================================"
 
-curl --proto '=https' --tlsv1.2 -sSf https://storage.googleapis.com/golang/go1.16.linux-amd64.tar.gz | tar -C $BINARY_DIR -xzf -
+curl --proto '=https' --tlsv1.2 -sSf https://storage.googleapis.com/golang/go1.16.4.linux-amd64.tar.gz | tar -C $BINARY_DIR -xzf -
 
 fi

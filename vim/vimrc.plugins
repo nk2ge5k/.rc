@@ -29,9 +29,11 @@ call plug#begin()
         Plug 'nvim-lua/plenary.nvim'
         Plug 'nvim-telescope/telescope.nvim'
         Plug 'nvim-telescope/telescope-fzy-native.nvim'
+        Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    else
+        Plug 'ycm-core/YouCompleteMe'
     endif
 
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 call glaive#Install()

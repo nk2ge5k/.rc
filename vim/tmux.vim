@@ -87,7 +87,7 @@ function! s:ListPanes()
 endfunction
 
 function! s:SwichToPane(index)
-    let cmd = [g:tmux_executable, 'select-pane', '-t', index]
+    let cmd = [g:tmux_executable, 'select-pane', '-t', a:index]
 
     let [out, err] = s:SystemError(cmd)
     return err ? 'echoerr ' . string(out) : ''

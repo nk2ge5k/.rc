@@ -139,14 +139,6 @@ function! tmux#SplitWindow(...) abort
         return 'echoerr ' . string(v:exception)
     endtry
 
-    if len(panes) > 1
-        for pane in panes
-            if !pane.active
-                return s:SwichToPane(pane.index)
-            endif
-        endfor
-    endif
-
     return s:SplitWindow(
                 \ get(a:000, 0, g:split_horizontal),
                 \ get(a:000, 1, g:split_detach),
@@ -192,8 +184,10 @@ endfunction
 
 
 " commands
-command! -bang -nargs=* -range=-1 Tsplit exec tmux#SplitWindow(<f-args>)
+command! -bang -nargs=* -range=-1 Tvsplit exec tmux#SplitWindow(1, <f-args>)
+command! -bang -nargs=* -range=-1 Tsplit exec tmux#SplitWindow(0, <f-args>)
 command! -bang -nargs=1 -range=-1 Tmux exec tmux#SendKeys('', <q-args>)
 
 " remaps
+noremap <leader>v :Tvsplit<CR>
 noremap <leader>s :Tsplit<CR>

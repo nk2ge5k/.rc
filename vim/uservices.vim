@@ -19,13 +19,31 @@ function! s:ExtractUservicesRootDir()
     return ''
 endfunction
 
-function! s:ExtractServiceName()
+function! s:ExtractServiceName(uservices_dir)
     let previous = ''
     let root = getcwd()
 
-    while root !=# previous
+    while root !=# previous && root !=# a:uservices_dir
         let service_yaml = substitute(root, '[\/]$', '', '') . '/service.yaml'
         let type = getftype(service_yaml)
+        if type ==# 'file'
+            return fnamemodify(root, ':t')
+        endif
+
+        let previous = root
+        let root = fnamemodify(root, ':h')
+    endwhile
+
+    return ''
+endfunction
+
+function! s:ExtractLibraryName(uservices_dir)
+    let previous = ''
+    let root = getcwd()
+
+    while root !=# previous && root !=# a:uservices_dir
+        let library_yaml = substitute(root, '[\/]$', '', '') . '/library.yaml'
+        let type = getftype(library_yaml)
         if type ==# 'file'
             return fnamemodify(root, ':t')
         endif
@@ -47,8 +65,14 @@ function! uservices#Cmake(...) abort
     let service = get(a:000, 0, '')
 
     if empty(service)
-        let service = s:ExtractServiceName()
+        let service = s:ExtractServiceName(uservices_dir)
         if empty(service)
+
+            let library = s:ExtractLibraryName(uservices_dir)
+            if !empty(library)
+                return tmux#SendKeys(uservices_dir, 'make -B cmake-lib-' . library)
+            endif
+
             return 'echoerr ' . string('service name is required')
         endif
     endif
@@ -66,7 +90,7 @@ function! uservices#TestsAll(...) abort
     let service = get(a:000, 0, '')
 
     if empty(service)
-        let service = s:ExtractServiceName()
+        let service = s:ExtractServiceName(uservices_dir)
         if empty(service)
             return 'echoerr ' . string('service name is required')
         endif
@@ -84,7 +108,7 @@ function! uservices#TestFile(...) abort
     let service = get(a:000, 0, '')
 
     if empty(service)
-        let service = s:ExtractServiceName()
+        let service = s:ExtractServiceName(uservices_dir)
         if empty(service)
             return 'echoerr ' . string('service name is required')
         endif
@@ -101,7 +125,7 @@ function! uservices#TestsuiteThis() abort
         return 'echoerr ' . string('cannot call outside uservices directory')
     endif
 
-    let service = s:ExtractServiceName()
+    let service = s:ExtractServiceName(uservices_dir)
     if empty(service)
         return 'echoerr ' . string('could not detect service')
     endif

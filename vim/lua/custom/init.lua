@@ -1,2 +1,1 @@
--- require("custom.nvim-lsp")
-require("custom.telescope")
+require("custom.nvim-lsp")

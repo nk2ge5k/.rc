@@ -146,6 +146,17 @@ function! tmux#SplitWindow(...) abort
                 \ get(a:000, 3, ''))
 endfunction
 
+function! tmux#SelectWindow(window_index)
+    if !s:InsideTmux()
+        return 'echoerr ' . string('cannot select window outside tmux')
+    endif
+
+    let cmd = [g:tmux_executable, "select-window", "-t", a:window_index]
+    let [out, err] = s:SystemError(cmd)
+
+    return err ? 'echoerr ' . string(out) : ''
+endfunction
+
 " tmux#SendKeys([, command ...])
 function! tmux#SendKeys(dir, ...) abort
     if !s:InsideTmux()
@@ -187,7 +198,18 @@ endfunction
 command! -bang -nargs=* -range=-1 Tvsplit exec tmux#SplitWindow(1, <f-args>)
 command! -bang -nargs=* -range=-1 Tsplit exec tmux#SplitWindow(0, <f-args>)
 command! -bang -nargs=1 -range=-1 Tmux exec tmux#SendKeys('', <q-args>)
+command! -bang -nargs=1 -range=-1 Twselect exec tmux#SelectWindow(<q-args>)
 
 " remaps
 noremap <leader>v :Tvsplit<CR>
 noremap <leader>s :Tsplit<CR>
+noremap <leader>0 :Twselect 0<CR>
+noremap <leader>1 :Twselect 1<CR>
+noremap <leader>2 :Twselect 2<CR>
+noremap <leader>3 :Twselect 3<CR>
+noremap <leader>4 :Twselect 4<CR>
+noremap <leader>5 :Twselect 5<CR>
+noremap <leader>6 :Twselect 6<CR>
+noremap <leader>7 :Twselect 7<CR>
+noremap <leader>8 :Twselect 8<CR>
+noremap <leader>9 :Twselect 9<CR>

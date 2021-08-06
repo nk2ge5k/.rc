@@ -78,21 +78,6 @@ endif
 
 autocm FileType yaml,python setlocal cursorcolumn " draw cursorcolumn for python and yaml
 
-function! StripTrailingWhitespace()
-    if &ft =~ 'vimwiki'
-    else
-        %s/\s\+$//e
-    endif
-endfun
-
-autocmd BufWritePre * call StripTrailingWhitespace()
-
-function YaPaste() range
-  echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| ya paste | ya notify')
-endfunction
-
-vnoremap <silent> <leader>y :call YaPaste()<cr>
-
 """""""""""""""""""""""""""""""""" APPERENCE """""""""""""""""""""""""""""""""""
 
 color default
@@ -183,9 +168,6 @@ let g:go_def_mapping_enabled = 1
 let g:go_term_enabled = 1
 let g:go_term_close_on_exit = 0
 
-""""""""""""""""""""""""""""""""" vim-rooter """""""""""""""""""""""""""""""""""
-
-let g:rooter_patterns = ['.git', 'Makefile', '.arc', 'service.yaml', 'compile_commands.json']
 
 """""""""""""""""""""""""""""""""" undotree """"""""""""""""""""""""""""""""""""
 
@@ -257,6 +239,9 @@ let g:rustfmt_autosave = 1
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 set completeopt=menuone,noinsert,noselect
 
+
+if !has('nvim')
+
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
@@ -278,7 +263,7 @@ function! s:show_documentation()
   endif
 endfunction
 
-
+endif
 """"""""""""""""""""""""""""" google/vim-codefmt """""""""""""""""""""""""""""""
 
 if $ARC == 1
@@ -309,19 +294,26 @@ augroup END
 
 endif
 
-""""""""""""""""""""""""""""""""" telescope """"""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""" custom """""""""""""""""""""""""""""""""""""
+
+function! StripTrailingWhitespace()
+    if &ft =~ 'vimwiki'
+    else
+        %s/\s\+$//e
+    endif
+endfun
+
+autocmd BufWritePre * call StripTrailingWhitespace()
+
+function YaPaste() range
+  echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| ya paste | ya notify')
+endfunction
+
+vnoremap <silent> <leader>y :call YaPaste()<cr>
 
 if has('nvim')
     lua require('custom')
-
-    " nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files()<cr>
-    " nnoremap <leader>; <cmd>lua require('telescope.builtin').buffers()<cr>
-    " nnoremap <leader>g <cmd>lua require('telescope.builtin').live_grep()<cr>
-
-    nnoremap <leader>q <cmd>lua require('telescope.builtin').quickfix()<cr>
-    nnoremap <leader>p <cmd>lua require('custom.telescope').projects()<cr>
 endif
-
 
 call s:LocalSource('tmux.vim')
 call s:LocalSource('uservices.vim')

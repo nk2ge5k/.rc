@@ -34,7 +34,7 @@ end
 
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
-local servers = { "pyright", "clangd", "gopls", "rls" }
+local servers = {"clangd", "gopls", "rls", "pyright"}
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,

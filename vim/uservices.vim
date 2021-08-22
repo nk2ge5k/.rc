@@ -19,6 +19,34 @@ function! s:ExtractUservicesRootDir()
     return ''
 endfunction
 
+function! s:ExtractProjectDir()
+
+    let uservices_dir = s:ExtractUservicesRootDir()
+    if empty(uservices_dir)
+        return 'echoerr ' . string('cannot call outside uservices directory')
+    endif
+
+    let root = getcwd()
+
+    while root !=# previous && root !=# uservices_dir
+        let service_yaml = substitute(root, '[\/]$', '', '') . '/service.yaml'
+        let type = getftype(service_yaml)
+        if type ==# 'file'
+            return root
+        endif
+
+        let library_yaml = substitute(root, '[\/]$', '', '') . '/library.yaml'
+        let type = getftype(library_yaml)
+        if type ==# 'file'
+            return root
+        endif
+
+        let previous = root
+        let root = fnamemodify(root, ':h')
+    endwhile
+
+endfunction
+
 function! s:ExtractServiceName(uservices_dir)
     let previous = ''
     let root = getcwd()

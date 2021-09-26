@@ -23,6 +23,7 @@ call plug#begin()
         Plug 'neoclide/coc.nvim', {'branch': 'release'}
     endif
 
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 call plug#end()
 
 call glaive#Install()

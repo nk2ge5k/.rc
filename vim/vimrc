@@ -286,8 +286,7 @@ augroup autoformat_settings
   autocmd FileType gn AutoFormatBuffer gn
   autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
   autocmd FileType java AutoFormatBuffer google-java-format
-  autocmd FileType python AutoFormatBuffer yapf
-  autocmd FileType python AutoFormatBuffer autopep8
+  autocmd FileType python AutoFormatBuffer black
   autocmd FileType rust AutoFormatBuffer rustfmt
   autocmd FileType vue AutoFormatBuffer prettier
 augroup END
@@ -317,3 +316,26 @@ endif
 
 call s:LocalSource('tmux.vim')
 call s:LocalSource('uservices.vim')
+
+lua <<EOF
+
+require'nvim-treesitter.configs'.setup {
+    ensure_installed = "maintained",
+    ignore_install = {},
+    incremental_selection = {
+        enable = true,
+        keymaps = {
+            init_selection = "gnn",
+            node_incremental = "grn",
+            scope_incremental = "grc",
+            node_decremental = "grm",
+        },
+    },
+    highlight = {
+        enable = true,
+        disable = {},
+        additional_vim_regex_highlighting = false
+    },
+}
+
+EOF

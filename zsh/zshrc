@@ -45,3 +45,6 @@ if [[ $DISPLAY ]]; then
     # switch keyboard layouts with alt+space
     setxkbmap -layout us,ru -option 'grp:alt_space_toggle'
 fi
+
+GPG_TTY=`tty`
+export GPG_TTY

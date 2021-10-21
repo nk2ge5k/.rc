@@ -1,4 +1,4 @@
-set shell=/bin/bash
+set shell=/usr/bin/zsh
 
 let s:vim_dir = expand('<sfile>:h')
 function! s:LocalSource(filename) abort
@@ -77,7 +77,10 @@ else
     cnoreabbrev st terminal
 endif
 
-autocm FileType yaml,python setlocal cursorcolumn " draw cursorcolumn for python and yaml
+autocmd FileType yaml,python setlocal cursorcolumn " draw cursorcolumn for python and yaml
+
+let &undodir=s:vim_dir . '/.vimdid/'
+set undofile
 
 """""""""""""""""""""""""""""""""" APPERENCE """""""""""""""""""""""""""""""""""
 
@@ -151,14 +154,6 @@ if has('nvim')
     tnoremap <C-w>l <C-\><C-N><C-w>l
 endif
 
-if executable('ag')
-    let g:ackprg = 'ag --vimgrep'
-endif
-
-""""""""""""""""""""""""""""""" NERDCommenter """"""""""""""""""""""""""""""""""
-
-let g:NERDSpaceDelims = 1
-
 """"""""""""""""""""""""""""""""""" vim-go """""""""""""""""""""""""""""""""""""
 
 let g:go_highlight_functions = 1
@@ -174,15 +169,11 @@ let g:go_term_enabled = 1
 let g:go_term_close_on_exit = 0
 
 
-"""""""""""""""""""""""""""""""""" undotree """"""""""""""""""""""""""""""""""""
-
-let g:undotree_WindowLayout = 3
-let g:undotree_ShortIndicators = 1
-
-set undodir=$HOME/dotfiles2.0/vim/.vimdid/
-set undofile                " So is persistent undo ...
-
 """""""""""""""""""""""""""""""""""" FZF """""""""""""""""""""""""""""""""""""""
+
+if executable('ag')
+    let g:ackprg = 'ag --vimgrep'
+endif
 
 if executable('fzf')
     let g:fzf_layout = { 'down': '~20%' }

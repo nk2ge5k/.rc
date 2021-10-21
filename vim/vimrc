@@ -83,6 +83,7 @@ autocm FileType yaml,python setlocal cursorcolumn " draw cursorcolumn for python
 
 color default
 highlight ColorColumn ctermbg=8 ctermfg=White
+highlight clear TODO
 
 set tabpagemax=15               " Only show 15 tabs
 set showmode                    " Display the current mode
@@ -135,6 +136,9 @@ set splitbelow                  " Puts new split windows to the bottom of the cu
 
 """"""""""""""""""""""""""""""""" KEY MAPPING """"""""""""""""""""""""""""""""""
 
+autocmd InsertLeave  * normal mZ
+nmap <leader>i `Z
+
 nmap j gj
 nmap k gk
 
@@ -182,11 +186,14 @@ set undofile                " So is persistent undo ...
 
 if executable('fzf')
     let g:fzf_layout = { 'down': '~20%' }
+    let g:fzf_buffers_jump = 1
 
     map <C-p> :Files<CR>
     nmap <leader>; :Buffers<CR>
 
     if executable('rg')
+        inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+
         set grepprg=rg\ --no-heading\ --vimgrep
         set grepformat=%f:%l:%c:%m
 
@@ -208,7 +215,18 @@ if executable('fzf')
         endfunction
 
         nmap <leader>fw :call SearchWord()<cr>
+
+        function! RipgrepFzf(query, fullscreen)
+            let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+            let initial_command = printf(command_fmt, shellescape(a:query))
+            let reload_command = printf(command_fmt, '{q}')
+            let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+            call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+        endfunction
+
+        command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
     endif
+
 endif
 
 """""""""""""""""""""""""""""""""" vim-wiki """"""""""""""""""""""""""""""""""""
@@ -307,41 +325,8 @@ endfunction
 
 vnoremap <silent> <leader>y :call YaPaste()<cr>
 
-if has('nvim')
-    lua require('custom')
-endif
-
-call s:LocalSource('tmux.vim')
-call s:LocalSource('uservices.vim')
-
-lua <<EOF
-
-require'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained",
-    ignore_install = {},
-    incremental_selection = {
-        enable = true,
-        keymaps = {
-            init_selection = "gnn",
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
-        },
-    },
-    highlight = {
-        enable = true,
-        disable = {},
-        additional_vim_regex_highlighting = false
-    },
-}
-
-EOF
-
 " Don't save backups of *.gpg files
 set backupskip+=*.gpg
-" To avoid that parts of the file is saved to .viminfo when yanking or
-" deleting, empty the 'viminfo' option.
-set viminfo=
 
 augroup encrypted
   au!
@@ -365,3 +350,10 @@ augroup encrypted
     \ silent u |
     \ setlocal nobin
 augroup END
+
+if has('nvim')
+    lua require('custom')
+endif
+
+call s:LocalSource('tmux.vim')
+call s:LocalSource('uservices.vim')

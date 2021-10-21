@@ -5,7 +5,7 @@ SOURCE_DIR="$HOME/src"
 BINARY_DIR="$HOME/bin"
 
 mkdir -p $SOURCE_DIR
-mkdir -P $BINARY_DIR
+mkdir -p $BINARY_DIR
 
 ################################# DEPENDENCIES #################################
 
@@ -125,5 +125,14 @@ then
 echo "================================ INSTALLING GO ================================"
 
 curl --proto '=https' --tlsv1.2 -sSf https://storage.googleapis.com/golang/go1.16.4.linux-amd64.tar.gz | tar -C $BINARY_DIR -xzf -
+
+fi
+
+
+#################################### NOTES #####################################
+if [ ! -d "$HOME/notes" ]
+then
+echo "=============================== INSTALLING NOTES =============================="
+git clone git@github.com:nk2ge5k/notes.git "$HOME/notes"
 
 fi

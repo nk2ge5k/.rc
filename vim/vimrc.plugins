@@ -2,11 +2,7 @@ call plug#begin()
     Plug 'terryma/vim-multiple-cursors'
     Plug 'fatih/vim-go'
     Plug 'plasticboy/vim-markdown'
-    Plug 'rust-lang/rust.vim'
     Plug 'tpope/vim-fugitive'
-    " typescript
-    Plug 'leafgarland/typescript-vim'
-    Plug 'peitalin/vim-jsx-typescript'
     Plug 'ap/vim-css-color'
 
     Plug 'google/vim-maktaba'

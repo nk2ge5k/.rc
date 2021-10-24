@@ -303,6 +303,10 @@ augroup END
 
 endif
 
+""""""""""""""""""""""""""""""""" terraform """"""""""""""""""""""""""""""""""""
+
+let g:terraform_fmt_on_save=1
+
 """"""""""""""""""""""""""""""""""" custom """""""""""""""""""""""""""""""""""""
 
 function! StripTrailingWhitespace()

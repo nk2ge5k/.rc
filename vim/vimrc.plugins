@@ -4,6 +4,8 @@ call plug#begin()
     Plug 'plasticboy/vim-markdown'
     Plug 'tpope/vim-fugitive'
     Plug 'ap/vim-css-color'
+    Plug 'hashivim/vim-terraform'
+
 
     Plug 'google/vim-maktaba'
     Plug 'google/vim-codefmt'
@@ -21,6 +23,7 @@ call plug#begin()
     endif
 
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'nvim-treesitter/playground'
 call plug#end()
 
 call glaive#Install()

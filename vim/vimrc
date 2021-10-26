@@ -1,4 +1,4 @@
-set shell=/usr/bin/zsh
+set shell=/bin/zsh
 
 let s:vim_dir = expand('<sfile>:h')
 function! s:LocalSource(filename) abort

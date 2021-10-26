@@ -13,8 +13,9 @@ call plug#begin()
 
     Plug 'vimwiki/vimwiki'
 
-    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
+
 
     if has('nvim')
         Plug 'neovim/nvim-lspconfig'

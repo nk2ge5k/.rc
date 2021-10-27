@@ -206,7 +206,8 @@ function! tmux#FastNote() abort
         let vim = 'nvim'
     endif
 
-    return s:Run('popup', '-E', vim, '-c', 'VimwikiMakeDiaryNote')
+    return s:Run('popup', '-w', '60%', '-h', '80%',
+                \ '-E', vim, '-c', 'VimwikiMakeDiaryNote')
 endfunction
 
 

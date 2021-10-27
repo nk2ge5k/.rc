@@ -57,14 +57,27 @@ function! s:InsideTmux()
     return exists('$TMUX')
 endfunction
 
-function! s:ListPanes()
-    let cmd = [g:tmux_executable,
-                \ 'list-panes', '-F"#P #{pane_active} #{pane_current_path}"']
+function! s:Run(...)
+    if len(a:000) == 0
+        return ''
+    endif
+
+    let cmd = [g:tmux_executable]
+    for item in a:000
+        if type(item) ==# type([])
+            let cmd = cmd + item
+        else
+            call add(cmd, item)
+        endif
+    endfor
 
     let [out, err] = s:SystemError(cmd)
-    if err
-        throw 'failed to list panes: ' . out
-    end
+    return err ? 'echoerr ' . string(out) : ''
+endfunction
+
+function! s:ListPanes()
+    let [out, err] = s:SystemError([g:tmux_executable,
+                \ 'list-panes', '-F"#P #{pane_active} #{pane_current_path}"'])
 
     let panes = []
     for line in split(out, "\n")
@@ -86,15 +99,14 @@ function! s:ListPanes()
     retur panes
 endfunction
 
-function! s:SwichToPane(index)
-    let cmd = [g:tmux_executable, 'select-pane', '-t', a:index]
 
-    let [out, err] = s:SystemError(cmd)
-    return err ? 'echoerr ' . string(out) : ''
+function! s:SwichToPane(index)
+    return s:Run('select-pane', '-t', a:index)
 endfunction
 
+
 function! s:SplitWindow(horizontal, detach, size, dir)
-    let cmd = [g:tmux_executable, 'split-window']
+    let cmd = ['split-window']
 
     if a:horizontal
         call add(cmd, '-h')
@@ -114,17 +126,11 @@ function! s:SplitWindow(horizontal, detach, size, dir)
         call add(cmd, a:dir)
     endif
 
-    let [out, err] = s:SystemError(cmd)
-    return err ? 'echoerr ' . string(out) : ''
+    return call('s:Run', cmd)
 endfunction
 
 function! s:SendKeys(pane_index, command)
-    let cmd = [g:tmux_executable,
-                \ "send-keys", "-t", a:pane_index,
-                \ "C-c", "Enter"] + a:command + ["Enter"]
-
-    let [out, err] = s:SystemError(cmd)
-    return err ? 'echoerr ' . string(out) : ''
+    return s:Run("send-keys", "-t", a:pane_index, "C-c", "Enter", a:command, "Enter")
 endfunction
 
 " tmux#SplitWindow([, {horizontal}, {detach}, {size}, {dir}])
@@ -151,10 +157,7 @@ function! tmux#SelectWindow(window_index)
         return 'echoerr ' . string('cannot select window outside tmux')
     endif
 
-    let cmd = [g:tmux_executable, "select-window", "-t", a:window_index]
-    let [out, err] = s:SystemError(cmd)
-
-    return err ? 'echoerr ' . string(out) : ''
+    return s:Run("select-window", "-t", a:window_index)
 endfunction
 
 " tmux#SendKeys([, command ...])
@@ -193,8 +196,22 @@ function! tmux#SendKeys(dir, ...) abort
     return s:SendKeys(index, a:000)
 endfunction
 
+function! tmux#FastNote() abort
+    if !s:InsideTmux()
+        return 'echoerr ' . string('cannot display popup outside tmux')
+    endif
+
+    let vim = 'vim'
+    if has('nvim')
+        let vim = 'nvim'
+    endif
+
+    return s:Run('popup', '-E', vim, '-c', 'VimwikiMakeDiaryNote')
+endfunction
+
 
 " commands
+command! -bang -nargs=* -range=-1 TFastNote exec tmux#FastNote(<f-args>)
 command! -bang -nargs=* -range=-1 Tvsplit exec tmux#SplitWindow(1, <f-args>)
 command! -bang -nargs=* -range=-1 Tsplit exec tmux#SplitWindow(0, <f-args>)
 command! -bang -nargs=1 -range=-1 Tmux exec tmux#SendKeys('', <q-args>)
@@ -203,6 +220,7 @@ command! -bang -nargs=1 -range=-1 Twselect exec tmux#SelectWindow(<q-args>)
 " remaps
 noremap <leader>v :Tvsplit<CR>
 noremap <leader>s :Tsplit<CR>
+noremap <leader>o :TFastNote<CR>
 noremap <leader>0 :Twselect 0<CR>
 noremap <leader>1 :Twselect 1<CR>
 noremap <leader>2 :Twselect 2<CR>

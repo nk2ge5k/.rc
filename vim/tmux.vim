@@ -206,7 +206,8 @@ function! tmux#FastNote() abort
         let vim = 'nvim'
     endif
 
-    return s:Run('popup', '-w', '60%', '-h', '80%',
+    let directory = get(g:, 'note_dir', $HOME)
+    return s:Run('popup', '-w', '60%', '-h', '80%', '-d', directory,
                 \ '-E', vim, '-c', 'VimwikiMakeDiaryNote')
 endfunction
 

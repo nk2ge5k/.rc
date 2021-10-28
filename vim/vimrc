@@ -122,7 +122,6 @@ set listchars=tab:·\ ,trail:.   " Highlight problematic whitespace
 set fillchars+=vert:\           " separator
 set vb t_vb=                    " No more beeps
 set lazyredraw
-set nofoldenable
 set noshowmode
 set noerrorbells
 
@@ -215,13 +214,16 @@ endif
 
 """""""""""""""""""""""""""""""""" vim-wiki """"""""""""""""""""""""""""""""""""
 
-let g:vimwiki_ext2syntax = {
-            \ '.md': 'markdown',
-            \ '.md.gpg': 'markdown'
-            \ }
+
+
+autocmd FileType vimwiki setlocal syntax=markdown
+autocmd FileType vimwiki setlocal foldenable
+
+let g:vim_markdown_emphasis_multiline = 0
 
 let s:note_dir = $HOME . '/notes'
 
+let g:vimwiki_folding = 'custom'
 let g:vimwiki_list = [{
     \ 'path': s:note_dir,
     \ 'syntax': 'markdown',
@@ -234,6 +236,10 @@ let g:vimwiki_list = [{
         \ 'cpp': 'cpp'
     \ },
     \ }]
+let g:vimwiki_ext2syntax = {
+    \ '.md': 'markdown',
+    \ '.md.gpg': 'markdown'
+    \ }
 
 """""""""""""""""""""""""""""""""" coc.vim """""""""""""""""""""""""""""""""""""
 
@@ -269,16 +275,6 @@ endfunction
 endif
 """"""""""""""""""""""""""""" google/vim-codefmt """""""""""""""""""""""""""""""
 
-if $ARC == 1
-
-augroup autoformat_settings
-    autocmd BufWritePost * silent! !ya style <afile>
-    autocmd BufWritePost * edit
-    autocmd BufWritePost * redraw!
-augroup END
-
-else
-
 Glaive codefmt clang_format_executable='clang-format-9'
 
 augroup autoformat_settings
@@ -294,8 +290,6 @@ augroup autoformat_settings
   autocmd FileType vue AutoFormatBuffer prettier
 augroup END
 
-endif
-
 """"""""""""""""""""""""""""""""" terraform """"""""""""""""""""""""""""""""""""
 
 let g:terraform_fmt_on_save=1
@@ -309,7 +303,7 @@ function! StripTrailingWhitespace()
     endif
 endfun
 
-autocmd BufWritePre * call StripTrailingWhitespace()
+autocmd BufWritePre vim call StripTrailingWhitespace()
 
 function YaPaste() range
   echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| ya paste | ya notify')

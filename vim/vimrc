@@ -214,12 +214,17 @@ endif
 
 """""""""""""""""""""""""""""""""" vim-wiki """"""""""""""""""""""""""""""""""""
 
-
-
-autocmd FileType vimwiki setlocal syntax=markdown
-autocmd FileType vimwiki setlocal foldenable
-
+let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_new_list_item_indent = 0
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_fenced_languages = [
+    \ 'csharp=cs',
+    \ 'cpp=cpp', 
+    \ 'vim=vim', 
+    \ 'bash=sh', 
+    \ 'go=go',
+    \ 'c=c',
+    \ 'python=python' ]
 
 let g:note_dir = $HOME . '/notes'
 

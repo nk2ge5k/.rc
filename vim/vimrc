@@ -246,6 +246,10 @@ let g:vimwiki_ext2syntax = {
     \ '.md.gpg': 'markdown'
     \ }
 
+if has("gui_running") || has('nvim-0.4')
+  hi def VimwikiDelText term=strikethrough cterm=strikethrough gui=strikethrough
+endif
+
 """""""""""""""""""""""""""""""""" coc.vim """""""""""""""""""""""""""""""""""""
 
 let g:rustfmt_autosave = 1

@@ -124,7 +124,16 @@ function! uservices#TestsAll(...) abort
         endif
     endif
 
-    return tmux#SendKeys(uservices_dir, 'make testsuite-' . service)
+    let cmd = [
+        \ 'make',
+        \ 'testsuite-' . service
+        \ ]
+
+    if exists('g:ucompile_procs')
+        call add(cmd, 'NPROCS=' . g:ucompile_procs)
+    endif
+
+    return tmux#SendKeys(uservices_dir, join(cmd, ' '))
 endfunction
 
 function! uservices#TestFile(...) abort
@@ -143,8 +152,18 @@ function! uservices#TestFile(...) abort
     endif
 
     let filename = expand('%:t')
-    return tmux#SendKeys(uservices_dir, 'make testsuite-' . service .
-                \ ' PYTEST_ARGS="-k ' . filename . ' -vv"')
+
+    let cmd = [
+        \ 'make',
+        \ 'testsuite-' . service
+        \ ' PYTEST_ARGS="-k ' . filename . ' -vv"' \
+        \ ]
+
+    if exists('g:ucompile_procs')
+        call add(cmd, 'NPROCS=' . g:ucompile_procs)
+    endif
+
+    return tmux#SendKeys(uservices_dir, join(cmd, ' '))
 endfunction
 
 function! uservices#TestsuiteThis() abort
@@ -181,8 +200,17 @@ function! uservices#TestsuiteThis() abort
     let end = match(line, '(', start)
     let name = line[start:end-1]
 
-    return tmux#SendKeys(uservices_dir, 'make testsuite-' . service .
-                \ ' PYTEST_ARGS="-k ' . name . ' -vv"')
+    let cmd = [
+        \ 'make',
+        \ 'testsuite-' . service
+        \ ' PYTEST_ARGS="-k ' . name . ' -vv"' \
+        \ ]
+
+    if exists('g:ucompile_procs')
+        call add(cmd, 'NPROCS=' . g:ucompile_procs)
+    endif
+
+    return tmux#SendKeys(uservices_dir, join(cmd, ' '))
 endfunction
 
 function! uservices#GdbThis() abort
@@ -219,8 +247,17 @@ function! uservices#GdbThis() abort
     let end = match(line, '(', start)
     let name = line[start:end-1]
 
-    return tmux#SendKeys(uservices_dir, 'make testsuite-gdb-' . service .
-                \ ' PYTEST_ARGS="-k ' . name . ' -vv"')
+    let cmd = [
+        \ 'make',
+        \ 'testsuite-gdb-' . service
+        \ ' PYTEST_ARGS="-k ' . name . ' -vv"' \
+        \ ]
+
+    if exists('g:ucompile_procs')
+        call add(cmd, 'NPROCS=' . g:ucompile_procs)
+    endif
+
+    return tmux#SendKeys(uservices_dir, join(cmd, ' '))
 endfunction
 
 " commands

@@ -350,6 +350,9 @@ if has('nvim')
     lua require('custom')
 endif
 
+
+let g:ucompile_procs = 8
+
 call s:LocalSource('tmux.vim')
 call s:LocalSource('uservices.vim')
 call s:LocalSource('c.vim')

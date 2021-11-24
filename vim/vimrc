@@ -345,6 +345,9 @@ augroup encrypted
 augroup END
 
 if has('nvim')
+    set nofoldenable
+    set foldmethod=expr
+    set foldexpr=nvim_treesitter#foldexpr()
     lua require('custom')
 endif
 

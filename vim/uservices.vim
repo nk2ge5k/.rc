@@ -126,7 +126,7 @@ function! uservices#TestsAll(...) abort
 
     let cmd = [
         \ 'make',
-        \ 'testsuite-' . service
+        \ 'testsuite-' . service,
         \ ]
 
     if exists('g:ucompile_procs')
@@ -155,8 +155,8 @@ function! uservices#TestFile(...) abort
 
     let cmd = [
         \ 'make',
-        \ 'testsuite-' . service
-        \ ' PYTEST_ARGS="-k ' . filename . ' -vv"' \
+        \ 'testsuite-' . service,
+        \ ' PYTEST_ARGS="-k ' . filename . ' -vv"',
         \ ]
 
     if exists('g:ucompile_procs')
@@ -202,8 +202,8 @@ function! uservices#TestsuiteThis() abort
 
     let cmd = [
         \ 'make',
-        \ 'testsuite-' . service
-        \ ' PYTEST_ARGS="-k ' . name . ' -vv"' \
+        \ 'testsuite-' . service,
+        \ ' PYTEST_ARGS="-k ' . name . ' -vv"',
         \ ]
 
     if exists('g:ucompile_procs')
@@ -249,8 +249,8 @@ function! uservices#GdbThis() abort
 
     let cmd = [
         \ 'make',
-        \ 'testsuite-gdb-' . service
-        \ ' PYTEST_ARGS="-k ' . name . ' -vv"' \
+        \ 'testsuite-gdb-' . service,
+        \ ' PYTEST_ARGS="-k ' . name . ' -vv"',
         \ ]
 
     if exists('g:ucompile_procs')

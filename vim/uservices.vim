@@ -132,6 +132,8 @@ function! uservices#TestsAll(...) abort
     if exists('g:ucompile_procs')
         call add(cmd, 'NPROCS=' . g:ucompile_procs)
     endif
+    let cmd = cmd + [ ';', 'tmux', 'display', 
+                \ '"Test for service ' . service . ' fininshed"']
 
     return tmux#SendKeys(uservices_dir, join(cmd, ' '))
 endfunction
@@ -162,6 +164,8 @@ function! uservices#TestFile(...) abort
     if exists('g:ucompile_procs')
         call add(cmd, 'NPROCS=' . g:ucompile_procs)
     endif
+    let cmd = cmd + [ ';', 'tmux', 'display',
+                \ '"Test for file ' . filename . ' fininshed"']
 
     return tmux#SendKeys(uservices_dir, join(cmd, ' '))
 endfunction
@@ -209,6 +213,8 @@ function! uservices#TestsuiteThis() abort
     if exists('g:ucompile_procs')
         call add(cmd, 'NPROCS=' . g:ucompile_procs)
     endif
+    let cmd = cmd + [ ';', 'tmux', 'display',
+                \ '"Test for function ' . name . ' fininshed"']
 
     return tmux#SendKeys(uservices_dir, join(cmd, ' '))
 endfunction

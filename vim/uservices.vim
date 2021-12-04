@@ -126,12 +126,14 @@ function! uservices#TestsAll(...) abort
 
     let cmd = [
         \ 'make',
-        \ 'testsuite-' . service
+        \ 'testsuite-' . service,
         \ ]
 
     if exists('g:ucompile_procs')
         call add(cmd, 'NPROCS=' . g:ucompile_procs)
     endif
+    let cmd = cmd + [ ';', 'tmux', 'display', 
+                \ '"Test for service ' . service . ' fininshed"']
 
     return tmux#SendKeys(uservices_dir, join(cmd, ' '))
 endfunction
@@ -155,13 +157,15 @@ function! uservices#TestFile(...) abort
 
     let cmd = [
         \ 'make',
-        \ 'testsuite-' . service
-        \ ' PYTEST_ARGS="-k ' . filename . ' -vv"' \
+        \ 'testsuite-' . service,
+        \ ' PYTEST_ARGS="-k ' . filename . ' -vv"',
         \ ]
 
     if exists('g:ucompile_procs')
         call add(cmd, 'NPROCS=' . g:ucompile_procs)
     endif
+    let cmd = cmd + [ ';', 'tmux', 'display',
+                \ '"Test for file ' . filename . ' fininshed"']
 
     return tmux#SendKeys(uservices_dir, join(cmd, ' '))
 endfunction
@@ -202,13 +206,15 @@ function! uservices#TestsuiteThis() abort
 
     let cmd = [
         \ 'make',
-        \ 'testsuite-' . service
-        \ ' PYTEST_ARGS="-k ' . name . ' -vv"' \
+        \ 'testsuite-' . service,
+        \ ' PYTEST_ARGS="-k ' . name . ' -vv"',
         \ ]
 
     if exists('g:ucompile_procs')
         call add(cmd, 'NPROCS=' . g:ucompile_procs)
     endif
+    let cmd = cmd + [ ';', 'tmux', 'display',
+                \ '"Test for function ' . name . ' fininshed"']
 
     return tmux#SendKeys(uservices_dir, join(cmd, ' '))
 endfunction
@@ -249,8 +255,8 @@ function! uservices#GdbThis() abort
 
     let cmd = [
         \ 'make',
-        \ 'testsuite-gdb-' . service
-        \ ' PYTEST_ARGS="-k ' . name . ' -vv"' \
+        \ 'testsuite-gdb-' . service,
+        \ ' PYTEST_ARGS="-k ' . name . ' -vv"',
         \ ]
 
     if exists('g:ucompile_procs')

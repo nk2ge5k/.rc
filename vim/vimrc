@@ -84,17 +84,21 @@ set undofile
 
 """""""""""""""""""""""""""""""""" APPERENCE """""""""""""""""""""""""""""""""""
 
-color default
-highlight ColorColumn ctermbg=8 ctermfg=White
-highlight clear TODO
+colorscheme atlas
+" highlight clear Normal
+" highlight ColorColumn ctermbg=8 ctermfg=White
+" highlight clear TODO
 
 set tabpagemax=15               " Only show 15 tabs
 set showmode                    " Display the current mode
 
 set cursorline                  " Highlight current line
 
+
 highlight clear SignColumn      " SignColumn should match background
 highlight clear LineNr          " Current line number row will have same
+" highlight clear CursorLine
+" highlight link CursorLine CursorColumn
 
 
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab

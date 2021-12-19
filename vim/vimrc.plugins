@@ -6,6 +6,9 @@ call plug#begin()
     Plug 'tpope/vim-fugitive'
     Plug 'ap/vim-css-color'
     Plug 'hashivim/vim-terraform'
+    Plug 'mhinz/vim-rfc'
+
+    Plug 'huyvohcmc/atlas.vim'
 
     Plug 'google/vim-maktaba'
     Plug 'google/vim-codefmt'

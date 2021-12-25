@@ -49,10 +49,8 @@ nvim_lsp.clangd.setup {
     cmd = { 
         'clangd',
         '--background-index',
-        '--malloc-trim',
         '--clang-tidy',
-        '--pch-storage=disk',
-        '-j=2',
+        '-j=3',
     },
     flags = {
       debounce_text_changes = 150,

@@ -8,7 +8,7 @@ call plug#begin()
     Plug 'hashivim/vim-terraform'
     Plug 'mhinz/vim-rfc'
 
-    Plug 'huyvohcmc/atlas.vim'
+    Plug 'nk2ge5k/atlas.vim'
 
     Plug 'google/vim-maktaba'
     Plug 'google/vim-codefmt'

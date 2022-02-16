@@ -29,15 +29,12 @@ bindkey "^X^E" edit-command-line
 
 alias vim=nvim
 
-# add fzf bindings
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # init pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 if [ -d "$PYENV_ROOT" ]
 then
     export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
+    # eval "$(pyenv init -)"
     # eval "$(pyenv virtualenv-init -)"
 fi
 

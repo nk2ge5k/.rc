@@ -103,10 +103,7 @@ fi
 if ! command -v zsh &> /dev/null
 then
 echo "================================ INTALLING ZSH ================================"
-
-    sudo apt install zsh && \
-        sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
+    sudo apt install zsh
 fi
 
 echo "source $SCRIPT_DIR/zsh/zshrc" >> $HOME/.zshrc

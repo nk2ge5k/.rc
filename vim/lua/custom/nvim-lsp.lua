@@ -56,3 +56,14 @@ nvim_lsp.clangd.setup {
       debounce_text_changes = 150,
     }
 }
+
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = false,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = false,
+})
+
+vim.o.updatetime = 500
+vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]]

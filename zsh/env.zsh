@@ -4,7 +4,7 @@ source "$HOME/.cargo/env"
 # default editor is nvim
 export EDITOR='nvim'
 # change man pager to nvim
-export MANPAGER="nvim -c 'set ft=man' -"
+# export MANPAGER="nvim -c 'set ft=man' -"
 
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"

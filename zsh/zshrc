@@ -1,14 +1,6 @@
 SCRIPT_DIR=$(realpath $(dirname $0))
 
 zstyle ':completion:*' completer _complete _ignored _approximate
-zstyle :compinstall filename '/home/nk2ge5k/.zshrc'
-
-autoload -Uz compinit
-for dump in ~/.zcompdump(N.mh+24); do
-    echo "Compimit"
-    compinit
-done
-compinit -C
 
 autoload -U colors && colors
 PS1="%{$fg[blue]%}%m %{$fg[yellow]%}%(4~|%3~|%~)%{$reset_color%}$ "

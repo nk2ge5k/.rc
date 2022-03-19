@@ -84,21 +84,14 @@ set undofile
 """""""""""""""""""""""""""""""""" APPERENCE """""""""""""""""""""""""""""""""""
 
 colorscheme atlas
-" highlight clear Normal
-" highlight ColorColumn ctermbg=8 ctermfg=White
-" highlight clear TODO
 
 set tabpagemax=15               " Only show 15 tabs
 set showmode                    " Display the current mode
 
 set cursorline                  " Highlight current line
 
-
 highlight clear SignColumn      " SignColumn should match background
 highlight clear LineNr          " Current line number row will have same
-" highlight clear CursorLine
-" highlight link CursorLine CursorColumn
-
 
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab
 
@@ -119,10 +112,11 @@ set wildmode=list:longest,full  " Command <Tab> completion, list matches, then
 set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
 set scrolljump=5                " Lines to scroll when cursor leaves screen
 set scrolloff=3                 " Minimum lines to keep above and below cursor
-set colorcolumn=81              " higlight column 81
+set colorcolumn=+1              " higlight column 81
 set list!
 set listchars=tab:·\ ,trail:.   " Highlight problematic whitespace
 set fillchars+=vert:\           " separator
+set fillchars+=stl:\ ,stlnc:\   "
 set vb t_vb=                    " No more beeps
 set lazyredraw
 set noshowmode
@@ -296,7 +290,7 @@ Glaive codefmt clang_format_executable='clang-format-9'
 
 augroup autoformat_settings
   autocmd FileType bzl AutoFormatBuffer buildifier
-  autocmd FileType c,cpp,proto,arduino,javascript,typescriptreact AutoFormatBuffer clang-format
+  autocmd FileType c,cpp,proto,arduino,javascript AutoFormatBuffer clang-format
   autocmd FileType dart AutoFormatBuffer dartfmt
   autocmd FileType gn AutoFormatBuffer gn
   autocmd FileType go AutoFormatBuffer gofmt

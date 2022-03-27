@@ -290,7 +290,7 @@ Glaive codefmt clang_format_executable='clang-format-9'
 
 augroup autoformat_settings
   autocmd FileType bzl AutoFormatBuffer buildifier
-  autocmd FileType c,cpp,proto,arduino,javascript AutoFormatBuffer clang-format
+  autocmd FileType c,cpp,proto,arduino AutoFormatBuffer clang-format
   autocmd FileType dart AutoFormatBuffer dartfmt
   autocmd FileType gn AutoFormatBuffer gn
   autocmd FileType go AutoFormatBuffer gofmt
@@ -298,7 +298,7 @@ augroup autoformat_settings
   autocmd FileType java AutoFormatBuffer google-java-format
   autocmd FileType python AutoFormatBuffer black
   autocmd FileType rust AutoFormatBuffer rustfmt
-  autocmd FileType vue AutoFormatBuffer prettier
+  autocmd FileType vue,javascript AutoFormatBuffer prettier
 augroup END
 
 """"""""""""""""""""""""""""""""" terraform """"""""""""""""""""""""""""""""""""

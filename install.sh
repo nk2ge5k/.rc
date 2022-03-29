@@ -7,11 +7,30 @@ BINARY_DIR="$HOME/bin"
 mkdir -p $SOURCE_DIR
 mkdir -p $BINARY_DIR
 
+ssh-add
+
 ################################# DEPENDENCIES #################################
 
 echo "=========================== INSTALLING DEPENDENCIES ==========================="
 
-sudo apt install -y $(cat packages.txt)
+OS=$(uname)
+
+echo "Installing dependencies for $OS..."
+
+LUAROCKS="luarocks"
+if [[ "$OS" == "Linux" ]]; then
+    sudo apt install -y $(cat packages.txt)
+elif [[ "$OS" == "Darwin" ]]; then
+    for package in $(cat mac-packages.txt); do
+        sudo port install $package
+    done
+    export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+    LUAROCKS="luarocks-5.3"
+    SCRIPT_DIR=$(grealpath $(dirname $0))
+else
+    echo "Unexpected operation system $OS"
+    exit 1;
+fi
 
 ##################################### VIM ######################################
 
@@ -19,9 +38,9 @@ if ! command -v nvim &> /dev/null
 then
 echo "============================== INSTALLING NEOVIM ==============================="
 
-    sudo luarocks build mpack
-    sudo luarocks build lpeg
-    sudo luarocks build inspect
+    sudo $LUAROCKS build mpack
+    sudo $LUAROCKS build lpeg
+    sudo $LUAROCKS build inspect
 
     NEOVIM_DIR="$SOURCE_DIR/github.com/neovim/neovim"
     if [ ! -d "$NEOVIM_DIR" ]
@@ -31,7 +50,7 @@ echo "============================== INSTALLING NEOVIM =========================
 
     cd $NEOVIM_DIR && \
         make clean && git checkout master && git pull origin master && \
-        make CMAKE_BUILD_TYPE=RelWithDebInfo USE_BUNDLED=OFF && \
+        make CMAKE_BUILD_TYPE=RelWithDebInfo && \
         sudo make install
 
     INIT_VIM="$HOME/.config/nvim/init.vim"
@@ -90,7 +109,7 @@ echo "================================ INTALLING TMUX ==========================
     fi
 
     cd "$SOURCE_DIR/github.com/tmux/tmux" && \
-        ./autogen.sh && ./configure && make && sudo make install
+        ./autogen.sh && ./configure --enable-utf8proc && make && sudo make install
 
 fi
 
@@ -103,10 +122,22 @@ fi
 if ! command -v zsh &> /dev/null
 then
 echo "================================ INTALLING ZSH ================================"
-    sudo apt install zsh
+
+    if [[ "$OS" == "Linux" ]]; then
+        sudo apt install -y zsh
+    elif [[ "$OS" == "Darwin" ]]; then
+        sudo port install -y zsh
+    else
+        echo "Unexpected operation system $OS"
+        exit 1;
+    fi
 fi
 
-echo "source $SCRIPT_DIR/zsh/zshrc" >> $HOME/.zshrc
+echo "source $SCRIPT_DIR/zsh/zshrc" > $HOME/.zshrc
+if [[ "$OS" == "Darwin" ]]; then
+   echo "alias realpath=grealpath" >> $HOME/.zshrc
+fi
+
 ##################################### RUST #####################################
 if ! command -v rustup &> /dev/null
 then

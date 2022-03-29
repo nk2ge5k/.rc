@@ -1,4 +1,10 @@
-SCRIPT_DIR=$(realpath $(dirname $0))
+OS=$(uname)
+
+if [[ "$OS" == "Darwin" ]]; then
+    SCRIPT_DIR=$(grealpath $(dirname $0))
+else
+    SCRIPT_DIR=$(realpath $(dirname $0))
+fi
 
 zstyle ':completion:*' completer _complete _ignored _approximate
 

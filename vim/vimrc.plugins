@@ -4,6 +4,7 @@ call plug#begin()
     Plug 'plasticboy/vim-markdown'
     Plug 'tpope/vim-fugitive'
     Plug 'mhinz/vim-rfc'
+    Plug 'Rykka/riv.vim'
 
     Plug 'nk2ge5k/atlas.vim'
 
@@ -19,6 +20,7 @@ call plug#begin()
     if has('nvim')
         Plug 'neovim/nvim-lspconfig'
         Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+        Plug 'nvim-treesitter/playground'
     else
         Plug 'neoclide/coc.nvim', {'branch': 'release'}
     endif

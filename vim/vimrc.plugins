@@ -4,7 +4,6 @@ call plug#begin()
     Plug 'plasticboy/vim-markdown'
     Plug 'tpope/vim-fugitive'
     Plug 'mhinz/vim-rfc'
-    Plug 'Rykka/riv.vim'
 
     Plug 'nk2ge5k/atlas.vim'
 

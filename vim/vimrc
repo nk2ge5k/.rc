@@ -329,10 +329,11 @@ endfunction
 vnoremap <silent> <leader>y :call YaPaste()<cr>
 
 if has('nvim')
+    lua require('custom')
+
     set nofoldenable
     set foldmethod=expr
     set foldexpr=nvim_treesitter#foldexpr()
-    lua require('custom')
 endif
 
 let g:ucompile_procs = 8

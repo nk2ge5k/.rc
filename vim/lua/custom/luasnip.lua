@@ -85,6 +85,42 @@ do
 end
 -- }}}
 
+-- {{{ cpp
+do
+    ls.add_snippets("cpp", {
+        -- struct
+        ls.snippet("stru", fmt(
+            [[
+            struct {} {{
+                {}
+            }}
+            ]],
+            {
+                insert(1),
+                insert(0),
+            }
+        )),
+        -- header file
+        ls.snippet("header", fmt(
+            [[
+            #pragma once
+
+            {}
+
+            namespace {} {{
+                {}
+            }}
+            ]],
+            {
+                insert(1),
+                insert(2),
+                insert(0),
+            }
+        ))
+    })
+end
+-- }}}
+
 -- {{{ lua
 do
     ls.add_snippets("lua", {

@@ -1,0 +1,145 @@
+local ls = require "luasnip"
+local types = require "luasnip.util.types"
+
+local n = ls.snippet_node
+local t = ls.text_node
+local d = ls.dynamic_node
+local r = ls.restore_node
+
+local choice = ls.choice_node
+local func = ls.function_node
+local insert = ls.insert_node
+
+local fmt = require("luasnip.extras.fmt").fmt
+local rep = require("luasnip.extras").rep
+
+-- Clear snippets because i tierd of reloading
+require("luasnip.session.snippet_collection").clear_snippets()
+
+-- {{{ config
+
+ls.config.set_config({
+    -- Remember last snippet to be able to jump back into it
+    history = true,
+    -- Update snippet while typing
+    updateevents = "TextChanged,TextChangedI",
+    -- Pretty clear
+    enable_autosnippets = true,
+
+    ext_opts = {
+        [types.choiceNode] = {
+            active = {
+                virt_text = { { " <-", "NonTest" } },
+            },
+        },
+    },
+})
+
+-- }}}
+
+-- {{{ keymaps
+
+-- <c-k> expand current snippet or jump to the next item in the snippet
+vim.keymap.set({"i", "s"}, "<c-k>", function()
+    if ls.expand_or_jumpable() then
+        ls.expand_or_jump()
+    end
+end, { silent = true })
+
+-- <c-j> jump on to the previous item in the snippet
+vim.keymap.set({ "i", "s" }, "<c-j>", function()
+    if ls.jumpable(-1) then
+        ls.jump(-1)
+    end
+end, { silent = false })
+
+-- <c-l> cycle through the options
+vim.keymap.set("i", "<c-l>", function()
+    if ls.choice_active() then
+        ls.change_choice(1)
+    end
+end)
+
+-- }}}
+
+-- {{{ all
+do
+    ls.add_snippets("all", {
+        -- todo comment
+        ls.snippet("todo", {
+            choice(1, {
+                t("TODO(nk2ge5k): "),
+                t("NOTE(nk2ge5k): "),
+                t("FIXME(nk2ge5k): "),
+            }),
+        }),
+        -- current time
+        ls.snippet("today", func(function()
+            return os.date("%Y-%m-%d")
+        end)),
+        -- now
+        ls.snippet("now", func(function()
+            return os.date("%Y-%m-%dT%H:%M:%S")
+        end)),
+    })
+end
+-- }}}
+
+-- {{{ lua
+do
+    ls.add_snippets("lua", {
+        ls.snippet("req", {
+            fmt("local {} = require('{}')", { insert(1), rep(1) })
+        }),
+        ls.snippet("fn", {
+            fmt("local {} = function({})\n   {}\nend", { insert(1), insert(2), insert(3) })
+        }),
+    })
+end
+-- }}}
+
+-- {{{ rusl
+do
+    ls.add_snippets("rust", {
+        -- print something
+        ls.snippet("pr", fmt("println!(\"{}\"{});", {
+            insert(1, "{:?}"),
+            insert(2),
+        })),
+        -- create test
+        ls.snippet("modtest", fmt(
+            [[
+            #[cfg(test)]
+            mod test {{
+            {}
+                {}
+            }}
+            ]],
+            {
+                choice(1, {
+                    t("   use super::*;"), 
+                    t(""),
+                }),
+                insert(0),
+            }
+        )),
+    })
+end
+-- }}}
+
+-- {{{ markdown
+do
+    local md_header = ls.snippet("hi", {
+        choice(1, {
+            t("# "),
+            t("## "),
+            t("### "),
+            t("#### "),
+        }),
+        insert(0),
+    })
+
+    ls.add_snippets("vimwiki", { md_header })
+    ls.add_snippets("markdown", { md_header })
+end
+-- }}}

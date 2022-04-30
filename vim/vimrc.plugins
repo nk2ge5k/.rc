@@ -6,12 +6,14 @@ call plug#begin()
     Plug 'mhinz/vim-rfc'
 
     Plug 'nk2ge5k/atlas.vim'
+    Plug 'folke/twilight.nvim'
 
     Plug 'google/vim-maktaba'
     Plug 'google/vim-codefmt'
     Plug 'google/vim-glaive'
 
     Plug 'vimwiki/vimwiki'
+    Plug 'gyim/vim-boxdraw'
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'

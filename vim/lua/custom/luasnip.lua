@@ -116,7 +116,32 @@ do
                 insert(2),
                 insert(0),
             }
-        ))
+        )),
+        -- range based for
+        ls.snippet("for", fmt(
+            [[
+            for (const auto& {}: {}) {{
+                {}
+            }}
+            ]],
+            {
+                insert(1, "item"),
+                insert(2, "items"),
+                insert(0),
+            }
+        )),
+        -- for loop
+        ls.snippet("fori", fmt(
+            [[
+            for (size_t i = 0; i < {}; ++i) {{
+                {}
+            }}
+            ]],
+            {
+                insert(1),
+                insert(0),
+            }
+        )),
     })
 end
 -- }}}

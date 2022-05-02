@@ -24,3 +24,5 @@ export PATH="$HOME/scripts/enabled/:$PATH"
 export XDG_CONFIG_HOME=$HOME/.config
 
 export GPG_TTY=`tty`
+
+export FZF_DEFAULT_COMMAND='rg --files'

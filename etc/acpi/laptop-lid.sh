@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# env | grep XAUTHORITY >> $HOME/.Xdbus
+# env | grep DBUS_SESSION_BUS_ADDRESS > $HOME/.Xdbus
+
 source /home/nk2ge5k/.Xdbus
 export DISPLAY=:0.0
 

@@ -149,19 +149,44 @@ end
 -- {{{ lua
 do
     ls.add_snippets("lua", {
-        ls.snippet("req", {
-            fmt("local {} = require('{}')", { insert(1), rep(1) })
-        }),
-        ls.snippet("fn", {
-            fmt("local {} = function({})\n   {}\nend", { insert(1), insert(2), insert(3) })
-        }),
+        ls.snippet("req", fmt([[local {} = require("{}")]], {
+            func(function (index)
+                local parts = vim.split(index[1][1], ".", true)
+                return parts[#parts] or ""
+            end, {1}),
+            insert(1),
+        })),
+        ls.snippet("fn", fmt(
+            [[
+            local {} = function ({})
+                {}
+            end
+            ]],
+            {
+                insert(1),
+                insert(2),
+                insert(3),
+            }
+        )),
     })
 end
 -- }}}
 
--- {{{ rusl
+-- {{{ rust
 do
     ls.add_snippets("rust", {
+        -- function
+        ls.snippet("fn", fmt(
+            [[
+            fn {} {{
+                {}
+            }}
+            ]],
+            {
+                insert(1),
+                insert(0),
+            }
+        )),
         -- print something
         ls.snippet("pr", fmt("println!(\"{}\"{});", {
             insert(1, "{:?}"),
@@ -178,7 +203,7 @@ do
             ]],
             {
                 choice(1, {
-                    t("   use super::*;"), 
+                    t("   use super::*;"),
                     t(""),
                 }),
                 insert(0),

@@ -43,11 +43,14 @@ set showcmd                 " Show partial commands in status line and
 
 set mouse=""                " disable mouse
 set noswapfile              " disable swap files
+set nobackup
 set hidden                  " Allow buffer switching without saving
 set history=1000
 set number
 set relativenumber
 set virtualedit=block
+
+set backupdir=/tmp/nvim/backup
 
 " For when you forget to sudo.. Really Write the file.
 cmap w!! w !sudo tee % >/dev/null

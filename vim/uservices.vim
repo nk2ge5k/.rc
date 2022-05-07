@@ -1,37 +1,5 @@
-
-if !exists('g:term_channel_id')
-    let g:term_channel_id = -1
-endif
-
-if !exists('g:term_use_tmux')
-    let g:term_use_tmux = 0
-endif
-
-function! s:TermOpen(cwd)
-
-    " TODO(nk2ge5k): switch between vsplit and split
-    new
-
-    let g:term_channel_id = termopen(&shell, {'cwd': a:cwd})
-endfunction
-
-function! s:SendKeys(cmd)
-    call chansend(g:term_channel_id, [a:cmd, ""])
-endfunction
-
 function! s:RunCommand(cmd, ...)
-    if g:term_use_tmux
-        return tmux#SendKeys(cmd, get(a:000, 0, getcwd()))
-    endif
-
-    try
-        " canceling previous job
-        call s:SendKeys("\<c-c>")
-        call s:SendKeys(a:cmd)
-    catch
-        call s:TermOpen(get(a:000, 0, getcwd()))
-        call s:SendKeys(a:cmd)
-    endtry
+    return term#SendKeys(cmd, get(a:000, 0, getcwd()))
 endfunction
 
 function! s:ExtractUservicesRootDir()

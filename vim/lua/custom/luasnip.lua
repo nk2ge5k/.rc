@@ -213,6 +213,27 @@ do
 end
 -- }}}
 
+-- {{{ go
+do
+    ls.add_snippets("go", {
+        -- range
+        ls.snippet("range", fmt(
+            [[
+            for {}, {} := range {} {{
+                {}
+            }}
+            ]],
+            {
+                insert(1, "_"),
+                insert(2, "item"),
+                insert(3, "items"),
+                insert(0),
+            }
+        ))
+    })
+end
+-- }}}
+
 -- {{{ markdown
 do
     local md_header = ls.snippet("hi", {

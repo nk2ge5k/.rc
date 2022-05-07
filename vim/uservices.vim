@@ -1,3 +1,39 @@
+
+if !exists('g:term_channel_id')
+    let g:term_channel_id = -1
+endif
+
+if !exists('g:term_use_tmux')
+    let g:term_use_tmux = 0
+endif
+
+function! s:TermOpen(cwd)
+
+    " TODO(nk2ge5k): switch between vsplit and split
+    new
+
+    let g:term_channel_id = termopen(&shell, {'cwd': a:cwd})
+endfunction
+
+function! s:SendKeys(cmd)
+    call chansend(g:term_channel_id, [a:cmd, ""])
+endfunction
+
+function! s:RunCommand(cmd, ...)
+    if g:term_use_tmux
+        return tmux#SendKeys(cmd, get(a:000, 0, getcwd()))
+    endif
+
+    try
+        " canceling previous job
+        call s:SendKeys("\<c-c>")
+        call s:SendKeys(a:cmd)
+    catch
+        call s:TermOpen(get(a:000, 0, getcwd()))
+        call s:SendKeys(a:cmd)
+    endtry
+endfunction
+
 function! s:ExtractUservicesRootDir()
     if exists('w:uservices_dir')
         return w:uservices_dir
@@ -98,14 +134,14 @@ function! uservices#Cmake(...) abort
 
             let library = s:ExtractLibraryName(uservices_dir)
             if !empty(library)
-                return tmux#SendKeys(uservices_dir, 'make -B cmake-lib-' . library)
+                return s:RunCommand('make -B cmake-lib-' . library, uservices_dir)
             endif
 
             return 'echoerr ' . string('service name is required')
         endif
     endif
 
-    return tmux#SendKeys(uservices_dir, 'make -B cmake-' . service)
+    return s:RunCommand('make -B cmake-' . service, uservices_dir)
 endfunction
 
 function! uservices#TestsAll(...) abort
@@ -135,7 +171,7 @@ function! uservices#TestsAll(...) abort
     let cmd = cmd + [ ';', 'tmux', 'display', 
                 \ '"Test for service ' . service . ' fininshed"']
 
-    return tmux#SendKeys(uservices_dir, join(cmd, ' '))
+    return s:RunCommand(join(cmd, ' '), uservices_dir)
 endfunction
 
 function! uservices#TestFile(...) abort
@@ -167,7 +203,7 @@ function! uservices#TestFile(...) abort
     let cmd = cmd + [ ';', 'tmux', 'display',
                 \ '"Test for file ' . filename . ' fininshed"']
 
-    return tmux#SendKeys(uservices_dir, join(cmd, ' '))
+    return s:RunCommand(join(cmd, ' '), uservices_dir)
 endfunction
 
 function! uservices#TestsuiteThis() abort
@@ -216,7 +252,7 @@ function! uservices#TestsuiteThis() abort
     let cmd = cmd + [ ';', 'tmux', 'display',
                 \ '"Test for function ' . name . ' fininshed"']
 
-    return tmux#SendKeys(uservices_dir, join(cmd, ' '))
+    return s:RunCommand(join(cmd, ' '), uservices_dir)
 endfunction
 
 function! uservices#GdbThis() abort
@@ -263,7 +299,7 @@ function! uservices#GdbThis() abort
         call add(cmd, 'NPROCS=' . g:ucompile_procs)
     endif
 
-    return tmux#SendKeys(uservices_dir, join(cmd, ' '))
+    return s:RunCommand(join(cmd, ' '), uservices_dir)
 endfunction
 
 " commands

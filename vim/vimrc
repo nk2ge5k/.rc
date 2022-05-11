@@ -262,36 +262,11 @@ if has("gui_running") || has('nvim-0.4')
   hi def VimwikiDelText term=strikethrough cterm=strikethrough gui=strikethrough
 endif
 
-"""""""""""""""""""""""""""""""""" coc.vim """""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""" lsp """""""""""""""""""""""""""""""""""""""
 
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 set completeopt=menuone,noinsert,noselect
 
-
-if !has('nvim')
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-nmap <leader>qf  <Plug>(coc-fix-current)
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-endif
 """"""""""""""""""""""""""""" google/vim-codefmt """""""""""""""""""""""""""""""
 
 Glaive codefmt clang_format_executable='clang-format-9'

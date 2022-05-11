@@ -176,7 +176,7 @@ function! term#SendKeys(dir, ...) abort
     endif
 
     let dir = a:dir
-    if !dir
+    if dir == ''
         let dir = getcwd()
     endif
 

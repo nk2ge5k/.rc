@@ -184,7 +184,7 @@ function! term#SendKeys(dir, ...) abort
         try
             " canceling previous job
             call s:SendKeys("\<c-c>")
-            call s:SendKeys("cd " + dir)
+            call s:SendKeys("cd " . dir)
             call s:SendKeys(a:1)
         catch
             call s:TermOpen(dir, 1, g:split_horizontal)

@@ -1,5 +1,5 @@
 function! s:RunCommand(cmd, ...)
-    return term#SendKeys(cmd, get(a:000, 0, getcwd()))
+    return term#SendKeys(get(a:000, 0, getcwd()), a:cmd)
 endfunction
 
 function! s:ExtractUservicesRootDir()

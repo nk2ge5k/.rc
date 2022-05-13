@@ -159,7 +159,7 @@ endfunction
 function! term#SplitWindow(...) abort
     if !s:UseTmux()
         call s:TermOpen(getcwd(), 0, get(a:000, 0, g:split_horizontal))
-        return
+        return ''
     endif
 
     return s:TmuxSplitWindow(
@@ -172,7 +172,7 @@ endfunction
 " term#SendKeys([, command ...])
 function! term#SendKeys(dir, ...) abort
     if a:1 == ''
-        return
+        return ''
     endif
 
     let dir = a:dir
@@ -191,7 +191,7 @@ function! term#SendKeys(dir, ...) abort
             call s:SendKeys(a:1)
         endtry
 
-        return
+        return ''
     endif
 
 

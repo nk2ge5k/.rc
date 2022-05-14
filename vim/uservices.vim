@@ -95,25 +95,31 @@ function! uservices#Cmake(...) abort
     endif
 
     let service = get(a:000, 0, '')
+    let cmd = []
 
     if empty(service)
         let service = s:ExtractServiceName(uservices_dir)
-        if empty(service)
-
-            let library = s:ExtractLibraryName(uservices_dir)
-            if !empty(library)
-                return s:RunCommand('make -B cmake-lib-' . library, uservices_dir)
-            endif
-
-            return 'echoerr ' . string('service name is required')
-        endif
     endif
 
-    return s:RunCommand('make -B cmake-' . service, uservices_dir)
+    if empty(service)
+        let library = s:ExtractLibraryName(uservices_dir)
+        if empty(library)
+            return 'echoerr ' . string('service name is required')
+        endif
+
+        let cmd = ['make', '-B', 'cmake-lib-' . library]
+    else
+        let cmd = [ 'make', '-B', 'cmake-' . service ]
+    endif
+
+    if exists('g:ucompile_procs')
+        call add(cmd, 'NPROCS=' . g:ucompile_procs)
+    endif
+
+    return s:RunCommand(join(cmd, ' '), uservices_dir)
 endfunction
 
 function! uservices#TestsAll(...) abort
-
     let uservices_dir = s:ExtractUservicesRootDir()
     if empty(uservices_dir)
         return 'echoerr ' . string('cannot call outside uservices directory')
@@ -136,6 +142,7 @@ function! uservices#TestsAll(...) abort
     if exists('g:ucompile_procs')
         call add(cmd, 'NPROCS=' . g:ucompile_procs)
     endif
+
     let cmd = cmd + [ ';', 'tmux', 'display', 
                 \ '"Test for service ' . service . ' fininshed"']
 
@@ -150,22 +157,33 @@ function! uservices#UTestsAll(...) abort
     endif
 
     let service = get(a:000, 0, '')
+    let cmd = []
 
     if empty(service)
         let service = s:ExtractServiceName(uservices_dir)
-        if empty(service)
-            return 'echoerr ' . string('service name is required')
-        endif
     endif
 
-    let cmd = [
-        \ 'make',
-        \ 'utest-' . service,
-        \ ]
+    if empty(service)
+        let library = s:ExtractLibraryName(uservices_dir)
+        if empty(library)
+            return 'echoerr ' . string('service name is required')
+        endif
+
+        let cmd = [
+            \ 'make',
+            \ 'utest-lib-' . library,
+            \ ]
+    else
+        let cmd = [
+            \ 'make',
+            \ 'utest-' . service,
+            \ ]
+    endif
 
     if exists('g:ucompile_procs')
         call add(cmd, 'NPROCS=' . g:ucompile_procs)
     endif
+
     let cmd = cmd + [ ';', 'tmux', 'display', 
                 \ '"Test for service ' . service . ' fininshed"']
 

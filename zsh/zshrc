@@ -27,6 +27,10 @@ pyenv() {
         export PATH="$PYENV_ROOT/bin:$PATH"
         eval "$(pyenv init -)"
         eval "$(pyenv virtualenv-init -)"
+
+        export PATH="$(pyenv root)/shims:$PATH"
+        export PATH="$(python-config --prefix)/bin:$PATH"
+        export PATH="$(python3-config --prefix)/bin:$PATH"
     fi
 }
 

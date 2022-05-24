@@ -98,7 +98,7 @@ highlight clear LineNr          " Current line number row will have same
 
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab
 
-set laststatus=2                " always display statusline
+set laststatus=3                " always display statusline
 set statusline=%<%n\ %F\ %m\ %r\ %y\ 0x%B,%b%=%l:%c\ %P
 
 set backspace=indent,eol,start  " Backspace for dummies
@@ -118,7 +118,7 @@ set scrolloff=3                 " Minimum lines to keep above and below cursor
 set colorcolumn=81              " higlight column 81
 set list!
 set listchars=tab:·\ ,trail:.   " Highlight problematic whitespace
-set fillchars+=vert:\           " separator
+set fillchars+=vert:│           " separator
 set fillchars+=stl:\ ,stlnc:\   "
 set vb t_vb=                    " No more beeps
 set lazyredraw

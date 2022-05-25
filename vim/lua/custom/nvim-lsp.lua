@@ -47,7 +47,7 @@ nvim_lsp.clangd.setup {
         'clangd',
         '--background-index',
         '--clang-tidy',
-        '-j=3',
+        '-j=8',
     },
 }
 

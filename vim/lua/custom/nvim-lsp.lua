@@ -1,5 +1,16 @@
 local nvim_lsp = require('lspconfig')
 
+
+function is_file_exists(file_name)
+  local file = io.open(file_name, "r")
+
+  if file == nil then
+    return false
+  end
+
+  return true
+end
+
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -41,15 +52,24 @@ for _, lsp in ipairs(servers) do
   }
 end
 
-nvim_lsp.clangd.setup {
-    on_attach=on_attach,
-    cmd = {
-        'clangd',
-        '--background-index',
-        '--clang-tidy',
-        '-j=8',
-    },
-}
+
+do
+  local cwd = vim.fn.getcwd()
+  local cmd = {
+      'clangd',
+      '--background-index',
+      '--clang-tidy',
+      '-j=8',
+  }
+
+
+  if is_file_exists(cwd .. "/ya.make.ext") then
+    local user = vim.fn.getenv("USER")
+    cmd[#cmd + 1] = "--compile-commands-dir=/tmp/" .. user .. "/ya-dump"
+  end
+
+  nvim_lsp.clangd.setup { on_attach=on_attach, cmd = cmd }
+end
 
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")

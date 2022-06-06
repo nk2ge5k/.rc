@@ -86,7 +86,14 @@ set undofile
 
 """""""""""""""""""""""""""""""""" APPERENCE """""""""""""""""""""""""""""""""""
 
-colorscheme atlas
+let g:everforest_diagnostic_text_highlight = 1
+let g:everforest_diagnostic_virtual_text = 'colored'
+let g:everforest_disable_italic_comment = 1
+let g:everforest_better_performance = 1
+let g:everforest_disable_terminal_colors = 1
+let g:everforest_spell_foreground = 'colored'
+
+colorscheme everforest
 
 set tabpagemax=15               " Only show 15 tabs
 set showmode                    " Display the current mode

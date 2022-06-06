@@ -20,6 +20,8 @@ call plug#begin()
 
     Plug 'tpope/vim-scriptease'
 
+    Plug 'sainnhe/everforest'
+
     if has('nvim')
         Plug 'numToStr/Comment.nvim'
         Plug 'neovim/nvim-lspconfig'

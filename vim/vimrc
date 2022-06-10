@@ -199,8 +199,8 @@ if executable('fzf')
     " autocmd  FileType fzf set laststatus=0 noshowmode noruler
       " \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
-    map <C-p> :Files<CR>
-    nmap <leader>; :Buffers<CR>
+    " map <C-p> :Files<CR>
+    " nmap <leader>; :Buffers<CR>
 
     if executable('rg')
         set grepprg=rg\ --no-heading\ --vimgrep
@@ -319,6 +319,15 @@ if has('nvim')
     set nofoldenable
     set foldmethod=expr
     set foldexpr=nvim_treesitter#foldexpr()
+
+    " Find files using Telescope command-line sugar.
+
+    noremap <C-p> <cmd>Telescope find_files<CR>
+    noremap <C-f> <cmd>Telescope current_buffer_fuzzy_find<CR>
+
+    noremap <leader>, <cmd>Telescope live_grep<CR>
+    noremap <leader>; <cmd>Telescope buffers<CR>
+    noremap <leader>t <cmd>Telescope treesitter<CR>
 endif
 
 let g:ucompile_procs = 8

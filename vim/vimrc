@@ -287,20 +287,11 @@ augroup autoformat_settings
   autocmd FileType vue,javascript,typescriptreact AutoFormatBuffer prettier
 augroup END
 
-""""""""""""""""""""""""""""""""" terraform """"""""""""""""""""""""""""""""""""
-
-let g:terraform_fmt_on_save=1
-
 """"""""""""""""""""""""""""""""""" custom """""""""""""""""""""""""""""""""""""
 
-function! StripTrailingWhitespace()
-    if &ft =~ 'vimwiki'
-    else
-        %s/\s\+$//e
-    endif
-endfun
-
-autocmd BufWritePre vim call StripTrailingWhitespace()
+augroup autospell
+  autocmd FileType markdown,vimwiki setlocal spelllang=ru,en spell
+augroup END
 
 function YaPaste() range
   echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| ya paste | ya notify')

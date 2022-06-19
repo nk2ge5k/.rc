@@ -81,6 +81,22 @@ do
         ls.snippet("now", func(function()
             return os.date("%Y-%m-%dT%H:%M:%S")
         end)),
+        -- current path
+        ls.snippet("apath", func(function()
+          return vim.fn.expand("%:p:h")
+        end)),
+        -- current file
+        ls.snippet("afile", func(function()
+          return vim.fn.expand("%:p")
+        end)),
+        -- current path
+        ls.snippet("path", func(function()
+          return vim.fn.expand("%:h")
+        end)),
+        -- current file
+        ls.snippet("file", func(function()
+          return vim.fn.expand("%")
+        end)),
     })
 end
 -- }}}

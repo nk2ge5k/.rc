@@ -40,7 +40,7 @@ ls.config.set_config({
 -- {{{ keymaps
 
 -- <c-k> expand current snippet or jump to the next item in the snippet
-vim.keymap.set({"i", "s"}, "<c-k>", function()
+vim.keymap.set({"i", "s"}, "<c-u>", function()
     if ls.expand_or_jumpable() then
         ls.expand_or_jump()
     end

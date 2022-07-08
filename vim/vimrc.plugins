@@ -6,11 +6,7 @@ call plug#begin()
     Plug 'mhinz/vim-rfc'
 
     Plug 'nk2ge5k/atlas.vim'
-    Plug 'folke/twilight.nvim'
-
-    Plug 'google/vim-maktaba'
-    Plug 'google/vim-codefmt'
-    Plug 'google/vim-glaive'
+    Plug 'sainnhe/everforest'
 
     Plug 'vimwiki/vimwiki'
     Plug 'gyim/vim-boxdraw'
@@ -19,8 +15,6 @@ call plug#begin()
     Plug 'junegunn/fzf.vim'
 
     Plug 'tpope/vim-scriptease'
-
-    Plug 'sainnhe/everforest'
 
     if has('nvim')
         Plug 'nvim-lua/plenary.nvim'
@@ -34,5 +28,3 @@ call plug#begin()
     endif
 
 call plug#end()
-
-call glaive#Install()

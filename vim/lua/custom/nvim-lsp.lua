@@ -1,7 +1,7 @@
 local nvim_lsp = require('lspconfig')
 
 
-function is_file_exists(file_name)
+local is_file_exists = function(file_name)
   local file = io.open(file_name, "r")
 
   if file == nil then
@@ -11,95 +11,95 @@ function is_file_exists(file_name)
   return true
 end
 
-local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- Mappings.
-  local opts = { noremap=true, silent=true }
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-  buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+local on_attach = function(_, bufnr)
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
+  vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = 0 })
+  vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = 0 })
+  vim.keymap.set("n", "gr", vim.lsp.buf.references)
+  vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
+  vim.keymap.set("n", "<leader>q", vim.diagnostic.setqflist)
+  vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+  vim.keymap.set("n", "<leader>H", vim.diagnostic.goto_prev)
+  vim.keymap.set("n", "<leader>L", vim.diagnostic.goto_next)
 end
 
--- Use a loop to conveniently both setup defined servers
--- and map buffer local keybindings when the language server attaches
-local servers = {"gopls", "rls", "pyright", "tsserver"}
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    on_attach = on_attach,
-  }
-end
+--- clangd -------------------------------------------------------
+------------------------------------------------------------------
 
-
-do
-  local cwd = vim.fn.getcwd()
+local clangd_command = function()
   local cmd = {
-      'clangd',
-      '--background-index',
-      '--clang-tidy',
-      '-j=8',
+    'clangd',
+    '--background-index',
+    '--clang-tidy',
+    '-j=8',
   }
 
+  local cwd = vim.fn.getcwd()
+  local user = vim.fn.getenv("USER")
 
   if is_file_exists(cwd .. "/ya.make.ext") then
-    local user = vim.fn.getenv("USER")
     cmd[#cmd + 1] = "--compile-commands-dir=/tmp/" .. user .. "/ya-dump"
+  elseif is_file_exists(cwd .. "/service.yaml") then
+    cmd[#cmd + 1] = "--compile-commands-dir=/tmp/" .. user .. "/uservices-build/build"
   end
 
-  nvim_lsp.clangd.setup { on_attach=on_attach, cmd = cmd }
+  return cmd
 end
 
-local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
 
-nvim_lsp.sumneko_lua.setup {
-  on_attach=on_attach,
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-        -- Setup your lua path
-        path = runtime_path,
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim', 'ngx'},
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-        checkThirdParty = false,
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
+local setup_clangd = function(lsp)
+  lsp.clangd.setup { on_attach = on_attach, cmd = clangd_command() }
+end
+
+--- sumneko_lua --------------------------------------------------
+------------------------------------------------------------------
+
+local setup_lua = function(lsp)
+  local runtime_path = vim.split(package.path, ';')
+  table.insert(runtime_path, "lua/?.lua")
+  table.insert(runtime_path, "lua/?/init.lua")
+
+  nvim_lsp.sumneko_lua.setup {
+    on_attach = on_attach,
+    settings = {
+      Lua = {
+        runtime = {
+          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+          version = 'LuaJIT',
+          -- Setup your lua path
+          path = runtime_path,
+        },
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = { 'vim', 'ngx' },
+        },
+        workspace = {
+          -- Make the server aware of Neovim runtime files
+          library = vim.api.nvim_get_runtime_file("", true),
+          checkThirdParty = false,
+        },
+        -- Do not send telemetry data containing a randomized but unique identifier
+        telemetry = {
+          enable = false,
+        },
       },
     },
-  },
-}
+  }
+end
+
+local servers = { "gopls", "rls" }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup { on_attach = on_attach }
+end
+
+setup_clangd(nvim_lsp)
+setup_lua(nvim_lsp)
 
 vim.diagnostic.config({
   virtual_text = true,
   signs = false,
   underline = true,
   update_in_insert = false,
-  severity_sort = false,
+  severity_sort = true,
 })

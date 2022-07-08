@@ -269,24 +269,6 @@ nmap <leader>vy :VimwikiMakeYesterdayDiaryNote<CR>
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 set completeopt=menuone,noinsert,noselect
 
-""""""""""""""""""""""""""""" google/vim-codefmt """""""""""""""""""""""""""""""
-
-Glaive codefmt clang_format_executable='clang-format-9'
-Glaive codefmt rustfmt_options+='--edition=2021'
-
-augroup autoformat_settings
-  autocmd FileType bzl AutoFormatBuffer buildifier
-  " autocmd FileType c,cpp,proto,arduino AutoFormatBuffer clang-format
-  autocmd FileType dart AutoFormatBuffer dartfmt
-  autocmd FileType gn AutoFormatBuffer gn
-  autocmd FileType go AutoFormatBuffer gofmt
-  autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
-  autocmd FileType java AutoFormatBuffer google-java-format
-  autocmd FileType python AutoFormatBuffer black
-  autocmd FileType rust AutoFormatBuffer rustfmt
-  autocmd FileType vue,javascript,typescriptreact AutoFormatBuffer prettier
-augroup END
-
 """"""""""""""""""""""""""""""""""" custom """""""""""""""""""""""""""""""""""""
 
 augroup autospell
@@ -312,10 +294,10 @@ if has('nvim')
 
     noremap <C-p> <cmd>Telescope find_files<CR>
     noremap <C-f> <cmd>Telescope current_buffer_fuzzy_find<CR>
-
     noremap <leader>, <cmd>Telescope live_grep<CR>
     noremap <leader>; <cmd>Telescope buffers<CR>
     noremap <leader>t <cmd>Telescope treesitter<CR>
+    noremap <leader>dl <cmd>Telescope diagnostics<CR>
 endif
 
 let g:ucompile_procs = 8

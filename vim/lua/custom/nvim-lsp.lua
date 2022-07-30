@@ -22,6 +22,17 @@ local on_attach = function(_, bufnr)
   vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
   vim.keymap.set("n", "<leader>H", vim.diagnostic.goto_prev)
   vim.keymap.set("n", "<leader>L", vim.diagnostic.goto_next)
+
+  local filetype = vim.bo.filetype
+  if filetype == "go" then
+    vim.keymap.set("n", "<leader>E", function()
+      -- TODO(nk2ge5k): add error check
+      vim.lsp.buf_request_sync(bufnr, "workspace/executeCommand", {
+        command = "gopls.gc_details",
+        arguments = { vim.uri_from_bufnr(bufnr) },
+      }, 2000)
+    end)
+  end
 end
 
 --- clangd -------------------------------------------------------
@@ -60,7 +71,7 @@ local setup_lua = function(lsp)
   table.insert(runtime_path, "lua/?.lua")
   table.insert(runtime_path, "lua/?/init.lua")
 
-  nvim_lsp.sumneko_lua.setup {
+  lsp.sumneko_lua.setup {
     on_attach = on_attach,
     settings = {
       Lua = {
@@ -88,13 +99,38 @@ local setup_lua = function(lsp)
   }
 end
 
-local servers = { "gopls", "rls" }
+--- gopls -------------------------------------------------------
+-----------------------------------------------------------------
+
+local setup_gopls = function(lsp)
+  lsp.gopls.setup {
+    on_attach = on_attach,
+    settings = {
+      gopls = {
+        analyses = {
+          unusedparams = true,
+          unusedvariable = true,
+          fieldalignment = true,
+          nilness = true,
+          shadow = true,
+        },
+        staticcheck = true,
+        codelenses = {
+          gc_details = true
+        },
+      },
+    }
+  }
+end
+
+local servers = { "rls" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end
 
 setup_clangd(nvim_lsp)
 setup_lua(nvim_lsp)
+setup_gopls(nvim_lsp)
 
 vim.diagnostic.config({
   virtual_text = true,

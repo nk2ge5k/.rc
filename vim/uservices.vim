@@ -135,12 +135,13 @@ function! uservices#TestsAll(...) abort
     endif
 
     let cmd = [
-        \ 'make',
-        \ 'testsuite-' . service,
+        \ './tools/runtests', 
+        \ '--service-name ' . service,
+        \ '-vv'
         \ ]
 
     if exists('g:ucompile_procs')
-        call add(cmd, 'NPROCS=' . g:ucompile_procs)
+        let cmd = ['NPROCS=' . g:ucompile_procs] + cmd
     endif
 
     let cmd = cmd + [ ';', 'tmux', 'display', 
@@ -255,15 +256,17 @@ function! uservices#TestsuiteThis() abort
 
     let end = match(line, '(', start)
     let name = line[start:end-1]
+    let filename = expand('%:t')
 
     let cmd = [
-        \ 'make',
-        \ 'testsuite-' . service,
-        \ ' PYTEST_ARGS="-k ' . name . ' -vv"',
+        \ './tools/runtests', 
+        \ '--service-name ' . service,
+        \ '--test-filter', '"*' . filename . '::' . name . '*"',
+        \ '-vv'
         \ ]
 
     if exists('g:ucompile_procs')
-        call add(cmd, 'NPROCS=' . g:ucompile_procs)
+        let cmd = ['NPROCS=' . g:ucompile_procs] + cmd
     endif
     let cmd = cmd + [ ';', 'tmux', 'display',
                 \ '"Test for function ' . name . ' fininshed"']

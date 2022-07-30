@@ -18,7 +18,7 @@ source $SCRIPT_DIR/key-bindings.zsh
 
 # init pyenv
 pyenv() {
-    echo "PYENV not loaded! Loading now..."
+    echo "Loading pyenv..."
     unset -f pyenv
 
     export PYENV_ROOT="$HOME/.pyenv"
@@ -43,3 +43,5 @@ nvm() {
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 }
+
+pyenv

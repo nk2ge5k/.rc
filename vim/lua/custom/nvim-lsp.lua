@@ -123,7 +123,7 @@ local setup_gopls = function(lsp)
   }
 end
 
-local servers = { "rls" , "pyright"}
+local servers = { "rls" , "pyright", "tsserver" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end

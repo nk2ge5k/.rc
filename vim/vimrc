@@ -189,41 +189,8 @@ if executable('ag')
 endif
 
 if executable('fzf')
-
     let g:fzf_buffers_jump = 1
     let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
-
-    " let g:fzf_layout = { 'down': '~20%' }
-
-    " autocmd! FileType fzf
-    " autocmd  FileType fzf set laststatus=0 noshowmode noruler
-      " \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-
-    " map <C-p> :Files<CR>
-    " nmap <leader>; :Buffers<CR>
-
-    if executable('rg')
-        set grepprg=rg\ --no-heading\ --vimgrep
-        set grepformat=%f:%l:%c:%m
-
-        command! -bang -nargs=* Rg
-          \ call fzf#vim#grep(
-          \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-          \   fzf#vim#with_preview('right:50%'),
-          \   <bang>0)
-
-
-        function! SearchWord()
-            :norm "gyiw
-
-            call fzf#vim#grep(
-                        \ 'rg --column --line-number --no-heading --color=always '.shellescape(getreg('g')), 1,
-                        \ fzf#vim#with_preview('right:50%'), 0)
-        endfunction
-
-        nmap <leader>fw :call SearchWord()<cr>
-    endif
-
 endif
 
 """""""""""""""""""""""""""""""""" vim-wiki """"""""""""""""""""""""""""""""""""
@@ -289,15 +256,6 @@ if has('nvim')
     set nofoldenable
     set foldmethod=expr
     set foldexpr=nvim_treesitter#foldexpr()
-
-    " Find files using Telescope command-line sugar.
-
-    noremap <C-p> <cmd>Telescope find_files<CR>
-    noremap <C-f> <cmd>Telescope current_buffer_fuzzy_find<CR>
-    noremap <leader>, <cmd>Telescope live_grep<CR>
-    noremap <leader>; <cmd>Telescope buffers<CR>
-    noremap <leader>t <cmd>Telescope treesitter<CR>
-    noremap <leader>dl <cmd>Telescope diagnostics<CR>
 endif
 
 let g:ucompile_procs = 8

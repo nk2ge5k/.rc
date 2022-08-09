@@ -66,6 +66,8 @@ noremap <leader>j :cnext<CR>
 noremap <leader>k :cprevious<CR>
 noremap <C-j> :lnext<CR>
 noremap <C-k> :lprevious<CR>
+noremap <C-h> :tabp<CR>
+noremap <C-l> :tabn<CR>
 noremap Y y$
 
 cnoreabbrev hs split %:p:h/<C-R>

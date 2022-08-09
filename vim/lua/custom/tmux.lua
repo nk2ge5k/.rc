@@ -1,6 +1,7 @@
 local Job = require "plenary.job"
 
 local config = {
+  -- tmux executable
   executable = "tmux"
 }
 
@@ -32,7 +33,7 @@ function Popup:run(o)
   end
 
   if o.command == nil then
-    error(debug.traceback "Not command to run in popup")
+    error(debug.traceback "No command to run in popup window")
   end
 
   if o.cwd == nil then
@@ -41,9 +42,9 @@ function Popup:run(o)
 
   local cmd = concat_into({
     "popup",
-    '-w', self._width .. "%", -- popup width
-    "-h", self._height .. "%", -- popup height
-    "-d", o.cwd, -- working directory
+    '-w', self._width .. "%",
+    "-h", self._height .. "%",
+    "-d", o.cwd,
     "-E"
   }, o.command)
 

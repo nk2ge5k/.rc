@@ -221,27 +221,7 @@ function! term#SendKeys(dir, ...) abort
     return s:TmuxSendKeys(index, a:000)
 endfunction
 
-function! term#FastNote() abort
-    if !s:InsideTmux()
-        return 'echoerr ' . string('cannot display popup outside tmux')
-    endif
-
-    let vim = 'vim'
-    if has('nvim')
-        let vim = 'nvim'
-    endif
-
-    let directory = get(g:, 'note_dir', $HOME)
-    return s:Tmux('popup', '-w', '60%', '-h', '80%', '-d', directory,
-                \ '-E', vim, '-c', 'VimwikiMakeDiaryNote')
-endfunction
-
-
 " commands
-command! -bang -nargs=* -range=-1 TFastNote exec term#FastNote(<f-args>)
 command! -bang -nargs=* -range=-1 Tvsplit exec term#SplitWindow(0, <f-args>)
 command! -bang -nargs=* -range=-1 Tsplit exec term#SplitWindow(1, <f-args>)
 command! -bang -nargs=1 -range=-1 Tsend exec term#SendKeys('', <q-args>)
-
-" remaps
-noremap <leader>o :TFastNote<CR>

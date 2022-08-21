@@ -42,7 +42,7 @@ local arc_root = function(cwd)
 end
 
 local is_arc_directory = function(dir)
-  return pcall(arc_root)
+  return pcall(arc_root, dir)
 end
 
 -- Returns table of changes in current worktree

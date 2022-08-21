@@ -1,4 +1,5 @@
 local nvim_lsp = require('lspconfig')
+local arc = require("custom.arc")
 
 
 local is_file_exists = function(file_name)
@@ -9,6 +10,10 @@ local is_file_exists = function(file_name)
   end
 
   return true
+end
+
+local startswith = function(text, prefix)
+  return text:find(prefix, 1, true) == 1
 end
 
 local on_attach = function(_, bufnr)
@@ -47,6 +52,16 @@ local clangd_command = function()
   }
 
   local cwd = vim.fn.getcwd()
+
+  if not arc.owns(cwd) then
+    return cmd
+  end
+
+  local uservices_root = arc.root() .. "/taxi/uservices"
+  if not startswith(cwd, uservices_root) then
+    return cmd
+  end
+
   local user = vim.fn.getenv("USER")
 
   if is_file_exists(cwd .. "/ya.make.ext") then
@@ -123,7 +138,7 @@ local setup_gopls = function(lsp)
   }
 end
 
-local servers = { "rls" , "pyright", "tsserver" }
+local servers = { "rls", "pyright", "tsserver" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end

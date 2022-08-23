@@ -36,7 +36,7 @@ end
 -- Returns path to arcadia root
 local arc_root = function(cwd)
   if vim.g.arc_root == nil then
-    vim.g.arc_root = trim(arc_cmd("root", cwd))
+    vim.g.arc_root = trim(table.concat(arc_cmd({"root"}, cwd), " "))
   end
   return vim.g.arc_root
 end
@@ -57,7 +57,7 @@ end
 --   }
 -- }
 local arc_status = function()
-  return assert(vim.json.decode(arc_cmd("status --json")))
+  return assert(vim.json.decode(arc_cmd({"status", "--json"})))
 end
 
 local arc = {

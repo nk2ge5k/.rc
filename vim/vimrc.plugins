@@ -5,8 +5,8 @@ call plug#begin()
     Plug 'tpope/vim-fugitive'
     Plug 'mhinz/vim-rfc'
 
-    Plug 'nk2ge5k/atlas.vim'
     Plug 'sainnhe/everforest'
+    Plug 'rcarriga/nvim-notify'
 
     Plug 'vimwiki/vimwiki'
     Plug 'gyim/vim-boxdraw'

@@ -138,14 +138,52 @@ local setup_gopls = function(lsp)
   }
 end
 
-local servers = { "rust_analyzer", "pyright", "tsserver" }
+--- rust-analyzer -----------------------------------------------
+-----------------------------------------------------------------
+
+local setup_rust_analyzer = function(lsp)
+  lsp.rust_analyzer.setup({
+    on_attach = on_attach,
+    settings = {
+      ["rust-analyzer"] = {
+        imports = {
+          granularity = {
+            group = "module",
+          },
+          prefix = "self",
+        },
+        cargo = {
+          buildScripts = {
+            enable = true,
+          },
+        },
+        procMacro = {
+          enable = true
+        },
+      }
+    }
+  })
+end
+
+
+local servers = { "pyright", "tsserver" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end
 
-setup_clangd(nvim_lsp)
-setup_lua(nvim_lsp)
-setup_gopls(nvim_lsp)
+local custom = {
+  -- clangd
+  setup_clangd,
+  -- sumneko_lua
+  setup_lua,
+  -- gopls
+  setup_gopls,
+  -- rust_analyzer
+  setup_rust_analyzer,
+}
+for _, fn in ipairs(custom) do
+  fn(nvim_lsp)
+end
 
 vim.diagnostic.config({
   virtual_text = true,

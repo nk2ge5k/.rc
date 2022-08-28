@@ -108,7 +108,8 @@ highlight clear LineNr          " Current line number row will have same
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab
 
 set laststatus=2                " always display statusline
-set statusline=%<%n\ %F\ %m\ %r\ %y\ 0x%B,%b%=%l:%c\ %P
+set statusline=%<%F\ %m\ %r\ %y\ 0x%B,%b%=%l:%c\ %P
+set statusline+=\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\"\ BOM\":\"\").\"]\ \"}
 
 set backspace=indent,eol,start  " Backspace for dummies
 set linespace=0                 " No extra spaces between rows

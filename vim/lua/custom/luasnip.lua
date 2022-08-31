@@ -64,13 +64,15 @@ end)
 
 -- {{{ all
 do
+    local user = vim.fn.getenv("USER")
+
     ls.add_snippets("all", {
         -- todo comment
         ls.snippet("todo", {
             choice(1, {
-                t("TODO(nk2ge5k): "),
-                t("NOTE(nk2ge5k): "),
-                t("FIXME(nk2ge5k): "),
+                t("TODO(" .. user .. "): "),
+                t("NOTE(" .. user .. "): "),
+                t("FIXME(" .. user .. "): "),
             }),
         }),
         -- current time

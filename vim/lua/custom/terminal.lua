@@ -95,6 +95,40 @@ local Terminal = {
 
 Terminal.__index = Terminal
 
+local _new_terminal = function(opts)
+  if not opts then
+    opts = {
+      vertical = true,
+      name = "<unnamed>",
+    }
+  end
+
+  local last_win = vim.api.nvim_get_current_win()
+
+  if opts.vertical then
+    vim.cmd('vsplit')
+  else
+    vim.cmd('split')
+  end
+
+  local win = vim.api.nvim_get_current_win()
+  local buf = vim.api.nvim_create_buf(true, true)
+  vim.api.nvim_win_set_buf(win, buf)
+
+  local job_id = vim.fn.termopen(vim.o.shell .. " # " .. opts.name, {
+    cwd = _get_dir(opts.cwd),
+    on_exit = opts.on_exit,
+    -- on_stdout = self:__make_output_handler(self.on_stdout),
+    -- on_stderr = self:__make_output_handler(self.on_stderr),
+    env = opts.env,
+    clear_env = opts.clear_env,
+  })
+
+  vim.fn.win_gotoid(last_win)
+
+  return win, buf, job_id
+end
+
 local new_window = function(vertical)
   if vertical then
     vim.cmd('vnew')
@@ -116,8 +150,9 @@ function Terminal:new(opts)
   opts = opts or {}
 
   -- Return existing terminal if we found such by id
-  if opts.id and _terminals[opts.id] then
-    return _terminals[opts.id]
+  local term = _find_term(opts)
+  if term then
+    return term
   end
 
   local id = _next_term_id()
@@ -143,20 +178,14 @@ function Terminal:_add()
 end
 
 function Terminal:_start()
-  print(vim.inspect(_terminals))
   self:_add()
 
   if vim.api.nvim_buf_is_valid(self._bufnr) then
-    print("terminal is valid")
     return
   end
 
-  local _, buf = new_window(self._is_vertical)
-
-  local cmd = table.concat({ vim.o.shell, ";", self.name }, " ")
-
-  self._channel_id = vim.fn.termopen(cmd, {
-    detach = 1,
+  local win, buf, chan = _new_terminal({
+    name = self.name,
     cwd = _get_dir(self.dir),
     on_exit = _handle_exit(self),
     -- on_stdout = self:__make_output_handler(self.on_stdout),
@@ -165,7 +194,9 @@ function Terminal:_start()
     clear_env = self.clear_env,
   })
 
+  self._channel_id = chan
   self._bufnr = buf
+  self._winnr = win
 end
 
 --- }}}

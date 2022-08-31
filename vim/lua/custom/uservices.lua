@@ -71,6 +71,18 @@ local extract_project = function(directory)
   error(debug.traceback, "Not inside uservices")
 end
 
+local extend = function(tbl, other)
+  if not other then
+    return tbl
+  end
+
+  for _, val in ipairs(other) do
+    tbl[#tbl + 1] = val
+  end
+
+  return tbl
+end
+
 -- }}}
 
 
@@ -127,13 +139,14 @@ end
 ---@private Creates new terminal for project
 function Project:_term_init()
   if self.term == nil then
-    print("creating new terminal", type(self.term))
     self.term = Terminal:new({
       name = self:_command_name(),
-      env = { NPROCS = 8 },
+      env = {
+        NPROCS = 8,
+        UPROJECT_DIR = self.directory,
+      },
       cwd = self.directory,
     })
-    print("new terminal", type(self.term), vim.inspect(self.term))
   end
 end
 
@@ -160,19 +173,14 @@ function Project:test(o)
   end
 
   if self.is_tier0 then
-    self.term:run({
-      "ya",
-      args = {
-        "make", "-j", "8", "-t", "-A", "--stat", self.directory .. "/testsute"
-      },
-      cwd = self.directory,
-    })
+    local args = extend({ "make", "-j", "8", "-A" }, o.options)
+    if self.type == SERVICE then
+      args[#args + 1] = "testsuite"
+    end
+    self.term:run({ command = "ya", args = args, cwd = self.directory })
   else
-    self.term:run({
-      "make",
-      args = { "testsuite" },
-      cwd = self.directory,
-    })
+    local args = extend({ "testsuite" }, o.options)
+    self.term:run({ "make", args = args, cwd = self.directory })
   end
 
   -- Terminal::new({
@@ -184,15 +192,10 @@ function Project:test(o)
 end
 
 function Project:make_compile_commands()
-
   local name = self:_command_name()
   local title = "Compile commands " .. name
 
-  notify({ "Command compilation started..." }, "info", {
-    title = title,
-    timeout = 3000,
-  })
-
+  notify({ "Command compilation started..." }, "info", { title = title })
   local stderr = {}
 
   Job:new({
@@ -207,27 +210,20 @@ function Project:make_compile_commands()
       if signal == 0 then
         notify({ "Compile command successfully created" }, "info", {
           title = title,
-          timeout = 3000,
         })
       else
         table.insert(stderr, 1,
           string.format("Command compilation failed with code: %s", signal))
-        notify(stderr, "error", {
-          title = title,
-          timeout = 3000,
-        })
+        notify(stderr, "error", { title = title })
       end
     end,
   }):start()
 end
 
 vim.api.nvim_create_user_command(
-  'Ptest', function()
-    print("projects", vim.inspect(_projects))
-    local project = Project:open()
-    project:test({})
-  end, {}
-)
+  'Ptest', function(input)
+    Project:open():test({ options = input.fargs })
+  end, { nargs = "*" })
 
 vim.api.nvim_create_user_command(
   'PCommands', function()

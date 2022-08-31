@@ -1,8 +1,9 @@
 local notify = require("notify")
-local static = require("notify.stages.static")
 
 notify.setup({
-  stages = static,
+  stages = require("notify.stages.static"),
+  icons = {},
+  timeout = 4000,
 })
 
 vim.notify = notify

@@ -174,6 +174,11 @@ function Project:test(o)
 
   if self.is_tier0 then
     local args = extend({ "make", "-j", "8", "-A" }, o.options)
+
+    if o.file then
+      args = extend(args, { "-F", "'*" .. o.file .. "*'" })
+    end
+
     if self.type == SERVICE then
       args[#args + 1] = "testsuite"
     end
@@ -221,8 +226,17 @@ function Project:make_compile_commands()
 end
 
 vim.api.nvim_create_user_command(
-  'Ptest', function(input)
+  'PTest', function(input)
     Project:open():test({ options = input.fargs })
+  end, { nargs = "*" })
+
+vim.api.nvim_create_user_command(
+  'PTestFile', function(input)
+    local file_name = vim.fn.expand('%:t')
+    Project:open():test({
+      file = file_name,
+      options = input.fargs,
+    })
   end, { nargs = "*" })
 
 vim.api.nvim_create_user_command(

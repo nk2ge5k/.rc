@@ -75,7 +75,11 @@ end
 
 
 local setup_clangd = function(lsp)
-  lsp.clangd.setup { on_attach = on_attach, cmd = clangd_command() }
+  lsp.clangd.setup {
+    autostart = false,
+    on_attach = on_attach,
+    cmd = clangd_command(),
+  }
 end
 
 --- sumneko_lua --------------------------------------------------

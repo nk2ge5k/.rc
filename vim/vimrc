@@ -82,6 +82,7 @@ else
 endif
 
 autocmd FileType yaml,python setlocal cursorcolumn " draw cursorcolumn for python and yaml
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 let &undodir=s:vim_dir . '/.vimdid/'
 set undofile

@@ -265,4 +265,3 @@ endif
 let g:ucompile_procs = 8
 
 call s:LocalSource('term.vim')
-call s:LocalSource('uservices.vim')

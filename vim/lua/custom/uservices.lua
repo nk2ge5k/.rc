@@ -2,6 +2,15 @@ local Terminal = require("custom.terminal")
 local notify = require("notify")
 local Job = require("plenary.job")
 
+local query_test_function = vim.treesitter.parse_query(
+  "python",
+  [[
+(function_definition
+  name: (identifier) @function_name
+  (#match? @function_name "^test_.+")
+  ) @function
+]]
+)
 
 -- {{{ utils
 
@@ -25,6 +34,50 @@ local is_tier0_project = function(directory)
   return vim.fn.getftype(service_yaml) == "file"
 end
 
+local get_root = function(bufnr, lang)
+  local parser = vim.treesitter.get_parser(bufnr, lang, {})
+  local tree = parser:parse()[1]
+  return tree:root()
+end
+
+local get_test_function = function(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+
+  if vim.bo[bufnr].filetype ~= "python" then
+    local message = string.format(
+      "cannot get test function from %s file",
+      vim.bo[bufnr].filetype
+    )
+    notify({ message }, "warn", { title = "Test function" })
+
+    return nil
+  end
+
+  local root = get_root(bufnr)
+  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+
+  local matches = query_test_function:iter_captures(root, bufnr, 0, row)
+  while true do
+    local id, node = matches()
+    if not node then
+      return nil
+    end
+
+    local start_row, _, end_row, _ = node:range()
+    local name = query_test_function.captures[id]
+
+    if name == "function" and start_row <= row and row <= end_row then
+      local capture_id, caplture_node = matches()
+      local capture_name = query_test_function.captures[capture_id]
+
+      if capture_name == "function_name" then
+        return vim.treesitter.get_node_text(caplture_node, bufnr)
+      end
+    end
+  end
+
+  return nil
+end
 
 local extract_uservices_directory = function(directory)
   if vim.w.uservices_directory ~= nil then
@@ -44,7 +97,10 @@ local extract_uservices_directory = function(directory)
     root = vim.fn.fnamemodify(root, ':h')
   end
 
-  error(debug.traceback, "Not inside uservices")
+  notify({
+    "Directory is not inside uservices directory",
+    directory,
+  }, "error")
 end
 
 
@@ -176,7 +232,11 @@ function Project:test(o)
     local args = extend({ "make", "-j", "8", "-A" }, o.options)
 
     if o.file then
-      args = extend(args, { "-F", "'*" .. o.file .. "*'" })
+      if o.function_name then
+        args = extend(args, { "-F", "'*" .. o.file .. "::" .. o.function_name .. "*'" })
+      else
+        args = extend(args, { "-F", "'*" .. o.file .. "*'" })
+      end
     end
 
     if self.type == SERVICE then
@@ -231,16 +291,33 @@ vim.api.nvim_create_user_command(
   end, { nargs = "*" })
 
 vim.api.nvim_create_user_command(
-  'PTestFile', function(input)
-    local file_name = vim.fn.expand('%:t')
-    Project:open():test({
-      file = file_name,
-      options = input.fargs,
-    })
-  end, { nargs = "*" })
-
-vim.api.nvim_create_user_command(
   'PCommands', function()
     Project:open():make_compile_commands()
   end, {}
 )
+
+-- Run all tests
+vim.keymap.set("n", "<leader>fa", function()
+  Project:open():test()
+end, { silent = true })
+
+-- Run tests in current file
+vim.keymap.set("n", "<leader>ff", function()
+  Project:open(vim.fn.expand('%:p:h')):test({
+    file = vim.fn.expand('%:t'),
+  })
+end, { silent = true })
+
+-- Run test under cursor
+vim.keymap.set("n", "<leader>fi", function()
+  local function_name = get_test_function()
+  if not function_name then
+    notify("Failed to find test function", "warn", { title = "Test function" })
+    return
+  end
+
+  Project:open(vim.fn.expand('%:p:h')):test({
+    file = vim.fn.expand('%:t'),
+    function_name = function_name,
+  })
+end, { silent = true })

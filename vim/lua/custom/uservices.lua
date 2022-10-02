@@ -206,6 +206,10 @@ function Project:_term_init()
   end
 end
 
+function Project:_reset_term()
+  -- self.term:run({ command = "\\<c-c>", skip_validation = true })
+end
+
 -- }}}
 
 function Project:prepare()
@@ -223,6 +227,7 @@ end
 
 function Project:test(o)
   self:_init()
+  self:_reset_term()
 
   if not o then
     o = {}
@@ -244,8 +249,17 @@ function Project:test(o)
     end
     self.term:run({ command = "ya", args = args, cwd = self.directory })
   else
+    local env = nil
     local args = extend({ "testsuite" }, o.options)
-    self.term:run({ "make", args = args, cwd = self.directory })
+    if o.file then
+      if o.function_name then
+        env = { PYTEST_ARGS = "-k " .. o.function_name .. " -vv" }
+      else
+        env = { PYTEST_ARGS = "-k " .. o.file .. " -vv" }
+      end
+    end
+
+    self.term:run({ "make", args = args, cwd = self.directory, env = env })
   end
 
   -- Terminal::new({
@@ -258,14 +272,21 @@ end
 
 function Project:make_compile_commands()
   local name = self:_command_name()
-  local title = "Compile commands " .. name
+  self:_make({"compile-db-" .. name})
+end
 
-  notify({ "Command compilation started..." }, "info", { title = title })
+function Project:format()
+  local name = self:_command_name()
+  self:_make({"format-" .. name})
+end
+
+function Project:_make(args)
+  notify({ "Start make " .. table.concat(args, " ") }, "info")
   local stderr = {}
 
   Job:new({
     command = "make",
-    args = { "compile-db-" .. name },
+    args = args,
     cwd = self._uservices_directory,
     detached = true,
     on_stderr = function(_, data)
@@ -273,13 +294,10 @@ function Project:make_compile_commands()
     end,
     on_exit = function(_, signal)
       if signal == 0 then
-        notify({ "Compile command successfully created" }, "info", {
-          title = title,
-        })
+        notify({ "Success make " .. table.concat(args, " ") }, "info")
       else
-        table.insert(stderr, 1,
-          string.format("Command compilation failed with code: %s", signal))
-        notify(stderr, "error", { title = title })
+        table.insert(stderr, 1, "Error make " .. table.concat(args, " "))
+        notify(stderr, "error")
       end
     end,
   }):start()
@@ -293,6 +311,12 @@ vim.api.nvim_create_user_command(
 vim.api.nvim_create_user_command(
   'PCommands', function()
     Project:open():make_compile_commands()
+  end, {}
+)
+
+vim.api.nvim_create_user_command(
+  'PFormat', function()
+    Project:open():format()
   end, {}
 )
 

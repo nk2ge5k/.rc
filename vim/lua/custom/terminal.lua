@@ -1,6 +1,3 @@
-
-
-
 -- {{{ utils
 
 local _terminals = {}
@@ -60,26 +57,26 @@ local _make_env = function(env)
     if type(k) == "number" then
       table.insert(result, v)
     elseif type(k) == "string" then
-      table.insert(result, k .. "=" .. tostring(v))
+      table.insert(result, string.format("%s=%q", k, tostring(v)))
     end
   end
 
   return result
 end
 
-local _find_term = function (opts)
-    if opts.id then
-      return _terminals[opts.id]
-    end
+local _find_term = function(opts)
+  if opts.id then
+    return _terminals[opts.id]
+  end
 
-    if opts.name then
-      local id = _by_name[opts.name]
-      if id then
-        return _terminals[id]
-      end
+  if opts.name then
+    local id = _by_name[opts.name]
+    if id then
+      return _terminals[id]
     end
+  end
 
-    return nil
+  return nil
 end
 
 -- }}}

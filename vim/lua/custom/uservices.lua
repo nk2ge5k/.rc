@@ -285,6 +285,11 @@ function Project:deploy()
   self:_make({ "deploy-testing-" .. name })
 end
 
+function Project:gen()
+  local name = self:_command_name()
+  self:_make({ "gen-" .. name })
+end
+
 function Project:_make(args)
   notify({ "Start make " .. table.concat(args, " ") }, "info")
   local stderr = {}
@@ -330,6 +335,13 @@ vim.api.nvim_create_user_command(
     Project:open():deploy()
   end, {}
 )
+
+vim.api.nvim_create_user_command(
+  'PGen', function()
+    Project:open():gen()
+  end, {}
+)
+
 
 -- Run all tests
 vim.keymap.set("n", "<leader>fa", function()

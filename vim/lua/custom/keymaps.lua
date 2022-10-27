@@ -7,6 +7,7 @@ local actions = require("telescope.actions")
 
 telescope.setup({
   defaults = {
+    file_ignore_patterns = { "node_modules", "vendor" },
     mappings = {
       i = {
         ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,

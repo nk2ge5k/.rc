@@ -290,6 +290,11 @@ function Project:gen()
   self:_make({ "gen-" .. name })
 end
 
+function Project:force_gen()
+  local name = self:_command_name()
+  self:_make({ "arc-gen-force-" .. name })
+end
+
 function Project:_make(args)
   notify({ "Start make " .. table.concat(args, " ") }, "info")
   local stderr = {}
@@ -342,6 +347,11 @@ vim.api.nvim_create_user_command(
   end, {}
 )
 
+vim.api.nvim_create_user_command(
+  'PForceGen', function()
+    Project:open():force_gen()
+  end, {}
+)
 
 -- Run all tests
 vim.keymap.set("n", "<leader>fa", function()

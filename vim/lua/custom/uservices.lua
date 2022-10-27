@@ -272,12 +272,27 @@ end
 
 function Project:make_compile_commands()
   local name = self:_command_name()
-  self:_make({"compile-db-" .. name})
+  self:_make({ "compile-db-" .. name })
 end
 
 function Project:format()
   local name = self:_command_name()
-  self:_make({"format-" .. name})
+  self:_make({ "format-" .. name })
+end
+
+function Project:deploy()
+  local name = self:_command_name()
+  self:_make({ "deploy-testing-" .. name })
+end
+
+function Project:gen()
+  local name = self:_command_name()
+  self:_make({ "gen-" .. name })
+end
+
+function Project:force_gen()
+  local name = self:_command_name()
+  self:_make({ "arc-gen-force-" .. name })
 end
 
 function Project:_make(args)
@@ -317,6 +332,24 @@ vim.api.nvim_create_user_command(
 vim.api.nvim_create_user_command(
   'PFormat', function()
     Project:open():format()
+  end, {}
+)
+
+vim.api.nvim_create_user_command(
+  'PDeploy', function()
+    Project:open():deploy()
+  end, {}
+)
+
+vim.api.nvim_create_user_command(
+  'PGen', function()
+    Project:open():gen()
+  end, {}
+)
+
+vim.api.nvim_create_user_command(
+  'PForceGen', function()
+    Project:open():force_gen()
   end, {}
 )
 

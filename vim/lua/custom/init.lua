@@ -1,8 +1,14 @@
 local notify = require("notify")
 
 notify.setup({
-  stages = require("notify.stages.static"),
-  icons = {},
+  icons = {
+    DEBUG = "DEBUG",
+    ERROR = "ERROR",
+    INFO = "INFO",
+    TRACE = "TRACE",
+    WARN = "WARN"
+  },
+  stages = "static",
   timeout = 4000,
 })
 

@@ -170,7 +170,7 @@ local setup_rust_analyzer = function(lsp)
 end
 
 
-local servers = { "pyright", "tsserver" }
+local servers = { "pyright", "tsserver", "dartls" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end

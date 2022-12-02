@@ -17,6 +17,7 @@ set nocompatible
 
 set background=dark         " dark background
 
+set nobackup nowritebackup
 filetype plugin indent on   " autodetect file type
 set syntax=on               " syntax highlighting
 scriptencoding utf-8
@@ -255,7 +256,12 @@ noremap <silent> <leader>ss :setlocal spelllang=ru,en spell<CR>
 noremap <silent> <leader>sn :setlocal nospell<CR>
 
 if has('nvim')
-    lua require('custom')
+
+lua << EOF
+    local home_dir = os.getenv("HOME")
+    package.path = home_dir .. "/dotfiles2.0/vim/lua/?.lua;" .. package.path
+    require('custom')
+EOF
 
     set nofoldenable
     set foldmethod=expr

@@ -2,6 +2,8 @@ local Terminal = require("custom.terminal")
 local notify = require("notify")
 local Job = require("plenary.job")
 
+local telescope = require("telescope")
+
 local query_test_function = vim.treesitter.parse_query(
   "python",
   [[
@@ -234,7 +236,7 @@ function Project:test(o)
   end
 
   if self.is_tier0 then
-    local args = extend({ "make", "-j", "8", "-A" }, o.options)
+    local args = extend({ "make", "--build=fastdebug", "-j", "8", "-A" }, o.options)
 
     if o.file then
       if o.function_name then
@@ -317,6 +319,7 @@ function Project:_make(args)
     end,
   }):start()
 end
+
 
 vim.api.nvim_create_user_command(
   'PTest', function(input)

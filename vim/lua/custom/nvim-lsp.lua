@@ -73,10 +73,17 @@ local clangd_command = function()
   return cmd
 end
 
+local clangd_should_autostart = function()
+    local name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+    if name == "eats-catalog" then
+      return false
+    end
+    return true
+end
 
 local setup_clangd = function(lsp)
   lsp.clangd.setup {
-    autostart = false,
+    autostart = clangd_should_autostart(),
     on_attach = on_attach,
     cmd = clangd_command(),
   }

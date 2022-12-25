@@ -18,7 +18,6 @@ source $SCRIPT_DIR/key-bindings.zsh
 
 # init pyenv
 pyenv() {
-    echo "Loading pyenv..."
     unset -f pyenv
 
     export PYENV_ROOT="$HOME/.pyenv"
@@ -36,7 +35,6 @@ pyenv() {
 
 # init nvm
 nvm() {
-    echo "NVM not loaded! Loading now..."
     unset -f nvm
 
     export NVM_DIR="$HOME/.config/nvm"

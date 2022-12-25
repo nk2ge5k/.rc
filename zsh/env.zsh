@@ -23,6 +23,16 @@ export PATH="$HOME/scripts/enabled/:$PATH"
 
 export XDG_CONFIG_HOME=$HOME/.config
 
-export GPG_TTY=`tty`
+if [ -x "$(command -v gpgconf)" ]; then
+  export GPG_TTY=$(tty)
+  gpgconf --launch gpg-agent
+fi
 
 export FZF_DEFAULT_COMMAND='rg --files'
+
+if [ -x "$(command -v ssh-agent)" ]; then
+  eval `ssh-agent` > /dev/null
+  if [[ "$(uname)" == "Darwin" ]]; then
+    ssh-add --apple-use-keychain 2> /dev/null
+  fi
+fi

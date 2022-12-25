@@ -70,10 +70,14 @@ noremap <C-k> :lprevious<CR>
 noremap <C-h> :tabp<CR>
 noremap <C-l> :tabn<CR>
 noremap Y y$
+noremap <leader>de :e %:p:h/<CR>
+noremap <leader>ds :split %:p:h/<CR>
+noremap <leader>dv :vsplit %:p:h/<CR>
 
 cnoreabbrev hs split %:p:h/<C-R>
 cnoreabbrev hv vsplit %:p:h/<C-R>
 cnoreabbrev he e %:p:h/<C-R>
+
 if has('nvim')
     cnoreabbrev vt vsplit \| terminal
     cnoreabbrev st split \| terminal

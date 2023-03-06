@@ -13,20 +13,20 @@ local arc_cmd = function(cmd, cwd)
 
   local stdout, ret = Job
       :new({
-        command = "arc",
-        args = cmd,
-        cwd = cwd,
-        on_stderr = function(_, data)
-          table.insert(stderr, data)
-        end,
+          command = "arc",
+          args = cmd,
+          cwd = cwd,
+          on_stderr = function(_, data)
+            table.insert(stderr, data)
+          end,
       })
       :sync()
 
   if ret ~= 0 then
     error(debug.traceback, string.format(
-      "Arc command %s failed: %s",
-      table.concat(cmd, " "),
-      table.concat(stderr, " ")
+        "Arc command %s failed: %s",
+        table.concat(cmd, " "),
+        table.concat(stderr, " ")
     ))
   end
 
@@ -35,8 +35,12 @@ end
 
 -- Returns path to arcadia root
 local arc_root = function(cwd)
+  if cwd == nil then
+    cwd = vim.fn.getcwd()
+  end
+
   if vim.g.arc_root == nil then
-    vim.g.arc_root = trim(table.concat(arc_cmd({"root"}, cwd), " "))
+    vim.g.arc_root = trim(table.concat(arc_cmd({ "root" }, cwd), " "))
   end
   return vim.g.arc_root
 end
@@ -57,13 +61,13 @@ end
 --   }
 -- }
 local arc_status = function()
-  return assert(vim.json.decode(arc_cmd({"status", "--json"})))
+  return assert(vim.json.decode(arc_cmd({ "status", "--json" })))
 end
 
 local arc = {
-  root = arc_root,
-  owns = is_arc_directory,
-  status = arc_status,
+    root = arc_root,
+    owns = is_arc_directory,
+    status = arc_status,
 }
 
 local creat_arc_window = function()
@@ -86,10 +90,6 @@ local creat_arc_window = function()
   -- and prevent collisions with other plugins.
   vim.api.nvim_buf_set_option(arc_buffer, 'filetype', 'arc')
 
-  vim.keymap.set('n', '<leader>h', function()
-    print("Hello keymap")
-  end, { buffer = arc_buffer })
-
   return arc_buffer
 end
 
@@ -98,14 +98,14 @@ local show_status = function(buffer)
   local output = arc.status()
 
   local lines = {
-    arc.root(),
-    vim.fn.getcwd(),
-    "",
+      arc.root(),
+      vim.fn.getcwd(),
+      "",
   }
 
   local modes = {
-    deleted = "D",
-    modified = "M",
+      deleted = "D",
+      modified = "M",
   }
 
   local changed = output["status"]["changed"]

@@ -5,14 +5,14 @@ local Job = require("plenary.job")
 local telescope = require("telescope")
 
 local query_test_function = vim.treesitter.parse_query(
-  "python",
-  [[
+        "python",
+        [[
 (function_definition
   name: (identifier) @function_name
   (#match? @function_name "^test_.+")
   ) @function
 ]]
-)
+    )
 
 -- {{{ utils
 
@@ -47,9 +47,9 @@ local get_test_function = function(bufnr)
 
   if vim.bo[bufnr].filetype ~= "python" then
     local message = string.format(
-      "cannot get test function from %s file",
-      vim.bo[bufnr].filetype
-    )
+            "cannot get test function from %s file",
+            vim.bo[bufnr].filetype
+        )
     notify({ message }, "warn", { title = "Test function" })
 
     return nil
@@ -81,7 +81,7 @@ local get_test_function = function(bufnr)
   return nil
 end
 
-local extract_uservices_directory = function(directory)
+local try_uservices_dirctory = function(directory)
   if vim.w.uservices_directory ~= nil then
     return vim.w.uservices_directory
   end
@@ -99,9 +99,18 @@ local extract_uservices_directory = function(directory)
     root = vim.fn.fnamemodify(root, ':h')
   end
 
+  return nil
+end
+
+local extract_uservices_directory = function(directory)
+  local dir = try_uservices_dirctory(directory)
+  if dir ~= nil then
+    return dir
+  end
+
   notify({
-    "Directory is not inside uservices directory",
-    directory,
+      "Directory is not inside uservices directory",
+      directory,
   }, "error")
 end
 
@@ -113,7 +122,6 @@ local extract_project = function(directory)
   local root = directory
 
   while root ~= prev and root ~= uservices_directory do
-
     if is_service_directory(root) then
       return root, SERVICE
     end
@@ -152,19 +160,22 @@ function Project:open(directory)
     directory = vim.fn.getcwd()
   end
 
-
   local uservices_directory = extract_uservices_directory(directory)
   local project_diretory, type = extract_project(directory)
+  local remote = nil
 
   -- self.__index = self
+  if vim.g.project_remote ~= nil then
+
+  end
 
   local obj = {
-    _uservices_directory = uservices_directory,
-    directory = project_diretory,
-    type = type,
-    is_tier0 = is_tier0_project(project_diretory),
-    name = vim.fn.fnamemodify(project_diretory, ":t"),
-    term = nil,
+      _uservices_directory = uservices_directory,
+      directory = project_diretory,
+      type = type,
+      is_tier0 = is_tier0_project(project_diretory),
+      name = vim.fn.fnamemodify(project_diretory, ":t"),
+      term = nil,
   }
 
   return setmetatable(obj, self)
@@ -198,13 +209,13 @@ end
 function Project:_term_init()
   if self.term == nil then
     self.term = Terminal:new({
-      name = self:_command_name(),
-      env = {
-        NPROCS = 8,
-        UPROJECT_DIR = self.directory,
-      },
-      cwd = self.directory,
-    })
+            name = self:_command_name(),
+            env = {
+                NPROCS = 8,
+                UPROJECT_DIR = self.directory,
+            },
+            cwd = self.directory,
+        })
   end
 end
 
@@ -224,7 +235,6 @@ function Project:prepare()
 
   -- 1. get or create terminal
   -- 2. run command
-
 end
 
 function Project:test(o)
@@ -236,7 +246,7 @@ function Project:test(o)
   end
 
   if self.is_tier0 then
-    local args = extend({ "make", "--build=fastdebug", "-j", "8", "-A" }, o.options)
+    local args = extend({ "tool", "tt", "test", "-S", self.name }, o.options)
 
     if o.file then
       if o.function_name then
@@ -246,9 +256,6 @@ function Project:test(o)
       end
     end
 
-    if self.type == SERVICE then
-      args[#args + 1] = "testsuite"
-    end
     self.term:run({ command = "ya", args = args, cwd = self.directory })
   else
     local env = nil
@@ -302,58 +309,57 @@ function Project:_make(args)
   local stderr = {}
 
   Job:new({
-    command = "make",
-    args = args,
-    cwd = self._uservices_directory,
-    detached = true,
-    on_stderr = function(_, data)
-      table.insert(stderr, data)
-    end,
-    on_exit = function(_, signal)
-      if signal == 0 then
-        notify({ "Success make " .. table.concat(args, " ") }, "info")
-      else
-        table.insert(stderr, 1, "Error make " .. table.concat(args, " "))
-        notify(stderr, "error")
-      end
-    end,
+      command = "make",
+      args = args,
+      cwd = self._uservices_directory,
+      detached = true,
+      on_stderr = function(_, data)
+        table.insert(stderr, data)
+      end,
+      on_exit = function(_, signal)
+        if signal == 0 then
+          notify({ "Success make " .. table.concat(args, " ") }, "info")
+        else
+          table.insert(stderr, 1, "Error make " .. table.concat(args, " "))
+          notify(stderr, "error")
+        end
+      end,
   }):start()
 end
 
+vim.api.nvim_create_user_command(
+    'PTest', function(input)
+  Project:open():test({ options = input.fargs })
+end, { nargs = "*" })
 
 vim.api.nvim_create_user_command(
-  'PTest', function(input)
-    Project:open():test({ options = input.fargs })
-  end, { nargs = "*" })
-
-vim.api.nvim_create_user_command(
-  'PCommands', function()
-    Project:open():make_compile_commands()
-  end, {}
+    'PCommands', function()
+  Project:open():make_compile_commands()
+end, {}
 )
 
 vim.api.nvim_create_user_command(
-  'PFormat', function()
-    Project:open():format()
-  end, {}
+    'PFormat', function()
+  Project:open():format()
+end, {}
 )
 
 vim.api.nvim_create_user_command(
-  'PDeploy', function()
-    Project:open():deploy()
-  end, {}
+    'PDeploy', function()
+  Project:open():deploy()
+end, {}
 )
 
 vim.api.nvim_create_user_command(
-  'PGen', function()
-    Project:open():gen()
-  end, {}
+    'PGen', function()
+  Project:open():gen()
+end, {}
 )
 
 vim.api.nvim_create_user_command(
-  'PForceGen', function()
-    Project:open():force_gen()
-  end, {}
+    'PForceGen', function()
+  Project:open():force_gen()
+end, {}
 )
 
 -- Run all tests
@@ -364,7 +370,7 @@ end, { silent = true })
 -- Run tests in current file
 vim.keymap.set("n", "<leader>ff", function()
   Project:open(vim.fn.expand('%:p:h')):test({
-    file = vim.fn.expand('%:t'),
+      file = vim.fn.expand('%:t'),
   })
 end, { silent = true })
 
@@ -377,7 +383,13 @@ vim.keymap.set("n", "<leader>fi", function()
   end
 
   Project:open(vim.fn.expand('%:p:h')):test({
-    file = vim.fn.expand('%:t'),
-    function_name = function_name,
+      file = vim.fn.expand('%:t'),
+      function_name = function_name,
   })
 end, { silent = true })
+
+return {
+    is_uservices_directory = function(path)
+      return try_uservices_dirctory(path) ~= nil
+    end
+}

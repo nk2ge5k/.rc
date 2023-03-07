@@ -16,6 +16,7 @@ set -gx GOPATH $HOME
 set -gx LD_LIBRARY_PATH /usr/local/lib
 set -gx FZF_DEFAULT_COMMAND "rg --files"
 set -gx XDG_CONFIG_HOME $HOME/.config
+set -gx PROJECTS_HISTORY $HOME/.projects_history
 
 
 ## FUNCTIONS #################################
@@ -108,12 +109,14 @@ function smux --argument-names session_name space_path \
     return
   end
 
+  echo "+ $space_path $session_name" >> $PROJECTS_HISTORY
+
   set -l space_name $(basename $space_path)
   if not tmux has-session -t $session_name &> /dev/null
     _smux_new_session $session_name
   end
 
-  if not test $(tmux list-windows -a -F'#S:#W' | grep -w "$session_name:$space_name")
+  if not test $(tmux list-windows -a -F'#S:#W' | grep -w "^$session_name:$space_name\$")
     eval "tmux neww -t $session_name -n $space_name -c $space_path -a"
   end
 
@@ -125,7 +128,7 @@ function smux --argument-names session_name space_path \
 end
 
 function session -d 'Start session from ~/.projects config'
-  set -l choice $(cat ~/.projects | fzf)
+  set -l choice $(tail -n 20 $PROJECTS_HISTORY | sort | uniq | cat ~/.projects - | fzf)
   set -l parts $(string split ' ' $choice)
 
   if test -z $choice
@@ -175,11 +178,21 @@ if status is-interactive
 
 ## SSH #######################################
 
-  if command -v ssh-agent > /dev/null
-    # eval ssh-agent > /dev/null
-    if test (uname) = "Darwin"
-      ssh-add --apple-use-keychain 2> /dev/null
-    end
+  #if command -v ssh-agent > /dev/null
+  #  eval (ssh-agent -c) > /dev/null
+  #  if test (uname) = "Darwin"
+  #    ssh-add --apple-use-keychain 2> /dev/null
+  #  end
+  #end
+
+## PYENV #####################################
+
+  if command -v pyenv > /dev/null
+    alias brew="env PATH=(string replace (pyenv root)/shims '' \"\$PATH\") brew"
+    set -Ux PYENV_ROOT $HOME/.pyenv
+    fish_add_path -pP $PYENV_ROOT/bin
+    pyenv init - | source
+    fish_add_path -pP $(pyenv prefix)/bin
   end
 
 ## ALIASES ###################################

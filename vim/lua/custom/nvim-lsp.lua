@@ -225,7 +225,7 @@ end
 null_ls.setup({ sources = sources })
 
 
-local servers = { "pyright", "tsserver", "dartls" }
+local servers = { "pyright", "tsserver", "dartls", "kotlin_language_server" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end

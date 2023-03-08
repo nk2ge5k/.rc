@@ -128,12 +128,21 @@ function smux --argument-names session_name space_path \
 end
 
 function session -d 'Start session from ~/.projects config'
-  set -l choice $(tail -n 20 $PROJECTS_HISTORY | sort | uniq | cat ~/.projects - | fzf)
-  set -l parts $(string split ' ' $choice)
+
+  set -l choice (
+    FZF_DEFAULT_COMMAND="cat ~/.projects" \
+      fzf --info=inline --border --margin=1 --padding=1 \
+      --prompt 'session > ' \
+      --header '/ Enter (open tmux) / CTRL-S (open session) / CTRL-H (search history)' \
+      --bind 'ctrl-s:change-prompt(session> )+reload(cat ~/.projects)' \
+      --bind 'ctrl-h:change-prompt(history> )+reload(cat $PROJECTS_HISTORY | sort | uniq)'
+  )
 
   if test -z $choice
     return
   end
+
+  set -l parts $(string split ' ' $choice)
 
   if test $(count $parts) -eq 3
     set -l type $parts[1]
@@ -142,7 +151,13 @@ function session -d 'Start session from ~/.projects config'
     switch $type
       case +
       case '*'
-        set -l name $(eval "ls $directory" | fzf)
+        set -l name (
+          FZF_DEFAULT_COMMAND="ls $directory" \
+            fzf --info=inline --border --margin=1 --padding=1 \
+            --prompt 'directory > ' \
+            --header '/ Enter (open tmux)'
+        )
+
         if test -z $name
           return
         end
@@ -155,14 +170,35 @@ function session -d 'Start session from ~/.projects config'
   end
 end
 
+function csrc --argument-names repository -d 'Clone given git repository'
+  set -l vendor_path $(dirname repository)
+  eval "cd ~/src/$vendor_path"
+end
+
 function src --argument-names repository -d 'Clone given git repository'
   set -l vendor_path $(dirname repository)
   eval "mkdir -p ~/src/$vendor_path"
   eval "git clone https://$repository.git ~/src/$repository"
+
+  csrc $repository
+end
+
+function pods
+  FZF_DEFAULT_COMMAND="kubectl get pods --all-namespaces" \
+    fzf --info=inline --layout=reverse --header-lines=1 \
+        --prompt "$(kubectl config current-context | sed 's/-context$//')> " \
+        --header '╱ Enter (kubectl exec) ╱ CTRL-O (open log in editor) ╱ CTRL-R (reload) ╱\n\n' \
+        --bind 'ctrl-/:change-preview-window(80%,border-bottom|hidden|)' \
+        --bind 'enter:execute:kubectl exec -it --namespace {1} {2} -- bash > /dev/tty' \
+        --bind 'ctrl-o:execute:kubectl logs --all-containers --namespace {1} {2} | $EDITOR' \
+        --bind 'ctrl-r:reload:$FZF_DEFAULT_COMMAND' \
+        --preview-window up:follow \
+        --preview 'kubectl logs --follow --all-containers --tail=10000 --namespace {1} {2}' 
 end
 
 
 if status is-interactive
+  set fish_vi_key_bindings
   set fish_greeting
 
 ## KEYBINDINGS ###############################

@@ -248,4 +248,8 @@ if status is-interactive
     abbr -a lll 'ls -la'
   end
 
+  abbr -a .. 'cd ..'
+  abbr -a ... 'cd ../..'
+  abbr -a .... 'cd ../../..'
+
 end

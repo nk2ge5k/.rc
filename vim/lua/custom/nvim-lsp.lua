@@ -3,6 +3,51 @@ local null_ls = require("null-ls")
 local h = require("null-ls.helpers")
 local arc = require("custom.arc")
 local uservices = require("custom.uservices")
+local cmp = require("cmp")
+
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+    end,
+  },
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+  }),
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
+
 
 
 local is_file_exists = function(file_name)
@@ -36,8 +81,8 @@ local on_attach = function(_, bufnr)
     vim.keymap.set("n", "<leader>E", function()
       -- TODO(nk2ge5k): add error check
       vim.lsp.buf_request_sync(bufnr, "workspace/executeCommand", {
-          command = "gopls.gc_details",
-          arguments = { vim.uri_from_bufnr(bufnr) },
+        command = "gopls.gc_details",
+        arguments = { vim.uri_from_bufnr(bufnr) },
       }, 2000)
     end)
   end
@@ -48,10 +93,10 @@ end
 
 local clangd_command = function()
   local cmd = {
-      'clangd',
-      '--background-index=false',
-      '--clang-tidy',
-      '-j=8',
+    'clangd',
+    '--background-index=false',
+    '--clang-tidy',
+    '-j=8',
   }
 
   local cwd = vim.fn.getcwd()
@@ -89,13 +134,13 @@ end
 
 local setup_clangd = function(lsp)
   lsp.clangd.setup {
-      autostart = clangd_should_autostart(),
-      on_attach = on_attach,
-      cmd = clangd_command(),
+    autostart = clangd_should_autostart(),
+    on_attach = on_attach,
+    cmd = clangd_command(),
   }
 end
 
---- sumneko_lua --------------------------------------------------
+--- lua_ls -------------------------------------------------------
 ------------------------------------------------------------------
 
 local setup_lua = function(lsp)
@@ -103,31 +148,31 @@ local setup_lua = function(lsp)
   table.insert(runtime_path, "lua/?.lua")
   table.insert(runtime_path, "lua/?/init.lua")
 
-  lsp.sumneko_lua.setup {
-      on_attach = on_attach,
-      settings = {
-          Lua = {
-              runtime = {
-                  -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-                  version = 'LuaJIT',
-                  -- Setup your lua path
-                  path = runtime_path,
-              },
-              diagnostics = {
-                  -- Get the language server to recognize the `vim` global
-                  globals = { 'vim', 'ngx' },
-              },
-              workspace = {
-                  -- Make the server aware of Neovim runtime files
-                  library = vim.api.nvim_get_runtime_file("", true),
-                  checkThirdParty = false,
-              },
-              -- Do not send telemetry data containing a randomized but unique identifier
-              telemetry = {
-                  enable = false,
-              },
-          },
+  lsp.lua_ls.setup {
+    on_attach = on_attach,
+    settings = {
+      Lua = {
+        runtime = {
+          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+          version = 'LuaJIT',
+          -- Setup your lua path
+          path = runtime_path,
+        },
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = { 'vim', 'ngx' },
+        },
+        workspace = {
+          -- Make the server aware of Neovim runtime files
+          library = vim.api.nvim_get_runtime_file("", true),
+          checkThirdParty = false,
+        },
+        -- Do not send telemetry data containing a randomized but unique identifier
+        telemetry = {
+          enable = false,
+        },
       },
+    },
   }
 end
 
@@ -136,22 +181,22 @@ end
 
 local setup_gopls = function(lsp)
   lsp.gopls.setup {
-      on_attach = on_attach,
-      settings = {
-          gopls = {
-              analyses = {
-                  unusedparams = true,
-                  unusedvariable = true,
-                  fieldalignment = true,
-                  nilness = true,
-                  shadow = true,
-              },
-              staticcheck = true,
-              codelenses = {
-                  gc_details = true
-              },
-          },
-      }
+    on_attach = on_attach,
+    settings = {
+      gopls = {
+        analyses = {
+          unusedparams = true,
+          unusedvariable = true,
+          fieldalignment = true,
+          nilness = true,
+          shadow = true,
+        },
+        staticcheck = true,
+        codelenses = {
+          gc_details = true
+        },
+      },
+    }
   }
 end
 
@@ -160,25 +205,25 @@ end
 
 local setup_rust_analyzer = function(lsp)
   lsp.rust_analyzer.setup({
-      on_attach = on_attach,
-      settings = {
-          ["rust-analyzer"] = {
-              imports = {
-                  granularity = {
-                      group = "module",
-                  },
-                  prefix = "self",
-              },
-              cargo = {
-                  buildScripts = {
-                      enable = true,
-                  },
-              },
-              procMacro = {
-                  enable = true
-              },
-          }
+    on_attach = on_attach,
+    settings = {
+      ["rust-analyzer"] = {
+        imports = {
+          granularity = {
+            group = "module",
+          },
+          prefix = "self",
+        },
+        cargo = {
+          buildScripts = {
+            enable = true,
+          },
+        },
+        procMacro = {
+          enable = true
+        },
       }
+    }
   })
 end
 
@@ -196,29 +241,29 @@ end
 
 if vim.fn.executable("ya") == 1 and inside_uservices then
   null_ls.register({
-      method = null_ls.methods.FORMATTING,
-      filetypes = { "python", "cpp" },
-      generator = h.formatter_factory({
-          command = "ya",
-          args = { "tool", "tt", "format", "$FILENAME" },
-          runtime_codition = inside_uservices,
-          timeout = 20000,
-          multiple_files = false,
-          async = true,
-      })
+    method = null_ls.methods.FORMATTING,
+    filetypes = { "python", "cpp" },
+    generator = h.formatter_factory({
+      command = "ya",
+      args = { "tool", "tt", "format", "$FILENAME" },
+      runtime_codition = inside_uservices,
+      timeout = 20000,
+      multiple_files = false,
+      async = true,
+    })
   })
 end
 
 local sources = {
-    null_ls.builtins.completion.spell,
-    null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.code_actions.shellcheck,
+  null_ls.builtins.completion.spell,
+  null_ls.builtins.diagnostics.shellcheck,
+  null_ls.builtins.code_actions.shellcheck,
 }
 
 if not inside_uservices then
   _insert(sources,
-      null_ls.builtins.formatting.isort,
-      null_ls.builtins.formatting.black.with { extra_args = { "--fast" } })
+    null_ls.builtins.formatting.isort,
+    null_ls.builtins.formatting.black.with { extra_args = { "--fast" } })
 end
 
 
@@ -231,23 +276,23 @@ for _, lsp in ipairs(servers) do
 end
 
 local custom = {
-    -- clangd
-    setup_clangd,
-    -- sumneko_lua
-    setup_lua,
-    -- gopls
-    setup_gopls,
-    -- rust_analyzer
-    setup_rust_analyzer,
+  -- clangd
+  setup_clangd,
+  -- lua_ls
+  setup_lua,
+  -- gopls
+  setup_gopls,
+  -- rust_analyzer
+  setup_rust_analyzer,
 }
 for _, fn in ipairs(custom) do
   fn(nvim_lsp)
 end
 
 vim.diagnostic.config({
-    virtual_text = true,
-    signs = false,
-    underline = true,
-    update_in_insert = false,
-    severity_sort = true,
+  virtual_text = true,
+  signs = false,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
 })

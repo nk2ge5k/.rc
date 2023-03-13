@@ -170,9 +170,8 @@ function session -d 'Start session from ~/.projects config'
   end
 end
 
-function csrc --argument-names repository -d 'Clone given git repository'
-  set -l vendor_path $(dirname repository)
-  eval "cd ~/src/$vendor_path"
+function csrc --argument-names repository -d 'Change to repository directory'
+  eval "cd ~/src/$repository"
 end
 
 function src --argument-names repository -d 'Clone given git repository'

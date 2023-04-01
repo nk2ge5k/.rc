@@ -8,7 +8,7 @@ local cmp = require("cmp")
 cmp.setup({
   snippet = {
     expand = function(args)
-      require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      require('luasnip').lsp_expand(args.body)
     end,
   },
   window = {
@@ -19,36 +19,26 @@ cmp.setup({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ['<C-u>'] = cmp.mapping.abort(),
+    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
+    {
+      name = 'buffer',
+      option = {
+        get_bufnrs = function()
+          local bufs = {}
+          for _, win in ipairs(vim.api.nvim_list_wins()) do
+            bufs[vim.api.nvim_win_get_buf(win)] = true
+          end
+          return vim.tbl_keys(bufs)
+        end,
+      },
+    },
     { name = 'luasnip' },
-  }, {
-    { name = 'buffer' },
   })
 })
-
--- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline({ '/', '?' }, {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = {
-    { name = 'buffer' }
-  }
-})
-
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'path' }
-  }, {
-    { name = 'cmdline' }
-  })
-})
-
-
 
 local is_file_exists = function(file_name)
   local file = io.open(file_name, "r")
@@ -71,6 +61,7 @@ local on_attach = function(_, bufnr)
   vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = 0 })
   vim.keymap.set("n", "gr", vim.lsp.buf.references)
   vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
+  vim.keymap.set("n", "ga", vim.lsp.buf.code_action)
   vim.keymap.set("n", "<leader>q", vim.diagnostic.setqflist)
   vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
   vim.keymap.set("n", "<leader>H", vim.diagnostic.goto_prev)

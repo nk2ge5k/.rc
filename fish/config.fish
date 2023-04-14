@@ -213,12 +213,15 @@ if status is-interactive
 
 ## SSH #######################################
 
-  #if command -v ssh-agent > /dev/null
-  #  eval (ssh-agent -c) > /dev/null
-  #  if test (uname) = "Darwin"
-  #    ssh-add --apple-use-keychain 2> /dev/null
-  #  end
-  #end
+  function ssh_agent
+    if command -v ssh-agent > /dev/null
+     eval (ssh-agent -c) > /dev/null
+     if test (uname) = "Darwin"
+       ssh-add --apple-use-keychain 2> /dev/null
+     end
+    end
+    functions --erase ssh_agent
+  end
 
 ## PYENV #####################################
 

@@ -4,7 +4,7 @@ local Job = require("plenary.job")
 
 local telescope = require("telescope")
 
-local query_test_function = vim.treesitter.parse_query(
+local query_test_function = vim.treesitter.query.parse_query(
         "python",
         [[
 (function_definition

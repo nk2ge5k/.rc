@@ -246,7 +246,7 @@ function Project:test(o)
   end
 
   if self.is_tier0 then
-    local args = extend({ "tool", "tt", "test", "-S", self.name }, o.options)
+    local args = extend({ "tool", "tt", "test", "-Y", "'-j 6'", "-S", self.name }, o.options)
 
     if o.file then
       if o.function_name then

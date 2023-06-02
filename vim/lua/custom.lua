@@ -22,7 +22,7 @@ if version.major >= 0 and version.minor >= 8 then
   vim.o.ch = 0
 end
 
-require"fidget".setup{}
+require("fidget").setup {}
 
 null_ls.setup({
   sources = {

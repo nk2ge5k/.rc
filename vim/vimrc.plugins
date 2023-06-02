@@ -33,6 +33,7 @@ call plug#begin()
 
         Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
         Plug 'nvim-treesitter/playground'
+        Plug 'nvim-treesitter/nvim-treesitter-context'
 
     endif
 

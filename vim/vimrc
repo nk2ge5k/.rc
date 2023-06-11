@@ -100,6 +100,7 @@ let g:everforest_disable_italic_comment = 1
 let g:everforest_better_performance = 1
 let g:everforest_disable_terminal_colors = 1
 let g:everforest_spell_foreground = 'colored'
+let g:everforest_transparent_background=1
 
 colorscheme everforest
 
@@ -108,8 +109,9 @@ set showmode                    " Display the current mode
 
 set cursorline                  " Highlight current line
 
-highlight clear SignColumn      " SignColumn should match background
-highlight clear LineNr          " Current line number row will have same
+" highlight clear SignColumn      " SignColumn should match background
+" highlight VertSplit ctermfg=223 guifg=#d3c6aa
+highlight clear VertSplit
 
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab
 

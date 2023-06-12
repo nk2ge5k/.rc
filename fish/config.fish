@@ -109,7 +109,7 @@ function smux --argument-names session_name space_path \
     return
   end
 
-  echo "+ $space_path $session_name" >> $PROJECTS_HISTORY
+  echo "+"\t"$space_path"\t"$session_name" >> $PROJECTS_HISTORY
 
   set -l space_name $(basename $space_path)
   if not tmux has-session -t $session_name &> /dev/null
@@ -142,7 +142,7 @@ function session -d 'Start session from ~/.projects config'
     return
   end
 
-  set -l parts $(string split ' ' $choice)
+  set -l parts $(string split \t $choice)
 
   if test $(count $parts) -eq 3
     set -l type $parts[1]

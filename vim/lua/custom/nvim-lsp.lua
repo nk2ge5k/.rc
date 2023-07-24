@@ -233,7 +233,7 @@ end
 if vim.fn.executable("ya") == 1 and inside_uservices then
   null_ls.register({
     method = null_ls.methods.FORMATTING,
-    filetypes = { "python", "cpp" },
+    filetypes = { "python" },
     generator = h.formatter_factory({
       command = "ya",
       args = { "tool", "tt", "format", "$FILENAME" },

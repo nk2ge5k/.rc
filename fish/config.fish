@@ -200,9 +200,13 @@ if status is-interactive
   set fish_vi_key_bindings
   set fish_greeting
 
+
 ## KEYBINDINGS ###############################
   bind \cx\ce edit_command_buffer
   bind \cx\cs session
+  bind yy fish_clipboard_copy
+  bind Y fish_clipboard_copy
+  bind p fish_clipboard_paste
 
 ## GPG #######################################
 

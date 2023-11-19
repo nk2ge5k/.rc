@@ -1,8 +1,5 @@
 local nvim_lsp = require('lspconfig')
-local null_ls = require("null-ls")
-local h = require("null-ls.helpers")
 local arc = require("custom.arc")
-local uservices = require("custom.uservices")
 local cmp = require("cmp")
 
 cmp.setup({
@@ -102,7 +99,7 @@ local clangd_command = function()
 
   local user = vim.fn.getenv("USER")
 
-  if vim.loop.os_uname().sysname == "Darwin" then
+  if vim.uv.os_uname().sysname == "Darwin" then
     cmd[#cmd + 1] = "--compile-commands-dir=" .. uservices_root
   else
     if is_file_exists(cwd .. "/ya.make.ext") then
@@ -218,50 +215,8 @@ local setup_rust_analyzer = function(lsp)
   })
 end
 
---- null-ls -----------------------------------------------------
------------------------------------------------------------------
+local servers = { "pyright", "tsserver", "dartls", "kotlin_language_server", "zls" }
 
-local inside_uservices = uservices.is_uservices_directory(vim.fn.getcwd())
-
-local _insert = function(dst, ...)
-  local args = { n = select("#", ...), ... }
-  for _, val in ipairs(args) do
-    table.insert(dst, val)
-  end
-end
-
-if vim.fn.executable("ya") == 1 and inside_uservices then
-  null_ls.register({
-    method = null_ls.methods.FORMATTING,
-    filetypes = { "python" },
-    generator = h.formatter_factory({
-      command = "ya",
-      args = { "tool", "tt", "format", "$FILENAME" },
-      runtime_codition = inside_uservices,
-      timeout = 20000,
-      multiple_files = false,
-      async = true,
-    })
-  })
-end
-
-local sources = {
-  null_ls.builtins.completion.spell,
-  null_ls.builtins.diagnostics.shellcheck,
-  null_ls.builtins.code_actions.shellcheck,
-}
-
-if not inside_uservices then
-  _insert(sources,
-    null_ls.builtins.formatting.isort,
-    null_ls.builtins.formatting.black.with { extra_args = { "--fast" } })
-end
-
-
-null_ls.setup({ sources = sources })
-
-
-local servers = { "pyright", "tsserver", "dartls", "kotlin_language_server" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end

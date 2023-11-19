@@ -16,6 +16,13 @@ call plug#begin()
 
     Plug 'tpope/vim-scriptease'
 
+    Plug 'goerz/jupytext.vim'
+
+    Plug 'google/vim-maktaba'
+    Plug 'google/vim-codereview'
+
+    Plug 'junegunn/goyo.vim'
+
     if has('nvim')
         Plug 'nvim-lua/plenary.nvim'
         Plug 'nvim-telescope/telescope.nvim'
@@ -26,15 +33,13 @@ call plug#begin()
         Plug 'hrsh7th/cmp-buffer'
         Plug 'hrsh7th/nvim-cmp'
         Plug 'jose-elias-alvarez/null-ls.nvim'
-        Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
         Plug 'L3MON4D3/LuaSnip'
         Plug 'saadparwaiz1/cmp_luasnip'
 
         Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
         Plug 'nvim-treesitter/playground'
-        Plug 'nvim-treesitter/nvim-treesitter-context'
 
+        Plug 'sourcegraph/sg.nvim', { 'do': 'nvim -l build/init.lua' }
     endif
-
 call plug#end()

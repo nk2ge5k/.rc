@@ -169,6 +169,8 @@ if has('nvim')
     tnoremap <C-W>j <C-\><C-N><C-w>j
     tnoremap <C-w>k <C-\><C-N><C-w>k
     tnoremap <C-w>l <C-\><C-N><C-w>l
+
+    nnoremap <space>g <cmd>lua require('sg.extensions.telescope').fuzzy_search_results()<CR>
 endif
 
 """"""""""""""""""""""""""""""""""" vim-go """""""""""""""""""""""""""""""""""""

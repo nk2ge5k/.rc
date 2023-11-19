@@ -22,8 +22,6 @@ if version.major >= 0 and version.minor >= 8 then
   vim.o.ch = 0
 end
 
-require("fidget").setup {}
-
 null_ls.setup({
   sources = {
     null_ls.builtins.completion.spell,

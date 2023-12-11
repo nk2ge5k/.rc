@@ -55,6 +55,8 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = 0 })
+  vim.keymap.set("n", "gv", vim.lsp.buf.definition, { buffer = 0 })
+  vim.keymap.set('n', '<leader>v', ':vsplit | lua vim.lsp.buf.definition()<CR>')
   vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = 0 })
   vim.keymap.set("n", "gr", vim.lsp.buf.references)
   vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
@@ -67,7 +69,6 @@ local on_attach = function(_, bufnr)
   local filetype = vim.bo.filetype
   if filetype == "go" then
     vim.keymap.set("n", "<leader>E", function()
-      -- TODO(nk2ge5k): add error check
       vim.lsp.buf_request_sync(bufnr, "workspace/executeCommand", {
         command = "gopls.gc_details",
         arguments = { vim.uri_from_bufnr(bufnr) },
@@ -125,6 +126,7 @@ local setup_clangd = function(lsp)
     autostart = clangd_should_autostart(),
     on_attach = on_attach,
     cmd = clangd_command(),
+    filetypes={ "c", "cpp", "objc", "objcpp", "cuda" }
   }
 end
 
@@ -215,7 +217,14 @@ local setup_rust_analyzer = function(lsp)
   })
 end
 
-local servers = { "pyright", "tsserver", "dartls", "kotlin_language_server", "zls" }
+local servers = {
+  "pyright",
+  "tsserver",
+  "dartls",
+  "kotlin_language_server",
+  "zls",
+  "bufls"
+}
 
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }

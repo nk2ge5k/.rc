@@ -17,6 +17,7 @@ set -gx LD_LIBRARY_PATH /usr/local/lib
 set -gx FZF_DEFAULT_COMMAND "rg --files"
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx PROJECTS_HISTORY $HOME/.projects_history
+set -gx CARGO_TARGET_DIR $HOME/.rust-target
 
 
 ## FUNCTIONS #################################
@@ -197,8 +198,7 @@ end
 
 
 if status is-interactive
-  set fish_vi_key_bindings
-  set fish_greeting
+  fish_vi_key_bindings
 
 
 ## KEYBINDINGS ###############################

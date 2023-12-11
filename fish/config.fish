@@ -259,3 +259,7 @@ if status is-interactive
   abbr -a .... 'cd ../../..'
 
 end
+
+if type -q ssh_agent
+  ssh_agent
+end

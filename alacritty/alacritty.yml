@@ -216,7 +216,6 @@ font:
   glyph_offset:
     x: 0
     y: 0
-colors: *everforest_dark_medium
 mouse:
   # If this is `true`, the cursor is temporarily hidden when typing.
   hide_when_typing: true

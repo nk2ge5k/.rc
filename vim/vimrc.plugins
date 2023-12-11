@@ -6,9 +6,9 @@ call plug#begin()
     Plug 'mhinz/vim-rfc'
 
     Plug 'sainnhe/everforest'
+    Plug 'nk2ge5k/atlas.vim'
     Plug 'rcarriga/nvim-notify'
 
-    Plug 'vimwiki/vimwiki'
     Plug 'gyim/vim-boxdraw'
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -22,6 +22,7 @@ call plug#begin()
     Plug 'google/vim-codereview'
 
     Plug 'junegunn/goyo.vim'
+
 
     if has('nvim')
         Plug 'nvim-lua/plenary.nvim'
@@ -39,6 +40,9 @@ call plug#begin()
 
         Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
         Plug 'nvim-treesitter/playground'
+
+        Plug 'mfussenegger/nvim-dap'
+        Plug 'leoluz/nvim-dap-go'
 
         Plug 'sourcegraph/sg.nvim', { 'do': 'nvim -l build/init.lua' }
     endif

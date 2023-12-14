@@ -106,7 +106,7 @@ function BigFile()
     set nowrap
 endfunction
 
-autocmd BufReadPre * if getfsize(expand("%")) > 5120 | exec BigFile() | endif
+autocmd BufReadPre * if getfsize(expand("%")) > 51200 | exec BigFile() | endif
 
 let &undodir=s:vim_dir . '/.vimdid/'
 set undofile

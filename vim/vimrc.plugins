@@ -43,6 +43,7 @@ call plug#begin()
 
         Plug 'mfussenegger/nvim-dap'
         Plug 'leoluz/nvim-dap-go'
+        Plug 'rcarriga/nvim-dap-ui'
 
         Plug 'sourcegraph/sg.nvim', { 'do': 'nvim -l build/init.lua' }
     endif

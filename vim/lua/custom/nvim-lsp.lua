@@ -126,7 +126,7 @@ local setup_clangd = function(lsp)
     autostart = clangd_should_autostart(),
     on_attach = on_attach,
     cmd = clangd_command(),
-    filetypes={ "c", "cpp", "objc", "objcpp", "cuda" }
+    filetypes = { "c", "cpp", "objc", "objcpp", "cuda" }
   }
 end
 
@@ -182,6 +182,7 @@ local setup_gopls = function(lsp)
           shadow = true,
         },
         staticcheck = true,
+        gofumpt = true,
         codelenses = {
           gc_details = true
         },

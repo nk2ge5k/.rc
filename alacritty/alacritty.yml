@@ -188,22 +188,22 @@ schemes:
 font:
   # Normal (roman) font face
   normal:
-    family: Ubuntu Mono
+    family: Fira Mono
     style: Regular
   # Bold font face
   bold:
-    family: Ubuntu Mono
+    family: Fira Mono
     style: Bold
   # Italic font face
   italic:
-    family: Ubuntu Mono
+    family: Fira Mono
     style: Italic
   # Bold italic font face
   bold_italic:
-    family: Ubuntu Mono
+    family: Fira Mono
     style: Bold Italic
   # Point size
-  size: 15
+  size: 13
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
   # spacing.

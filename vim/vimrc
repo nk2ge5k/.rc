@@ -70,9 +70,8 @@ noremap <C-k> :lprevious<CR>
 noremap <C-h> :tabp<CR>
 noremap <C-l> :tabn<CR>
 noremap Y y$
-noremap <leader>de :e %:p:h/<CR>
-noremap <leader>ds :split %:p:h/<CR>
-noremap <leader>dv :vsplit %:p:h/<CR>
+noremap <leader>s :split %:p:h/<CR>
+noremap <leader>v :vsplit %:p:h/<CR>
 
 cnoreabbrev hs split %:p:h/<C-R>
 cnoreabbrev hv vsplit %:p:h/<C-R>
@@ -113,13 +112,6 @@ set undofile
 
 """""""""""""""""""""""""""""""""" APPERENCE """""""""""""""""""""""""""""""""""
 
-let g:everforest_diagnostic_text_highlight = 1
-let g:everforest_diagnostic_virtual_text = 'colored'
-let g:everforest_disable_italic_comment = 1
-let g:everforest_better_performance = 1
-let g:everforest_disable_terminal_colors = 1
-let g:everforest_spell_foreground = 'colored'
-let g:everforest_transparent_background=1
 
 " colorscheme everforest
 colorscheme atlas
@@ -228,43 +220,6 @@ if executable('fzf')
     let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
 endif
 
-"""""""""""""""""""""""""""""""""" vim-wiki """"""""""""""""""""""""""""""""""""
-
-let g:vim_markdown_folding_style_pythonic = 1
-let g:vim_markdown_new_list_item_indent = 0
-let g:vim_markdown_conceal_code_blocks = 0
-let g:vim_markdown_fenced_languages = [
-    \ 'csharp=cs',
-    \ 'cpp=cpp', 
-    \ 'vim=vim', 
-    \ 'bash=sh', 
-    \ 'go=go',
-    \ 'c=c',
-    \ 'python=python' ]
-
-let g:note_dir = $HOME . '/notes'
-
-let g:vimwiki_folding = 'custom'
-let g:vimwiki_list = [{
-    \ 'path': g:note_dir,
-    \ 'syntax': 'markdown',
-    \ 'ext': '.md',
-    \ 'nested_syntaxes': {
-        \ 'go': 'go',
-        \ 'json': 'json',
-        \ 'php': 'php',
-        \ 'c': 'c',
-        \ 'cpp': 'cpp'
-    \ },
-    \ }]
-
-let g:vimwiki_ext2syntax = {
-    \ '.md': 'markdown',
-    \ }
-
-nmap <leader>vd :VimwikiMakeDiaryNote<CR>
-nmap <leader>vt :VimwikiMakeTomorrowDiaryNote<CR>
-nmap <leader>vy :VimwikiMakeYesterdayDiaryNote<CR>
 
 """""""""""""""""""""""""""""""""""" lsp """""""""""""""""""""""""""""""""""""""
 
@@ -277,11 +232,6 @@ augroup autospell
   autocmd FileType markdown,vimwiki setlocal spelllang=ru,en spell
 augroup END
 
-function YaPaste() range
-  echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| ya paste | ya notify')
-endfunction
-
-vnoremap <silent> <leader>y :call YaPaste()<cr>
 noremap <silent> <leader>ss :setlocal spelllang=ru,en spell<CR>
 noremap <silent> <leader>sn :setlocal nospell<CR>
 
@@ -293,11 +243,7 @@ lua << EOF
     require('custom')
 EOF
 
-    set nofoldenable
-    set foldmethod=expr
-    set foldexpr=nvim_treesitter#foldexpr()
 endif
 
-let g:ucompile_procs = 8
 
 call s:LocalSource('term.vim')

@@ -1,5 +1,4 @@
 local nvim_lsp = require('lspconfig')
-local arc = require("custom.arc")
 local cmp = require("cmp")
 
 cmp.setup({
@@ -81,49 +80,17 @@ end
 ------------------------------------------------------------------
 
 local clangd_command = function()
-  local cmd = {
+  return {
     'clangd',
     '--background-index=false',
     '--clang-tidy',
     '-j=8',
   }
-
-  local cwd = vim.fn.getcwd()
-
-  if not arc.owns(cwd) then
-    return cmd
-  end
-  local uservices_root = arc.root() .. "/taxi/uservices"
-  if not startswith(cwd, uservices_root) then
-    return cmd
-  end
-
-  local user = vim.fn.getenv("USER")
-
-  if vim.uv.os_uname().sysname == "Darwin" then
-    cmd[#cmd + 1] = "--compile-commands-dir=" .. uservices_root
-  else
-    if is_file_exists(cwd .. "/ya.make.ext") then
-      cmd[#cmd + 1] = "--compile-commands-dir=/tmp/" .. user .. "/ya-dump"
-    elseif is_file_exists(cwd .. "/service.yaml") then
-      cmd[#cmd + 1] = "--compile-commands-dir=/tmp/" .. user .. "/uservices-build/build"
-    end
-  end
-
-  return cmd
-end
-
-local clangd_should_autostart = function()
-  local name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
-  if name == "eats-catalog" then
-    return false
-  end
-  return true
 end
 
 local setup_clangd = function(lsp)
   lsp.clangd.setup {
-    autostart = clangd_should_autostart(),
+    autostart = true,
     on_attach = on_attach,
     cmd = clangd_command(),
     filetypes = { "c", "cpp", "objc", "objcpp", "cuda" }

@@ -17,6 +17,7 @@ set nocompatible
 
 set background=dark         " dark background
 
+set foldmethod=manual
 set nobackup nowritebackup
 filetype plugin indent on   " autodetect file type
 set syntax=on               " syntax highlighting
@@ -50,6 +51,7 @@ set history=1000
 set number
 set relativenumber
 set virtualedit=block
+set autoread
 
 set backupdir=/tmp/nvim/backup
 
@@ -96,7 +98,6 @@ function BigFile()
         " etc...
     endif
 
-    set foldmethod=manual
     syntax off
     filetype off
     set noundofile
@@ -112,18 +113,13 @@ set undofile
 
 """""""""""""""""""""""""""""""""" APPERENCE """""""""""""""""""""""""""""""""""
 
-
-" colorscheme everforest
-colorscheme atlas
-
 set tabpagemax=15               " Only show 15 tabs
 set showmode                    " Display the current mode
 
 set cursorline                  " Highlight current line
 
-" highlight clear SignColumn      " SignColumn should match background
-" highlight VertSplit ctermfg=223 guifg=#d3c6aa
 highlight clear VertSplit
+highlight Normal guifg=NvimLightGrey2 guibg=none
 
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab
 

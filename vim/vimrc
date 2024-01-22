@@ -121,6 +121,18 @@ set cursorline                  " Highlight current line
 highlight clear VertSplit
 highlight Normal guifg=NvimLightGrey2 guibg=none
 
+augroup comment_highlights
+  autocmd!
+
+  autocmd Syntax * syntax keyword NoteComment NOTE containedin=.*Comment,vimCommentTitle,cCommentL
+  autocmd Syntax * syntax keyword FixComment FIXME containedin=.*Comment,vimCommentTitle,cCommentL
+  autocmd Syntax * syntax match LeakComment /@leak/ containedin=.*Comment,vimCommentTitle,cCommentL
+
+  highlight NoteComment ctermbg=none ctermfg=11 guifg=#FDDA0D guibg=none
+  highlight FixComment ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
+  highlight LeakComment ctermbg=none ctermfg=9 guifg=#EE9F27 guibg=none
+augroup END
+
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab
 
 set laststatus=2                " always display statusline

@@ -127,10 +127,12 @@ augroup comment_highlights
   autocmd Syntax * syntax keyword NoteComment NOTE containedin=.*Comment,vimCommentTitle,cCommentL
   autocmd Syntax * syntax keyword FixComment FIXME containedin=.*Comment,vimCommentTitle,cCommentL
   autocmd Syntax * syntax match LeakComment /@leak/ containedin=.*Comment,vimCommentTitle,cCommentL
+  autocmd Syntax * syntax match QuestionComment /@question/ containedin=.*Comment,vimCommentTitle,cCommentL
 
   highlight NoteComment ctermbg=none ctermfg=11 guifg=#FDDA0D guibg=none
   highlight FixComment ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
   highlight LeakComment ctermbg=none ctermfg=9 guifg=#EE9F27 guibg=none
+  highlight QuestionComment cterm=bold gui=bold
 augroup END
 
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab

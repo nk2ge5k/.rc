@@ -186,9 +186,9 @@ nmap k gk
 
 " nvim terminal more like vim terminal
 if has('nvim')
-    tnoremap <C-w>N <C-\><C-n>
+    tnoremap <C-w>n <C-\><C-n>
     tnoremap <C-w>h <C-\><C-N><C-w>h
-    tnoremap <C-W>j <C-\><C-N><C-w>j
+    tnoremap <C-w>j <C-\><C-N><C-w>j
     tnoremap <C-w>k <C-\><C-N><C-w>k
     tnoremap <C-w>l <C-\><C-N><C-w>l
 

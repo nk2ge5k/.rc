@@ -74,6 +74,12 @@ noremap <C-l> :tabn<CR>
 noremap Y y$
 noremap <leader>s :split %:p:h/<CR>
 noremap <leader>v :vsplit %:p:h/<CR>
+" copy directory under cursor into 'x' register then open in the new tab,
+" changign tab current directory to the same directory.
+" NOTE: does not work properly if path under cursor is file
+noremap <leader>p :let @x = expand('<cfile>')<CR>
+      \ :execute 'tabnew' @x<CR>
+      \ :execute 'tcd' @x<CR>
 
 cnoreabbrev hs split %:p:h/<C-R>
 cnoreabbrev hv vsplit %:p:h/<C-R>

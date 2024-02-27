@@ -4,8 +4,6 @@ call plug#begin()
     Plug 'plasticboy/vim-markdown'
 
     Plug 'gyim/vim-boxdraw'
-
-
     Plug 'goerz/jupytext.vim'
 
     Plug 'tpope/vim-fugitive'

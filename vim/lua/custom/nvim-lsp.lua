@@ -30,7 +30,7 @@ local setup_clangd = function(lsp)
   lsp.clangd.setup {
     autostart = true,
     cmd = clangd_command(),
-    filetypes = { "c", "cpp", "objc", "objcpp", "cuda" }
+    filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "arduino" }
   }
 end
 
@@ -76,6 +76,7 @@ local setup_gopls = function(lsp)
   lsp.gopls.setup {
     settings = {
       gopls = {
+        buildFlags = { "-tags=goexperiment.arenas" },
         analyses = {
           unusedparams = true,
           unusedvariable = true,
@@ -119,6 +120,7 @@ local setup_rust_analyzer = function(lsp)
   })
 end
 
+
 vim.diagnostic.config({
   virtual_text = true,
   signs = false,
@@ -133,7 +135,6 @@ local servers = {
   "dartls",
   "kotlin_language_server",
   "zls",
-  "bufls"
 }
 
 for _, lsp in ipairs(servers) do

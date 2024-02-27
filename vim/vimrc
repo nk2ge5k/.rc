@@ -130,15 +130,42 @@ highlight Normal guifg=NvimLightGrey2 guibg=none
 augroup comment_highlights
   autocmd!
 
-  autocmd Syntax * syntax keyword NoteComment NOTE containedin=.*Comment,vimCommentTitle,cCommentL
-  autocmd Syntax * syntax keyword FixComment FIXME containedin=.*Comment,vimCommentTitle,cCommentL
-  autocmd Syntax * syntax match LeakComment /@leak/ containedin=.*Comment,vimCommentTitle,cCommentL
-  autocmd Syntax * syntax match QuestionComment /@question/ containedin=.*Comment,vimCommentTitle,cCommentL
+  " TODO
+  autocmd Syntax * syntax keyword TodoComment TODO
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " NOTE
+  autocmd Syntax * syntax keyword NoteComment NOTE
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " FIXME
+  autocmd Syntax * syntax keyword FixComment FIXME
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " @leak
+  autocmd Syntax * syntax match LeakComment /@leak/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " @question
+  autocmd Syntax * syntax match QuestionComment /@question/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " @slow
+  autocmd Syntax * syntax match SlowComment /@slow/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " @important
+  autocmd Syntax * syntax match ImportantComment /@important/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
 
-  highlight NoteComment ctermbg=none ctermfg=11 guifg=#FDDA0D guibg=none
-  highlight FixComment ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
-  highlight LeakComment ctermbg=none ctermfg=9 guifg=#EE9F27 guibg=none
-  highlight QuestionComment cterm=bold gui=bold
+  highlight TodoComment
+        \ cterm=bold gui=bold
+  highlight NoteComment
+        \ ctermbg=none ctermfg=11 guifg=#FDDA0D guibg=none
+  highlight FixComment
+        \ ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
+  highlight LeakComment
+        \ ctermbg=none ctermfg=9 guifg=#EE9F27 guibg=none
+  highlight QuestionComment
+        \ cterm=bold gui=bold
+  highlight SlowComment
+        \ ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
+  highlight ImportantComment
+        \ cterm=bold gui=bold ctermbg=none ctermfg=4 guifg=#3C93FA guibg=none
 augroup END
 
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab

@@ -9,6 +9,7 @@ call plug#begin()
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-scriptease'
     Plug 'tpope/vim-vinegar'
+    Plug 'tpope/vim-dispatch'
 
     if has('nvim')
         Plug 'nvim-lua/plenary.nvim'

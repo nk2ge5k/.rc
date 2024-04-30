@@ -22,8 +22,6 @@ call plug#begin()
 
         Plug 'numToStr/Comment.nvim'
         Plug 'rcarriga/nvim-notify'
-
-        Plug 'github/copilot.vim'
     else
         Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
         Plug 'junegunn/fzf.vim'

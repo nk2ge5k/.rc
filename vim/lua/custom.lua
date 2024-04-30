@@ -21,14 +21,15 @@ if version.major >= 0 and version.minor >= 8 then
   vim.o.ch = 0
 end
 
--- Copilot
-
-vim.keymap.set('i', '<C-y>', 'copilot#Accept("\\<CR>")', {
-  expr = true,
-  replace_keycodes = false
+local do_did_done = vim.api.nvim_create_augroup("DoDidDone", { clear = true })
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function(args)
+    if args.file == nil or args.file == "" then
+      vim.cmd('e ' .. '~/dodidone.txt')
+    end
+  end,
+  group = do_did_done,
 })
-
-vim.g.copilot_no_tab_map = true
 
 require("custom.keymaps")
 require("custom.nvim-lsp")

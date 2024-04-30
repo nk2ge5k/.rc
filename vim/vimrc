@@ -151,6 +151,9 @@ augroup comment_highlights
   " @important
   autocmd Syntax * syntax match ImportantComment /@important/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " @hack
+  autocmd Syntax * syntax match HackComment /@hack/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
 
   highlight TodoComment
         \ cterm=bold gui=bold
@@ -166,6 +169,8 @@ augroup comment_highlights
         \ ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
   highlight ImportantComment
         \ cterm=bold gui=bold ctermbg=none ctermfg=4 guifg=#3C93FA guibg=none
+  highlight HackComment
+        \ cterm=bold ctermbg=none ctermfg=45 guifg=#a86add guibg=none
 augroup END
 
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab

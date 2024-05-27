@@ -11,3 +11,5 @@
     unpushed = "!git log --branches --not --remotes"
     update = "!git fetch -ap upstream && git pull upstream develop && git push origin develop"
     fz = "!git checkout $(git branch | fzf)"
+[core]
+   hooksPath = ~/dotfiles2.0/git/hooks

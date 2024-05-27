@@ -148,11 +148,20 @@ augroup comment_highlights
   " @slow
   autocmd Syntax * syntax match SlowComment /@slow/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
+
   " @important
   autocmd Syntax * syntax match ImportantComment /@important/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
   " @hack
   autocmd Syntax * syntax match HackComment /@hack/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+
+  " @nocheckin
+  autocmd Syntax * syntax match NoCheckIn /@nocheckin/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+
+  " @unused
+  autocmd Syntax * syntax match UnusedComment /@unused/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
 
   highlight TodoComment
@@ -171,6 +180,11 @@ augroup comment_highlights
         \ cterm=bold gui=bold ctermbg=none ctermfg=4 guifg=#3C93FA guibg=none
   highlight HackComment
         \ cterm=bold ctermbg=none ctermfg=45 guifg=#a86add guibg=none
+  highlight NoCheckIn
+        \ cterm=bold,underline ctermbg=none ctermfg=9 gui=bold,underline guifg=#FF2400 guibg=none
+  highlight UnusedComment
+        \ ctermbg=none ctermfg=11 guifg=#FDDA0D guibg=none
+
 augroup END
 
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab

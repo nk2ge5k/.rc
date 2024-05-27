@@ -1,6 +1,10 @@
+#!/bin/sh
+
 if git commit -v --dry-run | grep '@nocheckin' >/dev/null 2>&1
 then
-  echo "Trying to commit non-committable code."
+  echo "\033[0;31m==== YOU ARE TRYING TO COMMIT SOMETHING THAT SHOULD NOT BE COMMITED ====\033[0m"
+  git grep --cached -n -A1 '@nocheckin'
+  echo "\033[0;31m========================================================================\033[0m"
   exit 1
 else
   exit 0

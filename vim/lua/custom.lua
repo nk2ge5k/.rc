@@ -1,5 +1,7 @@
 local notify = require("notify")
 
+require("oil").setup()
+
 notify.setup({
   icons = {
     DEBUG = "DEBUG",

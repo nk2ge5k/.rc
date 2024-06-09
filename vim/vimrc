@@ -93,6 +93,20 @@ else
     cnoreabbrev st terminal
 endif
 
+
+nnoremap <leader>u :UndotreeToggle<CR>
+
+if has("persistent_undo")
+    let target_path = expand('~/dotfiles2.0/vim/.vimdid')
+
+    if !isdirectory(target_path)
+        call mkdir(target_path, "p", 0700)
+    endif
+
+    let &undodir=target_path
+    set undofile
+endif
+
 autocmd FileType yaml,python setlocal cursorcolumn " draw cursorcolumn for python and yaml
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 

@@ -5,11 +5,13 @@ call plug#begin()
 
     Plug 'gyim/vim-boxdraw'
     Plug 'goerz/jupytext.vim'
+    Plug 'godlygeek/tabular'
 
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-scriptease'
     Plug 'tpope/vim-vinegar'
     Plug 'tpope/vim-dispatch'
+    Plug 'mbbill/undotree'
 
     if has('nvim')
         Plug 'nvim-lua/plenary.nvim'

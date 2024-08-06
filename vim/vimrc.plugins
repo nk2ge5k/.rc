@@ -1,7 +1,6 @@
 call plug#begin()
     Plug 'fatih/vim-go'
     Plug 'terryma/vim-multiple-cursors'
-    Plug 'plasticboy/vim-markdown'
 
     Plug 'gyim/vim-boxdraw'
     Plug 'goerz/jupytext.vim'

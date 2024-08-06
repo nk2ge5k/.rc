@@ -156,26 +156,23 @@ augroup comment_highlights
   " @leak
   autocmd Syntax * syntax match LeakComment /@leak/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
-  " @question
-  autocmd Syntax * syntax match QuestionComment /@question/
-        \ containedin=.*Comment,vimCommentTitle,cCommentL
   " @slow
   autocmd Syntax * syntax match SlowComment /@slow/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
-
   " @important
   autocmd Syntax * syntax match ImportantComment /@important/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
   " @hack
   autocmd Syntax * syntax match HackComment /@hack/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
-
   " @nocheckin
   autocmd Syntax * syntax match NoCheckIn /@nocheckin/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
-
   " @unused
   autocmd Syntax * syntax match UnusedComment /@unused/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " @hello
+  autocmd Syntax * syntax match AtComment "\k\@<!@\k\+"
         \ containedin=.*Comment,vimCommentTitle,cCommentL
 
   highlight TodoComment
@@ -186,8 +183,6 @@ augroup comment_highlights
         \ ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
   highlight LeakComment
         \ ctermbg=none ctermfg=9 guifg=#EE9F27 guibg=none
-  highlight QuestionComment
-        \ cterm=bold gui=bold
   highlight SlowComment
         \ ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
   highlight ImportantComment
@@ -198,6 +193,8 @@ augroup comment_highlights
         \ cterm=bold,underline ctermbg=none ctermfg=9 gui=bold,underline guifg=#FF2400 guibg=none
   highlight UnusedComment
         \ ctermbg=none ctermfg=11 guifg=#FDDA0D guibg=none
+  highlight AtComment
+        \ cterm=bold gui=bold
 
 augroup END
 

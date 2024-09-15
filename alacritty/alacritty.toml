@@ -1,0 +1,70 @@
+[font]
+size = 13
+
+[font.bold]
+family = "Menlo"
+style = "Bold"
+
+[font.bold_italic]
+family = "Menlo"
+style = "Bold Italic"
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[font.italic]
+family = "Menlo"
+style = "Italic"
+
+[font.normal]
+family = "Menlo"
+style = "Regular"
+
+[font.offset]
+x = 0
+y = 0
+
+[mouse]
+hide_when_typing = true
+
+[window]
+dynamic_title = true
+startup_mode = "Windowed"
+
+[keyboard]
+bindings = [
+  # Reset default bindings for MacOS
+  { key = "F"              , mods = "Command|Control" , action = "None" } ,
+  { key = "]"              , mods = "Command|Shift"   , action = "None" } ,
+  { key = "["              , mods = "Command|Shift"   , action = "None" } ,
+  { key = "Tab"            , mods = "Command"         , action = "None" } ,
+  { key = "Tab"            , mods = "Command|Shift"   , action = "None" } ,
+  { key = "1"              , mods = "Command"         , action = "None" } ,
+  { key = "2"              , mods = "Command"         , action = "None" } ,
+  { key = "3"              , mods = "Command"         , action = "None" } ,
+  { key = "4"              , mods = "Command"         , action = "None" } ,
+  { key = "5"              , mods = "Command"         , action = "None" } ,
+  { key = "6"              , mods = "Command"         , action = "None" } ,
+  { key = "7"              , mods = "Command"         , action = "None" } ,
+  { key = "8"              , mods = "Command"         , action = "None" } ,
+  { key = "9"              , mods = "Command"         , action = "None" } ,
+  { key = "0"              , mods = "Command"         , action = "None" } ,
+  { key = "="              , mods = "Command"         , action = "None" } ,
+  { key = "+"              , mods = "Command"         , action = "None" } ,
+  { key = "NumpadAdd"      , mods = "Command"         , action = "None" } ,
+  { key = "-"              , mods = "Command"         , action = "None" } ,
+  { key = "NumpadSubtract" , mods = "Command"         , action = "None" } ,
+
+  { key = "F" , mods = "Command" , mode="~Search" , action="None" } ,
+  { key = "B" , mods = "Command" , mode="~Search" , action="None" } ,
+
+  { key = "N" , mods = "Command" , action = "CreateNewTab"      } ,
+  { key = "T" , mods = "Command" , action = "CreateNewTab"      } ,
+  { key = "H" , mods = "Command" , action = "SelectPreviousTab" } ,
+  { key = "L" , mods = "Command" , action = "SelectNextTab"     } ,
+  { key = "0" , mods = "Command" , action = "ResetFontSize"     } ,
+  { key = "-" , mods = "Command" , action = "IncreaseFontSize"  } ,
+  { key = "'" , mods = "Command" , action = "DecreaseFontSize"  } ,
+  { key = "F" , mods = "Command" , action = "ToggleFullscreen"  } ,
+]

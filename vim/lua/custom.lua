@@ -24,7 +24,10 @@ end
 local do_did_done = vim.api.nvim_create_augroup("DoDidDone", { clear = true })
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function(args)
-    if args.file == nil or args.file == "" then
+    local dir  = vim.fn.getcwd()
+    local home = vim.fn.expand('$HOME')
+
+    if dir == home and (args.file == nil or args.file == "") then
       vim.cmd('e ' .. '~/dodidone.txt')
     end
   end,

@@ -131,7 +131,7 @@ vim.diagnostic.config({
 
 local servers = {
   "pyright",
-  "tsserver",
+  "ts_ls",
   "dartls",
   "kotlin_language_server",
   "zls",

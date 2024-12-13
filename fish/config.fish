@@ -13,7 +13,7 @@ set -gx LANG "en_US.UTF-8"
 set -gx LC_ALL "en_US.UTF-8"
 set -gx LC_CTYPE "en_US.UTF-8"
 set -gx GOPATH $HOME
-set -gx LD_LIBRARY_PATH "$HOME/.local/lib:/usr/local/lib:$LD_LIBRARY_PATH"
+set -gx LD_LIBRARY_PATH "$HOME/.local/lib:/usr/local/lib:/usr/local/lib:$LD_LIBRARY_PATH"
 set -gx FZF_DEFAULT_COMMAND "rg --files"
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx PROJECTS_HISTORY $HOME/.projects_history
@@ -213,6 +213,12 @@ if status is-interactive
   if command -v gpgconf > /dev/null
     set -gx GPG_TTY (tty)
     gpgconf --launch gpg-agent
+  end
+
+## ZOXIDE ####################################
+
+  if command -v zoxide > /dev/null
+    alias cd="z"
   end
 
 ## SSH #######################################

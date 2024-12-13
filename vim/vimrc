@@ -153,6 +153,9 @@ augroup comment_highlights
   " FIXME
   autocmd Syntax * syntax keyword FixComment FIXME
         \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " @fix
+  autocmd Syntax * syntax match AtFixComment /@fix/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
   " @leak
   autocmd Syntax * syntax match LeakComment /@leak/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
@@ -180,6 +183,8 @@ augroup comment_highlights
   highlight NoteComment
         \ ctermbg=none ctermfg=11 guifg=#FDDA0D guibg=none
   highlight FixComment
+        \ ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
+  highlight AtFixComment
         \ ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
   highlight LeakComment
         \ ctermbg=none ctermfg=9 guifg=#EE9F27 guibg=none

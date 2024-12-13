@@ -1,4 +1,5 @@
 local notify = require("notify")
+require("fidget").setup {}
 
 notify.setup({
   icons = {
@@ -33,6 +34,19 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
   group = do_did_done,
 })
+
+require('nvim-treesitter.configs').setup {
+  modules = {},
+  ignore_install = {},
+  parser_install_dir = nil,
+  ensure_installed = "all",
+  sync_install = false,
+  auto_install = true,
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+}
 
 require("custom.keymaps")
 require("custom.nvim-lsp")

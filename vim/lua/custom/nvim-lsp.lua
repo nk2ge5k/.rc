@@ -135,6 +135,7 @@ local servers = {
   "dartls",
   "kotlin_language_server",
   "zls",
+  "svelte",
 }
 
 for _, lsp in ipairs(servers) do

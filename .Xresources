@@ -1,0 +1,58 @@
+Xft.dpi:    96
+Xft.antialias:  2
+Xft.hinting:    1
+Xft.hintstyle:  hintmedium
+
+URxvt.termName: rxvt
+URxvt*depth: 32
+URxvt.transparent: false
+URxvt.font: xft:Ubuntu Mono:size=13
+URxvt.scrollBar: false
+
+URxvt*foreground: #c5c8c6
+URxvt*background: #1d1f21
+
+! Normal colors
+! black
+URxvt*color0:   #1d1f21
+! red
+URxvt*color1:   #cc6666
+! green
+URxvt*color2:   #b5bd68
+! yellow
+URxvt*color3:   #f0c674
+! blue
+URxvt*color4:   #81a2be
+! purple
+URxvt*color5:   #b294bb
+! cyan
+URxvt*color6:   #8abeb7
+! white
+URxvt*color7:   #c5c8c6
+
+! Light colors
+! black
+URxvt*color8:   #666666
+! red
+URxvt*color9:   #d54e53
+! green
+URxvt*color10:  #b9ca4a
+! yellow
+URxvt*color11:  #e7c547
+! blue
+URxvt*color12:  #7aa6da
+! purple
+URxvt*color13:  #c397d8
+! cyan
+URxvt*color14:  #70c0b1
+! white
+URxvt*color15:  #eaeaea
+
+
+URxvt.perl-ext-common:  resize-font,matcher
+URxvt.url-launcher: /usr/bin/xdg-open
+URxvt.matcher.button: 1
+
+URxvt.keysym.C-minus     :resize-font:smaller
+URxvt.keysym.C-backslash :resize-font:bigger
+URxvt.keysym.C-0         :resize-font:reset

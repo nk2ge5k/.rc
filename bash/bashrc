@@ -1,0 +1,79 @@
+_prepend_path_env () {
+  export PATH="$1:$PATH"
+}
+
+export LOG_LEVEL="WARN"
+export EDITOR="nvim"
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+export GOPATH="$HOME"
+export LD_LIBRARY_PATH="$HOME/.local/lib:/usr/local/lib:/usr/local/lib:$LD_LIBRARY_PATH"
+export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
+export FZF_DEFAULT_COMMAND="rg --files"
+export XDG_CONFIG_HOME="$HOME/.config"
+export PROJECTS_HISTORY="$HOME/.projects_history"
+export CARGO_TARGET_DIR="$HOME/.rust-target"
+
+_prepend_path_env "$HOME/.local/bin"
+_prepend_path_env "$HOME/.cargo/bin"
+_prepend_path_env "$HOME/bin"
+_prepend_path_env "$HOME/bin/go/bin"
+_prepend_path_env "$HOME/scripts/enabled"
+_prepend_path_env "$CARGO_TARGET_DIR/debug"
+
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+[ -f "$HOME/.fzf.bash" ] && source "$HOME/.fzf.bash"
+
+alias vim="nvim"
+
+## SSH #########################################################################
+
+function setenv() {
+  eval "export $1=$2"
+}
+
+if command -v ssh-agent 2>&1 > /dev/null; then
+  eval "$(ssh-agent -c)" > /dev/null
+  if test $(uname) = "Darwin"; then
+    ssh-add --apple-use-keychain 2> /dev/null
+  fi
+fi
+
+## PYENV #######################################################################
+
+export PYENV_ROOT="$HOME/.pyenv"
+_prepend_path_env "$PYENV_ROOT/bin"
+
+if command -v pyenv 2>&1 > /dev/null; then
+  alias brew="env PATH=(string replace (pyenv root)/shims '' \"\$PATH\") brew"
+
+  export PYENV_ROOT="$HOME/.pyenv"
+  eval "$(pyenv init - )"
+
+  _prepend_path_env "$PYENV_ROOT/bin"
+  _prepend_path_env "$(pyenv prefix)/bin"
+fi
+
+## ZOXIDE ######################################################################
+
+if command -v zoxide 2>&1 > /dev/null; then
+  eval "$(zoxide init bash)"
+  alias cd="z"
+fi
+
+## EXA #########################################################################
+
+if command -v exa 2>&1 > /dev/null; then
+  alias l='exa'
+  alias ls='exa'
+  alias ll='exa -l'
+  alias lll='exa -la'
+else
+  alias l='ls'
+  alias ll='ls -l'
+  alias lll='ls -la'
+fi

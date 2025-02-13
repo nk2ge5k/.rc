@@ -35,17 +35,8 @@ vim.api.nvim_create_autocmd("VimEnter", {
   group = do_did_done,
 })
 
-require('nvim-treesitter.configs').setup {
-  modules = {},
-  ignore_install = {},
-  parser_install_dir = nil,
-  ensure_installed = "all",
-  sync_install = false,
-  auto_install = true,
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-  },
+require 'colorizer'.setup {
+  '*'; -- Highlight all files, but customize some others.
 }
 
 require("custom.keymaps")

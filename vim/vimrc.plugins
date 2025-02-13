@@ -11,10 +11,9 @@ call plug#begin()
     Plug 'tpope/vim-vinegar'
     Plug 'tpope/vim-dispatch'
     Plug 'mbbill/undotree'
+    Plug 'norcalli/nvim-colorizer.lua'
 
     if has('nvim')
-        Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
         Plug 'nvim-lua/plenary.nvim'
         Plug 'nvim-telescope/telescope.nvim'
 
@@ -27,6 +26,7 @@ call plug#begin()
         Plug 'rcarriga/nvim-notify'
 
         Plug 'j-hui/fidget.nvim'
+        Plug 'leafOfTree/vim-svelte-plugin'
     else
         Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
         Plug 'junegunn/fzf.vim'

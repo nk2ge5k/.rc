@@ -30,7 +30,14 @@ local setup_clangd = function(lsp)
   lsp.clangd.setup {
     autostart = true,
     cmd = clangd_command(),
-    filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "arduino" }
+    filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "arduino" },
+    capabilities = {
+      textDocument = {
+        semanticTokens = {
+          multilineTokenSupport = true,
+        }
+      }
+    }
   }
 end
 
@@ -78,10 +85,6 @@ local setup_gopls = function(lsp)
       gopls = {
         buildFlags = { "-tags=goexperiment.arenas" },
         analyses = {
-          unusedparams = true,
-          unusedvariable = true,
-          fieldalignment = true,
-          nilness = true,
           shadow = true,
         },
         staticcheck = true,
@@ -166,6 +169,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
+
     -- Enable completion triggered by <c-x><c-o>
     vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
@@ -184,5 +188,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>f', function()
       vim.lsp.buf.format { async = true }
     end, opts)
+
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client ~= nil and client:supports_method('textDocument/completion') then
+      vim.lsp.completion.enable(true, client.id, ev.buf , { autotrigger = false })
+    end
   end,
 })
+

@@ -23,7 +23,6 @@ filetype plugin indent on   " autodetect file type
 set syntax=on               " syntax highlighting
 scriptencoding utf-8
 set encoding=utf-8
-set termencoding=utf-8
 set t_ut=
 set ttyfast
 set termguicolors
@@ -133,6 +132,13 @@ let &undodir=s:vim_dir . '/.vimdid/'
 set undofile
 
 """""""""""""""""""""""""""""""""" APPERENCE """""""""""""""""""""""""""""""""""
+
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_autowrite = 1
+let g:vim_markdown_auto_insert_bullets = 0
+let g:vim_markdown_new_list_item_indent = 0
+set conceallevel=2
+
 
 set tabpagemax=15               " Only show 15 tabs
 set showmode                    " Display the current mode

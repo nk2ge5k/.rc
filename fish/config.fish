@@ -7,7 +7,6 @@ fish_add_path -pP $HOME/bin/go/bin
 fish_add_path -pP $HOME/scripts/enabled/
 
 set -gx LOG_LEVEL WARN
-set -gx SHELL $(which fish)
 set -gx EDITOR nvim
 set -gx LANG "en_US.UTF-8"
 set -gx LC_ALL "en_US.UTF-8"

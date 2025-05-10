@@ -12,7 +12,6 @@ export LD_LIBRARY_PATH="$HOME/.local/lib:/usr/local/lib:/usr/local/lib:$LD_LIBRA
 export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
 export FZF_DEFAULT_COMMAND="rg --files"
 export XDG_CONFIG_HOME="$HOME/.config"
-export PROJECTS_HISTORY="$HOME/.projects_history"
 export CARGO_TARGET_DIR="$HOME/.rust-target"
 
 _prepend_path_env "$HOME/.local/bin"

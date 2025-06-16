@@ -34,6 +34,8 @@ keybind = ctrl+shift+r=reload_config
 keybind = ctrl+shift+n=increase_font_size:1
 keybind = ctrl+shift+y=decrease_font_size:1
 keybind = ctrl+shift+h=reset_font_size
+keybind = ctrl+j=scroll_page_down
+keybind = ctrl+k=scroll_page_up
 
 mouse-hide-while-typing = true
 

@@ -123,7 +123,6 @@ local setup_rust_analyzer = function(lsp)
   })
 end
 
-
 vim.diagnostic.config({
   virtual_text = true,
   signs = false,
@@ -136,9 +135,9 @@ local servers = {
   "pyright",
   "ts_ls",
   "dartls",
-  "kotlin_language_server",
   "zls",
   "svelte",
+  "sourcekit"
 }
 
 for _, lsp in ipairs(servers) do
@@ -146,13 +145,9 @@ for _, lsp in ipairs(servers) do
 end
 
 local custom = {
-  -- clangd
   setup_clangd,
-  -- lua_ls
   setup_lua,
-  -- gopls
   setup_gopls,
-  -- rust_analyzer
   setup_rust_analyzer,
 }
 for _, fn in ipairs(custom) do
@@ -160,16 +155,19 @@ for _, fn in ipairs(custom) do
 end
 
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+vim.keymap.set('n', ']d', function()
+  vim.diagnostic.jump({count = 1, float = true})
+end)
+vim.keymap.set('n', '[d', function()
+  vim.diagnostic.jump({count = -1, float = true})
+end)
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
-
     -- Enable completion triggered by <c-x><c-o>
     vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 

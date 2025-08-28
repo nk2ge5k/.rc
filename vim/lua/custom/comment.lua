@@ -10,12 +10,6 @@ comment.setup({
     ---@type boolean
     sticky = true,
 
-    ---Lines to be ignored while comment/uncomment.
-    ---Could be a regex string or a function that returns a regex string.
-    ---Example: Use '^$' to ignore empty lines
-    ---@type string|fun():string
-    ignore = nil,
-
     ---LHS of toggle mappings in NORMAL + VISUAL mode
     ---@type table
     toggler = {
@@ -60,12 +54,4 @@ comment.setup({
         ---Includes `g>`, `g<`, `g>[count]{motion}` and `g<[count]{motion}`
         extended = false,
     },
-
-    ---Pre-hook, called before commenting the line
-    ---@type fun(ctx: Ctx):string
-    pre_hook = nil,
-
-    ---Post-hook, called after commenting is done
-    ---@type fun(ctx: Ctx)
-    post_hook = nil,
 })

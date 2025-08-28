@@ -97,7 +97,7 @@ endif
 nnoremap <leader>u :UndotreeToggle<CR>
 
 if has("persistent_undo")
-    let target_path = expand('~/dotfiles2.0/vim/.vimdid')
+    let target_path = expand('~/.rc/vim/.vimdid')
 
     if !isdirectory(target_path)
         call mkdir(target_path, "p", 0700)
@@ -324,7 +324,7 @@ if has('nvim')
 
 lua << EOF
     local home_dir = os.getenv("HOME")
-    package.path = home_dir .. "/dotfiles2.0/vim/lua/?.lua;" .. package.path
+    package.path = home_dir .. "/.rc/vim/lua/?.lua;" .. package.path
     require('custom')
 EOF
 

@@ -1,5 +1,5 @@
 font-family = Iosevka
-font-size = 15
+font-size = 19
 
 font-style = "Regular"
 font-style-bold = "Bold"
@@ -28,7 +28,6 @@ palette = 15=#eaeaea
 cursor-style = block
 
 keybind = super+n=new_window
-keybind = super+t=new_window
 keybind = super+space=ignore
 keybind = ctrl+shift+r=reload_config
 keybind = ctrl+shift+n=increase_font_size:1
@@ -39,7 +38,5 @@ keybind = ctrl+k=scroll_page_up
 
 mouse-hide-while-typing = true
 
-working-directory = inherit
 window-inherit-working-directory = true
-window-decoration = false
 window-theme = dark

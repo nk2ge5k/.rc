@@ -12,25 +12,21 @@ call plug#begin()
     Plug 'tpope/vim-scriptease'
     Plug 'tpope/vim-dispatch'
     Plug 'mbbill/undotree'
-    Plug 'norcalli/nvim-colorizer.lua'
     Plug 'tpope/vim-vinegar'
 
     if has('nvim')
         Plug 'nvim-lua/plenary.nvim'
         Plug 'nvim-telescope/telescope.nvim'
 
-        Plug 'zk-org/zk-nvim'
-
         Plug 'neovim/nvim-lspconfig'
 
         Plug 'L3MON4D3/LuaSnip', {'tag': 'v2.*', 'do': 'make install_jsregexp'}
-        Plug 'sourcegraph/sg.nvim', { 'do': 'nvim -l build/init.lua' }
 
         Plug 'numToStr/Comment.nvim'
         Plug 'rcarriga/nvim-notify'
 
-        Plug 'j-hui/fidget.nvim'
         Plug 'leafOfTree/vim-svelte-plugin'
+        Plug 'jbyuki/venn.nvim'
     else
         Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
         Plug 'junegunn/fzf.vim'

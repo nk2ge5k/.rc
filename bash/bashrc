@@ -40,7 +40,7 @@ function setenv() {
   eval "export $1=$2"
 }
 
-if [[ -n "$SSH_CLIENT" ]]; then
+if [[ ! -n "$SSH_CLIENT" ]]; then
   if command -v ssh-agent 2>&1 > /dev/null; then
     eval "$(ssh-agent -c)" > /dev/null
     if test $(uname) = "Darwin"; then

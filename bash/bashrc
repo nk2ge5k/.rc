@@ -26,7 +26,6 @@ _prepend_path_env "$CARGO_TARGET_DIR/debug"
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
-[ -f "$HOME/.fzf.bash" ] && source "$HOME/.fzf.bash"
 
 alias vim="nvim"
 
@@ -41,10 +40,12 @@ function setenv() {
   eval "export $1=$2"
 }
 
-if command -v ssh-agent 2>&1 > /dev/null; then
-  eval "$(ssh-agent -c)" > /dev/null
-  if test $(uname) = "Darwin"; then
-    ssh-add --apple-use-keychain 2> /dev/null
+if [[ -n "$SSH_CLIENT" ]]; then
+  if command -v ssh-agent 2>&1 > /dev/null; then
+    eval "$(ssh-agent -c)" > /dev/null
+    if test $(uname) = "Darwin"; then
+      ssh-add --apple-use-keychain 2> /dev/null
+    fi
   fi
 fi
 
@@ -52,12 +53,15 @@ fi
 
 export PYENV_ROOT="$HOME/.pyenv"
 _prepend_path_env "$PYENV_ROOT/bin"
-alias brew="env PATH=(string replace (pyenv root)/shims '' \"\$PATH\") brew"
 
 ## ZOXIDE ######################################################################
 
 if command -v zoxide 2>&1 > /dev/null; then
-  eval "$(zoxide init bash)"
+  if [[ -n $ZSH_VERSION ]]; then
+    eval "$(zoxide init zsh)"
+  else
+    eval "$(zoxide init bash)"
+  fi
   alias cd="z"
 fi
 

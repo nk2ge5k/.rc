@@ -27,6 +27,7 @@ if [[ -n "$ZSH_VERSION" ]]; then
   bindkey -v
 
   # Enable completiohn
+  fpath=(~/.zsh/completion $fpath)
   autoload -Uz compinit
   compinit
 

@@ -33,6 +33,9 @@ keybind = ctrl+shift+n=increase_font_size:1
 keybind = ctrl+shift+y=decrease_font_size:1
 keybind = ctrl+shift+h=reset_font_size
 
+keybind = ctrl+a>u=scroll_page_fractional:-0.5
+keybind = ctrl+a>d=scroll_page_fractional:0.5
+
 keybind = ctrl+a>r=reload_config
 
 # Splits

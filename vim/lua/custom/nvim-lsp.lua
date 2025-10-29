@@ -1,5 +1,3 @@
-local nvim_lsp = require('lspconfig')
-
 local is_file_exists = function(file_name)
   local file = io.open(file_name, "r")
 
@@ -17,111 +15,89 @@ end
 --- clangd -------------------------------------------------------
 ------------------------------------------------------------------
 
-local clangd_command = function()
-  return {
-    'clangd',
-    '--background-index=false',
-    '--clang-tidy',
-    '-j=8',
-  }
-end
-
-local setup_clangd = function(lsp)
-  lsp.clangd.setup {
-    autostart = true,
-    cmd = clangd_command(),
-    filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "arduino" },
-    capabilities = {
-      textDocument = {
-        semanticTokens = {
-          multilineTokenSupport = true,
-        }
+vim.lsp.config("clangd", {
+  autostart = true,
+  cmd = { 'clangd', '--background-index=false', '--clang-tidy', '-j=8' },
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "arduino" },
+  capabilities = {
+    textDocument = {
+      semanticTokens = {
+        multilineTokenSupport = true,
       }
     }
   }
-end
+})
 
 --- lua_ls -------------------------------------------------------
 ------------------------------------------------------------------
 
-local setup_lua = function(lsp)
-  local runtime_path = vim.split(package.path, ';')
-  table.insert(runtime_path, "lua/?.lua")
-  table.insert(runtime_path, "lua/?/init.lua")
+local lua_runtime_path = vim.split(package.path, ';')
+table.insert(lua_runtime_path, "lua/?.lua")
+table.insert(lua_runtime_path, "lua/?/init.lua")
 
-  lsp.lua_ls.setup {
-    settings = {
-      Lua = {
-        runtime = {
-          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-          version = 'LuaJIT',
-          -- Setup your lua path
-          path = runtime_path,
-        },
-        diagnostics = {
-          -- Get the language server to recognize the `vim` global
-          globals = { 'vim', 'ngx' },
-        },
-        workspace = {
-          -- Make the server aware of Neovim runtime files
-          library = vim.api.nvim_get_runtime_file("", true),
-          checkThirdParty = false,
-        },
-        -- Do not send telemetry data containing a randomized but unique identifier
-        telemetry = {
-          enable = false,
-        },
+vim.lsp.config("lua_ls", {
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+        path = lua_runtime_path,
+      },
+      diagnostics = {
+        globals = { 'vim', 'ngx' },
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file("", true),
+        checkThirdParty = false,
+      },
+      telemetry = {
+        enable = false,
       },
     },
-  }
-end
+  },
+})
 
 --- gopls -------------------------------------------------------
 -----------------------------------------------------------------
 
-local setup_gopls = function(lsp)
-  lsp.gopls.setup {
-    settings = {
-      gopls = {
-        buildFlags = { "-tags=goexperiment.arenas" },
-        analyses = {
-          shadow = true,
-        },
-        staticcheck = true,
-        gofumpt = true,
-        codelenses = {
-          gc_details = true
-        },
+vim.lsp.config("gopls", {
+  settings = {
+    gopls = {
+      buildFlags = { "-tags=goexperiment.arenas" },
+      analyses = {
+        shadow = true,
       },
-    }
+      staticcheck = true,
+      gofumpt = true,
+      codelenses = {
+        gc_details = true
+      },
+    },
   }
-end
+})
 
 --- rust-analyzer -----------------------------------------------
 -----------------------------------------------------------------
 
-local setup_rust_analyzer = function(lsp)
-  lsp.rust_analyzer.setup({
-    settings = {
-      ["rust-analyzer"] = {
-        imports = {
-          granularity = {
-            group = "module",
-          },
-          prefix = "self",
+vim.lsp.config("rust_analyzer", {
+  settings = {
+    ["rust-analyzer"] = {
+      imports = {
+        granularity = {
+          group = "module",
         },
-        cargo = {
-          buildScripts = {
-            enable = true,
-          },
+        prefix = "self",
+      },
+      cargo = {
+        buildScripts = {
+          enable = true,
         },
-        procMacro = {
-          enable = true
-        },
-      }
+      },
+      procMacro = {
+        enable = true
+      },
     }
-  })
-end
+  }
+})
 
 vim.diagnostic.config({
   virtual_text = true,
@@ -132,6 +108,10 @@ vim.diagnostic.config({
 })
 
 local servers = {
+  "clangd",
+  "lua_ls",
+  "gopls",
+  "rust_analyzer",
   "pyright",
   "ts_ls",
   "dartls",
@@ -141,18 +121,9 @@ local servers = {
 }
 
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {}
+  vim.lsp.enable(lsp)
 end
 
-local custom = {
-  setup_clangd,
-  setup_lua,
-  setup_gopls,
-  setup_rust_analyzer,
-}
-for _, fn in ipairs(custom) do
-  fn(nvim_lsp)
-end
 
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
@@ -193,4 +164,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
   end,
 })
-

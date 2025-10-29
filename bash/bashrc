@@ -2,9 +2,9 @@ _prepend_path_env () {
   export PATH="$1:$PATH"
 }
 
-export HISTCONTROL=ignoreboth
+export HISTFILE=$HOME/.history
 export HISTSIZE=10000
-export HISTFILESIZE=50000
+export SAVEHIST=10000
 
 export LOG_LEVEL="WARN"
 export EDITOR="nvim"
@@ -15,12 +15,12 @@ export FZF_DEFAULT_COMMAND="rg --files"
 export XDG_CONFIG_HOME="$HOME/.config"
 export CARGO_TARGET_DIR="$HOME/.rust-target"
 
-_prepend_path_env "$HOME/.local/bin"
 _prepend_path_env "$HOME/.cargo/bin"
-_prepend_path_env "$HOME/bin"
 _prepend_path_env "$HOME/.local/go/bin"
 _prepend_path_env "$HOME/scripts/enabled"
 _prepend_path_env "$CARGO_TARGET_DIR/debug"
+_prepend_path_env "$HOME/bin"
+_prepend_path_env "$HOME/.local/bin"
 
 if [[ -n "$ZSH_VERSION" ]]; then
   # Vim-style keybindings

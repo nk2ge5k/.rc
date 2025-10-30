@@ -37,6 +37,7 @@ keybind = ctrl+a>u=scroll_page_fractional:-0.5
 keybind = ctrl+a>d=scroll_page_fractional:0.5
 
 keybind = ctrl+a>r=reload_config
+keybind = ctrl+a>,=prompt_surface_title
 
 # Splits
 keybind = ctrl+a>i=new_split:right
@@ -46,6 +47,7 @@ keybind = ctrl+a>h=goto_split:left
 keybind = ctrl+a>j=goto_split:down
 keybind = ctrl+a>k=goto_split:up
 keybind = ctrl+a>z=toggle_split_zoom
+keybind = ctrl+a>q=close_surface
 
 # Tabs
 keybind = ctrl+a>c=new_tab

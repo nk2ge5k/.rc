@@ -1,11 +1,11 @@
-" set shell=/bin/zsh
+set runtimepath^=~/.vim runtimepath+=~/.vim/after
+let &packpath=&runtimepath
 
 let s:vim_dir = expand('<sfile>:h')
 function! s:LocalSource(filename) abort
     exec 'source ' . s:vim_dir . '/' . a:filename
 endfunction
 
-call s:LocalSource('vimrc.plugins')
 """"""""""""""""""""""""""""""""""" GENERAL """"""""""""""""""""""""""""""""""""
 
 if has('nvim')
@@ -14,7 +14,6 @@ endif
 
 let mapleader=" "
 set nocompatible
-
 set background=dark         " dark background
 
 set foldmethod=manual
@@ -93,7 +92,6 @@ else
     cnoreabbrev st terminal
 endif
 
-
 nnoremap <leader>u :UndotreeToggle<CR>
 
 if has("persistent_undo")
@@ -111,7 +109,6 @@ autocmd FileType yaml,python setlocal cursorcolumn " draw cursorcolumn for pytho
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 function BigFile()
-    echo("Big file")
     if exists(':TSBufDisable')
         exec 'TSBufDisable autotag'
         exec 'TSBufDisable highlight'
@@ -130,6 +127,7 @@ autocmd BufReadPre * if getfsize(expand("%")) > 52428800 | exec BigFile() | endi
 
 let &undodir=s:vim_dir . '/.vimdid/'
 set undofile
+
 
 """""""""""""""""""""""""""""""""" APPERENCE """""""""""""""""""""""""""""""""""
 
@@ -266,20 +264,18 @@ if has('nvim')
     tnoremap <C-w>j <C-\><C-N><C-w>j
     tnoremap <C-w>k <C-\><C-N><C-w>k
     tnoremap <C-w>l <C-\><C-N><C-w>l
-
-    nnoremap <space>g <cmd>lua require('sg.extensions.telescope').fuzzy_search_results()<CR>
 endif
 
 """"""""""""""""""""""""""""""""""" vim-go """""""""""""""""""""""""""""""""""""
 
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
+let g:go_highlight_functions = 0
+let g:go_highlight_methods = 0
 let g:go_highlight_fields = 0
 let g:go_highlight_types = 0
 let g:go_highlight_operators = 0
-let g:go_highlight_build_constraints = 1
+let g:go_highlight_build_constraints = 00
 let g:go_fmt_command = "goimports"
-let g:go_def_mapping_enabled = 1
+let g:go_def_mapping_enabled = 0
 
 let g:go_term_enabled = 1
 let g:go_term_close_on_exit = 0
@@ -288,13 +284,6 @@ let g:go_info_mode='gopls'
 
 
 """""""""""""""""""""""""""""""""""" FZF """""""""""""""""""""""""""""""""""""""
-
-let g:rooter_patterns = [
-            \ '.git', 
-            \ 'Makefile', 
-            \ 'compile_commands.json',
-            \ 'Cargo.toml',
-            \ ]
 
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
@@ -320,15 +309,10 @@ augroup END
 noremap <silent> <leader>ss :setlocal spelllang=ru,en spell<CR>
 noremap <silent> <leader>sn :setlocal nospell<CR>
 
-if has('nvim')
-
-lua << EOF
-    local home_dir = os.getenv("HOME")
-    package.path = home_dir .. "/.rc/vim/lua/?.lua;" .. package.path
-    require('custom')
-EOF
-
-endif
-
-
 call s:LocalSource('term.vim')
+
+if has('nvim')
+  call s:LocalSource('lua/init.lua')
+else
+  call s:LocalSource('vimrc.plugins')
+endif

@@ -149,62 +149,45 @@ highlight Normal guifg=NvimLightGrey2 guibg=none
 augroup comment_highlights
   autocmd!
 
-  " TODO
-  autocmd Syntax * syntax keyword TodoComment TODO
-        \ containedin=.*Comment,vimCommentTitle,cCommentL
-  " NOTE
-  autocmd Syntax * syntax keyword NoteComment NOTE
-        \ containedin=.*Comment,vimCommentTitle,cCommentL
-  " FIXME
-  autocmd Syntax * syntax keyword FixComment FIXME
-        \ containedin=.*Comment,vimCommentTitle,cCommentL
-  " @fix
-  autocmd Syntax * syntax match AtFixComment /@fix/
-        \ containedin=.*Comment,vimCommentTitle,cCommentL
-  " @leak
-  autocmd Syntax * syntax match LeakComment /@leak/
-        \ containedin=.*Comment,vimCommentTitle,cCommentL
-  " @slow
-  autocmd Syntax * syntax match SlowComment /@slow/
-        \ containedin=.*Comment,vimCommentTitle,cCommentL
-  " @important
-  autocmd Syntax * syntax match ImportantComment /@important/
-        \ containedin=.*Comment,vimCommentTitle,cCommentL
-  " @hack
-  autocmd Syntax * syntax match HackComment /@hack/
-        \ containedin=.*Comment,vimCommentTitle,cCommentL
-  " @nocheckin
-  autocmd Syntax * syntax match NoCheckIn /@nocheckin/
-        \ containedin=.*Comment,vimCommentTitle,cCommentL
-  " @unused
-  autocmd Syntax * syntax match UnusedComment /@unused/
-        \ containedin=.*Comment,vimCommentTitle,cCommentL
-  " @hello
-  autocmd Syntax * syntax match AtComment "\k\@<!@\k\+"
+  autocmd Syntax * syntax match @comment.atodo "\k\@<!@\k\+"
+
+  " @note
+  autocmd Syntax * syntax match @comment.atnote /@note/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
 
-  highlight TodoComment
-        \ cterm=bold gui=bold
-  highlight NoteComment
+  " @fix
+  autocmd Syntax * syntax match @comment.aterror /@fix/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " @leak
+  autocmd Syntax * syntax match @comment.aterror /@leak/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+
+  " @slow
+  autocmd Syntax * syntax match @comment.aterror /@slow/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " @important
+  autocmd Syntax * syntax match @comment.important /@important/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " @hack
+  autocmd Syntax * syntax match @comment.hack /@hack/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+  " @nocheckin
+  autocmd Syntax * syntax match @comment.nocheckin /@nocheckin/
+        \ containedin=.*Comment,vimCommentTitle,cCommentL
+
+
+  highlight @comment.atnote
         \ ctermbg=none ctermfg=11 guifg=#FDDA0D guibg=none
-  highlight FixComment
+  highlight @comment.aterror
         \ ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
-  highlight AtFixComment
-        \ ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
-  highlight LeakComment
-        \ ctermbg=none ctermfg=9 guifg=#EE9F27 guibg=none
-  highlight SlowComment
-        \ ctermbg=none ctermfg=9 guifg=#FF2400 guibg=none
-  highlight ImportantComment
+  highlight @comment.important
         \ cterm=bold gui=bold ctermbg=none ctermfg=4 guifg=#3C93FA guibg=none
-  highlight HackComment
+  highlight @comment.hack
         \ cterm=bold ctermbg=none ctermfg=45 guifg=#a86add guibg=none
-  highlight NoCheckIn
+  highlight @comment.nocheckin
         \ cterm=bold,underline ctermbg=none ctermfg=9 gui=bold,underline guifg=#FF2400 guibg=none
-  highlight UnusedComment
-        \ ctermbg=none ctermfg=11 guifg=#FDDA0D guibg=none
-  highlight AtComment
-        \ cterm=bold gui=bold
+  highlight @comment.attodo
+        \ cterm=bold gui=bold guifg=NvimLightGrey2
 
 augroup END
 

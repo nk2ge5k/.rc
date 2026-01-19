@@ -1,5 +1,8 @@
 return {
   'neovim/nvim-lspconfig',
+  opts = {
+    inlay_hints = { enabled = false },
+  },
   config = function()
     vim.lsp.config("clangd", {
       autostart = true,
@@ -54,9 +57,7 @@ return {
           },
           staticcheck = true,
           gofumpt = true,
-          codelenses = {
-            gc_details = true
-          },
+          codelenses = { gc_details = true }
         },
       }
     })
@@ -125,6 +126,7 @@ return {
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspConfig', {}),
       callback = function(ev)
+        vim.lsp.inlay_hint.enable(false)
         -- Enable completion triggered by <c-x><c-o>
         vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 

@@ -32,11 +32,10 @@ return {
             path = lua_runtime_path,
           },
           diagnostics = {
-            globals = { 'vim', 'ngx' },
+            globals = { 'vim', 'ngx', 'playdate' },
           },
           workspace = {
             library = vim.api.nvim_get_runtime_file("", true),
-            checkThirdParty = false,
           },
           telemetry = {
             enable = false,
@@ -51,7 +50,7 @@ return {
     vim.lsp.config("gopls", {
       settings = {
         gopls = {
-          buildFlags = { "-tags=goexperiment.arenas" },
+          buildFlags = { "-tags=goexperiment.arenas,goexperiment.simd" },
           analyses = {
             shadow = true,
           },

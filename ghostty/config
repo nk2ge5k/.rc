@@ -15,3 +15,5 @@ mouse-hide-while-typing = true
 
 window-inherit-working-directory = true
 window-theme = dark
+
+app-notifications = no-clipboard-copy

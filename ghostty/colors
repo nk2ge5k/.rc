@@ -1,13 +1,16 @@
-background = 2e303c
+# background = 2e303c
+background = 1c1c1c
 
-palette = 0=#2e303c
+# palette = 0=#2e303c
+palette = 0=#1c1c1c
 palette = 1=#cc6666
 palette = 2=#b5bd68
 palette = 3=#f0c674
 palette = 4=#81a2be
 palette = 5=#b294bb
 palette = 6=#8abeb7
-palette = 7=#c5c8c6
+# palette = 7=#c5c8c6
+palette = 7=#c7c7c7
 palette = 8=#666666
 palette = 9=#d54e53
 palette = 10=#b9ca4a

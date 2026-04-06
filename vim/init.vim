@@ -63,22 +63,19 @@ cmap cwd lcd %:p:h
 cmap cd. lcd %:p:h
 
 noremap <leader>hl :nohl<CR>
-noremap <leader>nl :set invnumber invrelativenumber<CR>
 noremap <leader>j :cnext<CR>
 noremap <leader>k :cprevious<CR>
 noremap <C-j> :lnext<CR>
 noremap <C-k> :lprevious<CR>
 noremap <C-h> :tabp<CR>
 noremap <C-l> :tabn<CR>
+
 noremap Y y$
-noremap <leader>s :split %:p:h/<CR>
-noremap <leader>v :vsplit %:p:h/<CR>
-" copy directory under cursor into 'x' register then open in the new tab,
-" changign tab current directory to the same directory.
-" NOTE: does not work properly if path under cursor is file
-noremap <leader>p :let @x = expand('<cfile>')<CR>
-      \ :execute 'tabnew' @x<CR>
-      \ :execute 'tcd' @x<CR>
+
+noremap <leader>p :bp<CR>
+noremap <leader>n :bn<CR>
+nnoremap <silent> <Leader>d "_d
+vnoremap <silent> <Leader>d "_d
 
 cnoreabbrev hs split %:p:h/<C-R>
 cnoreabbrev hv vsplit %:p:h/<C-R>

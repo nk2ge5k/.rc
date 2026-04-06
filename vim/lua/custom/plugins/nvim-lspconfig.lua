@@ -1,4 +1,4 @@
-local ENABLED = true
+local ENABLED = false
 
 local lsp_enable = function()
   vim.lsp.config("clangd", {

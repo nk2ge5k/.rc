@@ -1,4 +1,4 @@
-local ENABLED = false
+local ENABLED = vim.fn.getenv("VIM_LSP")  == "1"
 
 local lsp_enable = function()
   vim.lsp.config("clangd", {

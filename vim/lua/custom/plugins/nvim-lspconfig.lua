@@ -111,7 +111,8 @@ end
 return {
   'neovim/nvim-lspconfig',
   config = function()
-    if ENABLED then
+    local is_fs_enabled = vim.fn.filereadable(vim.fs.joinpath(vim.fn.getcwd(), ".lsp"))
+    if ENABLED or is_fs_enabled then
       lsp_enable()
     end
 

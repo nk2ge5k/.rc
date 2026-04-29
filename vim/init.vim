@@ -14,7 +14,7 @@ endif
 
 let mapleader=" "
 set nocompatible
-set background=dark         " dark background
+set background=dark
 
 set foldmethod=manual
 set nobackup nowritebackup
@@ -141,7 +141,7 @@ set showmode                    " Display the current mode
 set cursorline                  " Highlight current line
 
 highlight clear VertSplit
-highlight Normal guifg=NvimLightGrey2 guibg=none
+highlight Normal guibg=none
 
 augroup comment_highlights
   autocmd!

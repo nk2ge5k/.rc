@@ -112,12 +112,12 @@ function BigFile()
         " etc...
     endif
 
-    syntax off
+    setlocal syntax=off
     filetype off
-    set noundofile
-    set noswapfile
-    set noloadplugins
-    set nowrap
+    setlocal noundofile
+    setlocal noswapfile
+    setlocal noloadplugins
+    setlocal nowrap
 endfunction
 
 autocmd BufReadPre * if getfsize(expand("%")) > 52428800 | exec BigFile() | endif
@@ -146,7 +146,8 @@ highlight Normal guibg=none
 augroup comment_highlights
   autocmd!
 
-  autocmd Syntax * syntax match @comment.atodo "\k\@<!@\k\+"
+  " @todo
+  autocmd Syntax * syntax match @comment.attodo "\k\@<!@\k\+"
 
   " @note
   autocmd Syntax * syntax match @comment.atnote /@note/
@@ -158,10 +159,10 @@ augroup comment_highlights
   " @leak
   autocmd Syntax * syntax match @comment.aterror /@leak/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
-
   " @slow
   autocmd Syntax * syntax match @comment.aterror /@slow/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
+
   " @important
   autocmd Syntax * syntax match @comment.important /@important/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
@@ -172,7 +173,10 @@ augroup comment_highlights
   autocmd Syntax * syntax match @comment.nocheckin /@nocheckin/
         \ containedin=.*Comment,vimCommentTitle,cCommentL
 
+  autocmd ColorScheme * call s:ApplyCommentHighlights()
+augroup END
 
+function! s:ApplyCommentHighlights() abort
   highlight @comment.atnote
         \ ctermbg=none ctermfg=11 guifg=#FDDA0D guibg=none
   highlight @comment.aterror
@@ -184,9 +188,10 @@ augroup comment_highlights
   highlight @comment.nocheckin
         \ cterm=bold,underline ctermbg=none ctermfg=9 gui=bold,underline guifg=#FF2400 guibg=none
   highlight @comment.attodo
-        \ cterm=bold gui=bold guifg=NvimLightGrey2
+        \ cterm=bold gui=bold ctermfg=231 guifg=NvimLightGrey2
+endfunction
 
-augroup END
+call s:ApplyCommentHighlights()
 
 autocmd FileType yaml setlocal ts=4 sts=4 sw=4 expandtab
 
@@ -220,7 +225,8 @@ set noerrorbells
 
 """""""""""""""""""""""""""""""""" FORMATTING """"""""""""""""""""""""""""""""""
 
-set autoindent                  " Indent at the same level of the previous line
+set smartindent
+" set autoindent                  " Indent at the same level of the previous line
 set expandtab                   " Tabs are spaces, not tabs
 set shiftwidth=2                " Use indents of 2 spaces
 set tabstop=2                   " An indentation every four columns

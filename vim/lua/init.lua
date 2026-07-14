@@ -17,3 +17,18 @@ require('lazy').setup({
 })
 
 require("custom.c")
+
+-- matchadd-based comment annotation highlights (works with treesitter)
+vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+  callback = function()
+    vim.fn.matchadd("@comment.attodo",    "@todo")
+    vim.fn.matchadd("@comment.atnote",    "@note")
+    vim.fn.matchadd("@comment.atnote",    "@question")
+    vim.fn.matchadd("@comment.aterror",   "@fix")
+    vim.fn.matchadd("@comment.aterror",   "@leak")
+    vim.fn.matchadd("@comment.aterror",   "@slow")
+    vim.fn.matchadd("@comment.important", "@important")
+    vim.fn.matchadd("@comment.hack",      "@hack")
+    vim.fn.matchadd("@comment.nocheckin", "@nocheckin")
+  end,
+})

@@ -1,0 +1,100 @@
+*gopkg.txt*  Browse Go package documentation from pkg.go.dev via pkgsite-cli
+
+==============================================================================
+CONTENTS                                                      *gopkg-contents*
+
+  1. Requirements .......................... |gopkg-requirements|
+  2. Setup ................................. |gopkg-setup|
+  3. Commands .............................. |gopkg-commands|
+  4. Doc buffer ............................ |gopkg-buffer|
+  5. Mappings .............................. |gopkg-mappings|
+  6. Lua API ............................... |gopkg-api|
+
+==============================================================================
+1. REQUIREMENTS                                           *gopkg-requirements*
+
+- Neovim 0.10+
+- `pkgsite-cli` in $PATH (or set `cmd`, see |gopkg-setup|)
+
+==============================================================================
+2. SETUP                                                         *gopkg-setup*
+
+Calling setup is optional; these are the defaults: >lua
+    require("gopkg").setup({
+      cmd = "pkgsite-cli", -- executable
+      limit = 25,          -- max search results
+      split = "vsplit",    -- "vsplit" | "split" | "tab" | "current"
+      examples = true,     -- include examples in docs
+      keymaps = true,      -- buffer-local mappings in doc buffers
+      server = nil,        -- -server, e.g. a local pkgsite
+      goos = nil,          -- -goos
+      goarch = nil,        -- -goarch
+      timeout = nil,       -- -timeout, e.g. "10s"
+    })
+<
+==============================================================================
+3. COMMANDS                                                   *gopkg-commands*
+
+                                                                      *:GoPkg*
+:GoPkg                  Prompt for a query and search packages.
+
+:GoPkg search {query}   Search pkg.go.dev and open the selected package.
+
+:GoPkg symbol {Symbol}  Find packages exporting {Symbol} and open the selected
+                        one at that symbol.
+
+:GoPkg doc {target}     Open docs. {target} is `path[@version][.Symbol]` or
+                        `path[@version]#Symbol`, e.g. >
+                            :GoPkg doc net/http.Client.Do
+                            :GoPkg doc gopkg.in/yaml.v3@v3.0.1#Node
+<
+:GoPkg {target}         Shortcut for `:GoPkg doc {target}`.
+
+:GoPkg symbols [path]   Pick a symbol of [path] (default: the package in the
+                        current doc buffer) and jump to it.
+
+:GoPkg cursor           In a Go buffer, open docs for the `pkg.Ident` under
+                        the cursor (resolved through the file's imports), or
+                        for the import path under the cursor.
+
+==============================================================================
+4. DOC BUFFER                                                   *gopkg-buffer*
+
+Docs open in a `gopkg://{path}@{version}` markdown buffer. A visible doc
+window is reused. Constants, variables, functions, types, methods, struct
+fields and interface methods are indexed so they can be jumped to by name
+(`Builder`, `Builder.Grow`, `Client.Timeout`).
+
+==============================================================================
+5. MAPPINGS                                                   *gopkg-mappings*
+
+Doc buffer (when `keymaps = true`):
+
+  gd, <CR>, <C-]>   Follow link under cursor (same package or another one),
+                    or jump to the symbol named under cursor.
+  gs                Pick a symbol of this package.
+  gO                Package outline in the location list.
+  ]] / [[           Next / previous declaration.
+  gx                Open link, or this package/symbol on pkg.go.dev.
+  q                 Close the doc window.
+
+Global <Plug> mappings, e.g. in `ftplugin/go.lua`: >lua
+    vim.keymap.set("n", "<leader>K", "<Plug>(gopkg-cursor)", { buffer = true })
+    vim.keymap.set("n", "<leader>gp", "<Plug>(gopkg-search)")
+<
+  *<Plug>(gopkg-cursor)*   Same as |:GoPkg| cursor.
+  *<Plug>(gopkg-search)*   Same as |:GoPkg| without arguments.
+
+==============================================================================
+6. LUA API                                                         *gopkg-api*
+
+  require("gopkg").open(target, symbol?)   Open docs (see :GoPkg doc).
+  require("gopkg").search(query?)          Search packages.
+  require("gopkg").search_symbol(symbol?)  Search by symbol.
+  require("gopkg").symbols(path?)          Symbol picker.
+  require("gopkg").cursor()                Docs for identifier under cursor.
+
+Pickers use |vim.ui.select()| and prompts use |vim.ui.input()|, so they follow
+whatever UI override you have installed.
+
+ vim:tw=78:ts=8:ft=help:norl:

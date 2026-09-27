@@ -1,9 +1,9 @@
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath=&runtimepath
 
-let s:vim_dir = expand('<sfile>:h')
+let g:vim_dir = expand('<sfile>:h')
 function! s:LocalSource(filename) abort
-    exec 'source ' . s:vim_dir . '/' . a:filename
+    exec 'source ' . g:vim_dir . '/' . a:filename
 endfunction
 
 """"""""""""""""""""""""""""""""""" GENERAL """"""""""""""""""""""""""""""""""""
@@ -25,6 +25,8 @@ set encoding=utf-8
 set t_ut=
 set ttyfast
 set termguicolors
+
+let g:loaded_nvim_dir_plugin = 1
 
 if !has("nvim")
     set ttyscroll=10
@@ -51,6 +53,7 @@ set number
 set relativenumber
 set virtualedit=block
 set autoread
+set noautochdir
 
 set backupdir=/tmp/nvim/backup
 
@@ -122,7 +125,7 @@ endfunction
 
 autocmd BufReadPre * if getfsize(expand("%")) > 52428800 | exec BigFile() | endif
 
-let &undodir=s:vim_dir . '/.vimdid/'
+let &undodir=g:vim_dir . '/.vimdid/'
 set undofile
 
 

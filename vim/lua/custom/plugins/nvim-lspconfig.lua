@@ -1,4 +1,4 @@
-local ENABLED = vim.fn.getenv("VIM_LSP")  == "1"
+local ENABLED = vim.fn.getenv("LSP_DISABLE") ~= "1"
 
 local lsp_enable = function()
   vim.lsp.config("clangd", {
@@ -32,7 +32,10 @@ local lsp_enable = function()
           globals = { 'vim', 'ngx', 'playdate' },
         },
         workspace = {
-          library = vim.api.nvim_get_runtime_file("", true),
+          library = {
+            vim.env.VIMRUNTIME,
+            "/usr/share/hypr/stubs/",
+          }
         },
         telemetry = {
           enable = false,

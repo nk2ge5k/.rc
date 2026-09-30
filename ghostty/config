@@ -19,3 +19,4 @@ window-theme = dark
 app-notifications = no-clipboard-copy
 
 config-file = colors
+config-file = tmux-like

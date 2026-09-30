@@ -1,23 +1,77 @@
-keybind = ctrl+a>u=scroll_page_fractional:-0.5
-keybind = ctrl+a>d=scroll_page_fractional:0.5
+gtk-custom-css = tabs.css
+custom-shader = border.glsl
+macos-window-shadow = false
 
+# Ghostty translation of _tmux.conf
+# Put this at ~/.config/ghostty/config (or merge it into your existing one).
+# tmux tabs/windows -> Ghostty tabs; tmux panes -> Ghostty splits.
+
+# ---------------------------------------------------------------------------
+# General
+# ---------------------------------------------------------------------------
+
+# history-limit 100000 (lines). Ghostty measures scrollback in BYTES, per split.
+# ~100 MB comfortably holds 100k lines of typical output.
+scrollback-limit = 100000000
+
+# new-window/split-window -c "#{pane_current_path}"
+# New tabs and splits open in the focused split's working directory.
+window-inherit-working-directory = true
+
+# window-style fg=#c5c8c6 (inactive panes look different from the active one)
+# Ghostty dims unfocused splits instead of recoloring their text.
+unfocused-split-opacity = 0.85
+
+# set-titles on / "#T": Ghostty sets the window title from the running program.
+# focus-events, true color (Tc), escape-time 0, and clipboard integration
+# (the pbcopy/xclip copy-pipe) are all native, so nothing to configure.
+
+# ---------------------------------------------------------------------------
+# Prefix: Ctrl-a  (tmux: prefix C-a, bind C-a send-prefix)
+# ---------------------------------------------------------------------------
+
+# Ctrl-a Ctrl-a sends a literal Ctrl-a to the shell (e.g. readline line start).
+keybind = ctrl+a>ctrl+a=text:\x01
+
+# bind r source-file ~/.tmux.conf
 keybind = ctrl+a>r=reload_config
-keybind = ctrl+a>,=prompt_surface_title
 
-# Splits
-keybind = ctrl+a>i=new_split:right
-keybind = ctrl+a>s=new_split:down
-keybind = ctrl+a>l=goto_split:right
+# ---------------------------------------------------------------------------
+# Panes -> splits
+# ---------------------------------------------------------------------------
+
+# vim-like pane navigation (h/j/k/l)
 keybind = ctrl+a>h=goto_split:left
 keybind = ctrl+a>j=goto_split:down
 keybind = ctrl+a>k=goto_split:up
-keybind = ctrl+a>z=toggle_split_zoom
-keybind = ctrl+a>q=close_surface
+keybind = ctrl+a>l=goto_split:right
 
-# Tabs
+# resize-pane 10 (tmux counts cells; Ghostty counts pixels, so tune to taste)
+keybind = ctrl+a>shift+i=resize_split:up,180
+keybind = ctrl+a>shift+u=resize_split:down,180
+keybind = ctrl+a>shift+y=resize_split:left,90
+keybind = ctrl+a>shift+o=resize_split:right,90
+
+# s = split-window -h (side by side), i = split-window (stacked)
+keybind = ctrl+a>s=new_split:right
+keybind = ctrl+a>i=new_split:down
+
+keybind = ctrl+a>z=toggle_split_zoom
+
+# ---------------------------------------------------------------------------
+# Windows -> tabs
+# ---------------------------------------------------------------------------
+
+# c = new window in current dir. C = new window in session dir; Ghostty has
+# no "session path", so both open a tab in the current directory.
 keybind = ctrl+a>c=new_tab
+keybind = ctrl+a>shift+c=new_tab
+
+# L / H = next / previous window
 keybind = ctrl+a>shift+l=next_tab
 keybind = ctrl+a>shift+h=previous_tab
+
+# base-index 1: Ghostty tab numbering already starts at 1.
 keybind = ctrl+a>1=goto_tab:1
 keybind = ctrl+a>2=goto_tab:2
 keybind = ctrl+a>3=goto_tab:3
@@ -27,3 +81,62 @@ keybind = ctrl+a>6=goto_tab:6
 keybind = ctrl+a>7=goto_tab:7
 keybind = ctrl+a>8=goto_tab:8
 keybind = ctrl+a>9=goto_tab:9
+
+# w = choose-tree. Closest equivalent is the tab overview (Linux/GTK only).
+# On macOS, swap this for toggle_command_palette or just use the tab bar.
+keybind = ctrl+a>w=toggle_tab_overview
+keybind = ctrl+a>shift+semicolon=toggle_command_palette
+
+# ---------------------------------------------------------------------------
+# Scratch shell popup (prefix a toggling an 80% x 80% "shell" session)
+# ---------------------------------------------------------------------------
+
+# Ghostty's quick terminal is a persistent drop-down terminal you toggle in
+# and out, which matches the popup's behavior. Pressing ctrl+a>a again hides it.
+quick-terminal-position = center
+quick-terminal-size = 80%,80%
+quick-terminal-autohide = false
+keybind = ctrl+a>a=toggle_quick_terminal
+keybind = ctrl+a>comma=prompt_surface_title
+
+# Enter "copy mode" like tmux's prefix-[
+keybind = ctrl+a>bracket_left=activate_key_table:vim
+
+keybind = vim/
+
+# Scroll by line / page
+keybind = vim/j=scroll_page_lines:1
+keybind = vim/k=scroll_page_lines:-1
+keybind = vim/ctrl+d=scroll_page_down
+keybind = vim/ctrl+u=scroll_page_up
+keybind = vim/ctrl+f=scroll_page_down
+keybind = vim/ctrl+b=scroll_page_up
+
+# Top / bottom
+keybind = vim/g>g=scroll_to_top
+keybind = vim/shift+g=scroll_to_bottom
+
+# Search
+keybind = vim/slash=start_search
+keybind = vim/n=navigate_search:next
+
+# Extend an existing (mouse-made) selection with hjkl
+keybind = vim/h=adjust_selection:left
+keybind = vim/l=adjust_selection:right
+keybind = vim/shift+k=adjust_selection:up
+keybind = vim/shift+j=adjust_selection:down
+keybind = vim/0=adjust_selection:beginning_of_line
+keybind = vim/shift+4=adjust_selection:end_of_line
+
+keybind = vim/v=write_scrollback_file:open
+
+# Copy (like your tmux y / Enter)
+keybind = vim/y=copy_to_clipboard
+keybind = vim/enter=copy_to_clipboard
+
+# Exit
+keybind = vim/escape=deactivate_key_table
+keybind = vim/q=deactivate_key_table
+
+# Swallow anything unbound so it doesn't reach the shell
+keybind = vim/catch_all=ignore

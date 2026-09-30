@@ -143,6 +143,9 @@ set showmode                    " Display the current mode
 
 set cursorline                  " Highlight current line
 
+highlight link BlankLineOnly Error
+autocmd BufWinEnter,WinEnter * match BlankLineOnly /^\s\+$/
+
 highlight clear VertSplit
 highlight Normal guibg=none
 
